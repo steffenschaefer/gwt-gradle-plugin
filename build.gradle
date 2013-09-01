@@ -1,0 +1,26 @@
+task wrapper(type: Wrapper) { gradleVersion = '1.6' }
+
+allprojects {
+	apply plugin: 'eclipse'
+
+	group = 'de.richsource.gradle.plugins'
+	version = '1.0-SNAPSHOT'
+}
+
+eclipse.project.name=project.name
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'groovy'
+
+	version = rootProject.version
+	sourceCompatibility = '1.6'
+	targetCompatibility = '1.6'
+	eclipse {
+		classpath.downloadSources = true
+		jdt {
+			sourceCompatibility = 1.6
+			targetCompatibility = 1.6
+		}
+	}
+}
