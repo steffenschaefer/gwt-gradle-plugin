@@ -1,26 +1,43 @@
-task wrapper(type: Wrapper) { gradleVersion = '1.6' }
-
-allprojects {
-	apply plugin: 'eclipse'
-
-	group = 'de.richsource.gradle.plugins'
-	version = '1.0-SNAPSHOT'
-}
-
-eclipse.project.name=project.name
+task publish
 
 subprojects {
 	apply plugin: 'java'
-	apply plugin: 'groovy'
+	apply plugin: 'maven-publish'
 
-	version = rootProject.version
-	sourceCompatibility = '1.6'
-	targetCompatibility = '1.6'
-	eclipse {
-		classpath.downloadSources = true
-		jdt {
-			sourceCompatibility = 1.6
-			targetCompatibility = 1.6
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	repositories { mavenCentral() }
+
+	dependencies {
+		compile gradleApi()
+		testCompile group: 'junit', name: 'junit', version: '4.+'
+	}
+	
+	task sourceJar(type: Jar) {
+		from sourceSets.main.allJava
+	}
+	
+	task javadocJar (type: Jar, dependsOn: javadoc) {
+		from javadoc.destinationDir
+	}
+
+	group='de.richsource.gradle.plugins'
+	version='0.1-SNAPSHOT'
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+				artifact javadocJar { classifier = 'javadoc' }
+				artifact sourceJar { classifier = 'sources' }
+			}
+		}
+		repositories {
+			maven {
+				url new File(rootProject.projectDir, 'repo').toURI()
+			}
 		}
 	}
+
+	rootProject.tasks.publish.dependsOn project.tasks.publish
 }

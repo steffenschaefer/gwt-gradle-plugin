@@ -3,3 +3,5 @@ bin/
 .project
 .gradle/
 .settings/
+build/
+/repo/
