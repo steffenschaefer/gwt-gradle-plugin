@@ -20,7 +20,7 @@ public class GwtBasePlugin implements Plugin<Project> {
 	@Override
 	public void apply(Project project) {
 		project.getPlugins().apply(JavaPlugin.class);
-		final GwtPluginExtension gwtPluginExtension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
+		final GwtPluginExtension extension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
 		
 		GwtCompileTask compileTask = project.getTasks().create(GwtCompileTask.NAME, GwtCompileTask.class);
 		final File buildDir = new File(project.getBuildDir(), BUILD_DIR);
@@ -38,16 +38,14 @@ public class GwtBasePlugin implements Plugin<Project> {
 		compileTask.classpath(mainSourceSet.getOutput().getClassesDir());
 		compileTask.classpath(mainSourceSet.getCompileClasspath());
 		
-//		sourceSets.main.java.srcDirs,
-//        sourceSets.main.output.resourcesDir,
-//        sourceSets.main.output.classesDir,
-//        sourceSets.main.compileClasspath
+		compileTask.getInputs().source(mainSourceSet.getAllJava().getSrcDirs());
+		compileTask.getInputs().source(mainSourceSet.getOutput().getResourcesDir());
 		
 		compileTask.conventionMapping("modules", new Callable<List<String>>() {
 
 			@Override
 			public List<String> call() throws Exception {
-				return gwtPluginExtension.getModules();
+				return extension.getModules();
 			}
 		});
 	}

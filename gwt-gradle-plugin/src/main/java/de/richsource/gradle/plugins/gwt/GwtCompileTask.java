@@ -2,6 +2,11 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
+import de.richsource.gradle.plugins.gwt.option.CompilerOptions;
+import de.richsource.gradle.plugins.gwt.option.LogLevel;
+import de.richsource.gradle.plugins.gwt.option.Style;
+import de.richsource.gradle.plugins.gwt.option.impl.CompilerOptionsImpl;
+
 
 //-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
 //-workDir                The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
@@ -19,56 +24,57 @@ import java.io.File;
 //-war                    The directory into which deployable output files will be written (defaults to 'war')
 //-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra                  The directory into which extra files, not intended for deployment, will be written
-public class GwtCompileTask extends AbstractGwtActionTask {
+public class GwtCompileTask extends AbstractGwtActionTask implements CompilerOptions {
 	
 	public static final String NAME = "compileGwt";
 	
+	private CompilerOptions options = new CompilerOptionsImpl();
+
 //	private Boolean noserver;
 //	private Integer port;
 //	private String whitelist;
-	
-	private LogLevel logLevel;
-	private File workDir;
-	private File gen;
-	private Style style;
-	private Boolean ea;
-	private Boolean enableClosureCompiler;
-	private Boolean disableClassMetadata;
-	private Boolean disableCastChecking;
-	private Boolean validateOnly;
-	private Boolean draftCompile;
-	private Integer optimize;
-	private Boolean compileReport;
-	private Boolean strict;
-	private Integer localWorkers;
-	private File war;
-	private File deploy;
-	private File extra;
 
 	@Override
 	protected String getClassName() {
 		return "com.google.gwt.dev.Compiler";
 	}
 	
-	@Override
-	protected void addArgs() {
-		argIfSet("-logLevel", getLogLevel());
-		dirArgIfSet("-workDir", getWorkDir());
-		dirArgIfSet("-gen", getGen());
-		argIfSet("-style", getStyle());
-		argIfEnabled(getEa(), "-ea");
-		argIfEnabled(getEnableClosureCompiler(), "-XenableClosureCompiler");
+	private void addJJSOptions() {
+		argIfSet("-optimize", getOptimize());
+		argIfEnabled(getDisableAggressiveOptimization(), "-XdisableAggressiveOptimization");
 		argIfEnabled(getDisableClassMetadata(), "-XdisableClassMetadata");
 		argIfEnabled(getDisableCastChecking(), "-XdisableCastChecking");
-		argIfEnabled(getValidateOnly(), "-validateOnly");
-		argIfEnabled(getDraftCompile(), "-draftCompile");
-		argIfSet("-optimize", getOptimize());
-		argIfEnabled(getCompileReport(), "-compileReport");
+		argIfEnabled(getEa(), "-ea");
+		argIfEnabled(getDisableRunAsync(), "-XdisableRunAsync");
+		argIfSet("-style", getStyle());
+		argIfEnabled(getSoyc(), "-soyc");
+		argIfEnabled(getSoycDetailed(), "-XsoycDetailed");
 		argIfEnabled(getStrict(), "-strict");
-		argIfSet("-localWorkers", getLocalWorkers());
+		argIfEnabled(getDisableSoycHtml(), "-XdisableSoycHtml");
+		argIfEnabled(getEnableClosureCompiler(), "-XenableClosureCompiler");
+		argIfSet("-XfragmentCount", getFragmentCount());
+	}
+	
+	private void addPrecompileOptions() {
+		addJJSOptions();
+		dirArgIfSet("-gen", getGen());
+		argIfEnabled(getValidateOnly(), "-validateOnly");
+		argIfEnabled(getDisableGeneratingOnShards(), "-XdisableGeneratingOnShards");
+	}
+	
+	@Override
+	protected void addArgs() {
+		addPrecompileOptions();
+		
 		dirArgIfSet("-war", getWar());
 		dirArgIfSet("-deploy", getDeploy());
 		dirArgIfSet("-extra", getExtra());
+		dirArgIfSet("-out", getOut());
+		dirArgIfSet("-workDir", getWorkDir());
+		argIfSet("-localWorkers", getLocalWorkers());
+		argIfSet("-logLevel", getLogLevel());
+		argIfEnabled(getDraftCompile(), "-draftCompile");
+		argIfEnabled(getCompileReport(), "-compileReport");
 
 		// Dev
 		
@@ -90,139 +96,204 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 		
 	}
 
-	public LogLevel getLogLevel() {
-		return logLevel;
-	}
-
-	public void setLogLevel(LogLevel logLevel) {
-		this.logLevel = logLevel;
-	}
-
-	public File getWorkDir() {
-		return workDir;
-	}
-
-	public void setWorkDir(File workDir) {
-		this.workDir = workDir;
+	public Integer getOptimize() {
+		return options.getOptimize();
 	}
 
 	public File getGen() {
-		return gen;
-	}
-
-	public void setGen(File gen) {
-		this.gen = gen;
-	}
-
-	public Style getStyle() {
-		return style;
-	}
-
-	public void setStyle(Style style) {
-		this.style = style;
-	}
-
-	public Boolean getEa() {
-		return ea;
-	}
-
-	public void setEa(Boolean ea) {
-		this.ea = ea;
-	}
-
-	public Boolean getDisableClassMetadata() {
-		return disableClassMetadata;
-	}
-
-	public void setDisableClassMetadata(Boolean disableClassMetadata) {
-		this.disableClassMetadata = disableClassMetadata;
-	}
-
-	public Boolean getDisableCastChecking() {
-		return disableCastChecking;
-	}
-
-	public void setDisableCastChecking(Boolean disableCastChecking) {
-		this.disableCastChecking = disableCastChecking;
-	}
-
-	public Boolean getValidateOnly() {
-		return validateOnly;
-	}
-
-	public void setValidateOnly(Boolean validateOnly) {
-		this.validateOnly = validateOnly;
-	}
-
-	public Boolean getDraftCompile() {
-		return draftCompile;
-	}
-
-	public void setDraftCompile(Boolean draftCompile) {
-		this.draftCompile = draftCompile;
-	}
-
-	public Integer getOptimize() {
-		return optimize;
-	}
-
-	public void setOptimize(Integer optimize) {
-		this.optimize = optimize;
-	}
-
-	public Boolean getCompileReport() {
-		return compileReport;
-	}
-
-	public void setCompileReport(Boolean compileReport) {
-		this.compileReport = compileReport;
-	}
-
-	public Boolean getStrict() {
-		return strict;
-	}
-
-	public void setStrict(Boolean strict) {
-		this.strict = strict;
-	}
-
-	public Integer getLocalWorkers() {
-		return localWorkers;
-	}
-
-	public void setLocalWorkers(Integer localWorkers) {
-		this.localWorkers = localWorkers;
+		return options.getGen();
 	}
 
 	public File getWar() {
-		return war;
+		return options.getWar();
+	}
+
+	public void setGen(File gen) {
+		options.setGen(gen);
+	}
+
+	public void setOptimize(Integer optimize) {
+		options.setOptimize(optimize);
 	}
 
 	public void setWar(File war) {
-		this.war = war;
+		options.setWar(war);
+	}
+
+	public Boolean getValidateOnly() {
+		return options.getValidateOnly();
 	}
 
 	public File getDeploy() {
-		return deploy;
+		return options.getDeploy();
+	}
+
+	public Boolean getDisableAggressiveOptimization() {
+		return options.getDisableAggressiveOptimization();
 	}
 
 	public void setDeploy(File deploy) {
-		this.deploy = deploy;
+		options.setDeploy(deploy);
+	}
+
+	public void setValidateOnly(Boolean validateOnly) {
+		options.setValidateOnly(validateOnly);
 	}
 
 	public File getExtra() {
-		return extra;
+		return options.getExtra();
+	}
+
+	public void setDisableAggressiveOptimization(
+			Boolean disableAggressiveOptimization) {
+		options.setDisableAggressiveOptimization(disableAggressiveOptimization);
+	}
+
+	public Boolean getDisableGeneratingOnShards() {
+		return options.getDisableGeneratingOnShards();
 	}
 
 	public void setExtra(File extra) {
-		this.extra = extra;
+		options.setExtra(extra);
+	}
+
+	public File getOut() {
+		return options.getOut();
+	}
+
+	public void setDisableGeneratingOnShards(Boolean disableGeneratingOnShards) {
+		options.setDisableGeneratingOnShards(disableGeneratingOnShards);
+	}
+
+	public void setOut(File out) {
+		options.setOut(out);
+	}
+
+	public Boolean getDisableClassMetadata() {
+		return options.getDisableClassMetadata();
+	}
+
+	public File getWorkDir() {
+		return options.getWorkDir();
+	}
+
+	public void setWorkDir(File workDir) {
+		options.setWorkDir(workDir);
+	}
+
+	public void setDisableClassMetadata(Boolean disableClassMetadata) {
+		options.setDisableClassMetadata(disableClassMetadata);
+	}
+
+	public Integer getLocalWorkers() {
+		return options.getLocalWorkers();
+	}
+
+	public void setLocalWorkers(Integer localWorkers) {
+		options.setLocalWorkers(localWorkers);
+	}
+
+	public Boolean getDisableCastChecking() {
+		return options.getDisableCastChecking();
+	}
+
+	public LogLevel getLogLevel() {
+		return options.getLogLevel();
+	}
+
+	public void setDisableCastChecking(Boolean disableCastChecking) {
+		options.setDisableCastChecking(disableCastChecking);
+	}
+
+	public void setLogLevel(LogLevel logLevel) {
+		options.setLogLevel(logLevel);
+	}
+
+	public Boolean getEa() {
+		return options.getEa();
+	}
+
+	public Boolean getDraftCompile() {
+		return options.getDraftCompile();
+	}
+
+	public void setEa(Boolean ea) {
+		options.setEa(ea);
+	}
+
+	public void setDraftCompile(Boolean draftCompile) {
+		options.setDraftCompile(draftCompile);
+	}
+
+	public Boolean getDisableRunAsync() {
+		return options.getDisableRunAsync();
+	}
+
+	public Boolean getCompileReport() {
+		return options.getCompileReport();
+	}
+
+	public void setDisableRunAsync(Boolean disableRunAsync) {
+		options.setDisableRunAsync(disableRunAsync);
+	}
+
+	public void setCompileReport(Boolean compileReport) {
+		options.setCompileReport(compileReport);
+	}
+
+	public Style getStyle() {
+		return options.getStyle();
+	}
+
+	public void setStyle(Style style) {
+		options.setStyle(style);
+	}
+
+	public Boolean getSoyc() {
+		return options.getSoyc();
+	}
+
+	public void setSoyc(Boolean soyc) {
+		options.setSoyc(soyc);
+	}
+
+	public Boolean getSoycDetailed() {
+		return options.getSoycDetailed();
+	}
+
+	public void setSoycDetailed(Boolean soycDetailed) {
+		options.setSoycDetailed(soycDetailed);
+	}
+
+	public Boolean getStrict() {
+		return options.getStrict();
+	}
+
+	public void setStrict(Boolean strict) {
+		options.setStrict(strict);
+	}
+
+	public Boolean getDisableSoycHtml() {
+		return options.getDisableSoycHtml();
+	}
+
+	public void setDisableSoycHtml(Boolean disableSoycHtml) {
+		options.setDisableSoycHtml(disableSoycHtml);
 	}
 
 	public Boolean getEnableClosureCompiler() {
-		return enableClosureCompiler;
+		return options.getEnableClosureCompiler();
 	}
 
 	public void setEnableClosureCompiler(Boolean enableClosureCompiler) {
-		this.enableClosureCompiler = enableClosureCompiler;
+		options.setEnableClosureCompiler(enableClosureCompiler);
+	}
+
+	public Integer getFragmentCount() {
+		return options.getFragmentCount();
+	}
+
+	public void setFragmentCount(Integer fragmentCount) {
+		options.setFragmentCount(fragmentCount);
 	}
 }
