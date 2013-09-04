@@ -1,5 +1,6 @@
 package de.richsource.gradle.plugins.gwt;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		this.modules = modules;
 	}
 	
-	public void javaArgs(String... args) {
+	public void javaArgs(Object... args) {
 		javaExec.jvmArgs(args);
 	}
 	
@@ -58,7 +59,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		return extraArgs;
 	}
 	
-	protected void arg(String... arg) {
+	protected void arg(Object... arg) {
 		javaExec.args(arg);
 	}
 	
@@ -68,9 +69,16 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		}
 	}
 	
+	protected void dirArgIfSet(String arg, File dir) {
+		if(dir != null) {
+			dir.mkdirs();
+			arg(arg, dir);
+		}
+	}
+	
 	protected void argIfSet(String arg, Object value) {
 		if(value != null) {
-			arg(arg, value.toString());
+			arg(arg, value);
 		}
 	}
 	

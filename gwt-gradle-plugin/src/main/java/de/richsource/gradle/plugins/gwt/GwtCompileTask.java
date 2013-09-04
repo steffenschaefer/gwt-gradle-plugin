@@ -53,8 +53,8 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 	@Override
 	protected void addArgs() {
 		argIfSet("-logLevel", getLogLevel());
-		argIfSet("-workDir", getWorkDir());
-		argIfSet("-gen", getGen());
+		dirArgIfSet("-workDir", getWorkDir());
+		dirArgIfSet("-gen", getGen());
 		argIfSet("-style", getStyle());
 		argIfEnabled(getEa(), "-ea");
 		argIfEnabled(getEnableClosureCompiler(), "-XenableClosureCompiler");
@@ -66,9 +66,9 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 		argIfEnabled(getCompileReport(), "-compileReport");
 		argIfEnabled(getStrict(), "-strict");
 		argIfSet("-localWorkers", getLocalWorkers());
-		argIfSet("-war", getWar());
-		argIfSet("-deploy", getDeploy());
-		argIfSet("-extra", getExtra());
+		dirArgIfSet("-war", getWar());
+		dirArgIfSet("-deploy", getDeploy());
+		dirArgIfSet("-extra", getExtra());
 
 		// Dev
 		
