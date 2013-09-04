@@ -1,0 +1,87 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse'
+
+httpPort = 8081
+stopPort = 9451
+stopKey = 'stop'
+
+repositories { mavenCentral() }
+
+dependencies {
+	providedCompile 'com.google.gwt:gwt-user:2.5.0'
+    providedCompile 'com.google.gwt:gwt-dev:2.5.0'
+    compile('javax.validation:validation-api:1.0.0.GA') { 
+        artifact {
+            name = 'validation-api'
+            type = 'jar'
+        }
+        artifact {
+            name = 'validation-api'
+            type = 'jar'
+            classifier = 'sources'
+        }
+    }
+    runtime 'com.google.gwt:gwt-servlet:2.5.0'
+    runtime 'org.json:json:20090211'
+}
+
+task compileGwt (dependsOn: [compileJava, processResources], type: JavaExec) {
+	ext {
+	    buildDir = "${project.buildDir}/gwt"
+	    extraDir = "${project.buildDir}/extra"
+	}
+     
+    inputs.source sourceSets.main.java.srcDirs
+    inputs.dir sourceSets.main.output.resourcesDir
+    outputs.dir buildDir
+     
+    outputs.upToDateSpec = new org.gradle.api.specs.AndSpec()
+     
+    doFirst {
+        file(buildDir).mkdirs()
+    }
+     
+    main = 'com.google.gwt.dev.Compiler'
+     
+    classpath {
+        [
+            sourceSets.main.java.srcDirs,
+            sourceSets.main.output.resourcesDir,
+            sourceSets.main.output.classesDir,
+            sourceSets.main.compileClasspath
+        ]   
+    }
+     
+    args =
+        [
+            'de.richsource.gradle.plugins.gwt.example.Basic',
+            '-war', buildDir,
+            '-logLevel', 'INFO',
+            '-extra', extraDir
+        ]
+         
+    maxHeapSize = '512M'
+}
+
+sourceSets {
+	main {
+		output.dir(tasks.compileGwt.buildDir, builtBy: 'compileGwt')
+	}
+}
+
+task explodedWar(type: Sync) {
+	into "$buildDir/explodedWar"
+	with war
+}
+
+eclipse {
+    project {
+        natures 'com.google.gwt.eclipse.core.gwtNature'
+        buildCommand 'com.google.gdt.eclipse.core.webAppProjectValidator'
+        buildCommand 'com.google.gwt.eclipse.core.gwtProjectValidator'       
+    }
+    classpath {
+        containers 'com.google.gwt.eclipse.core.GWT_CONTAINER'
+    }
+}

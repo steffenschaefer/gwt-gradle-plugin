@@ -1,0 +1,13 @@
+subprojects {
+	buildscript {
+		repositories {
+			maven {
+				url new File(rootProject.projectDir.parentFile, 'repo').toURI()
+			}
+			mavenCentral()
+		}
+		dependencies {
+			classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1-SNAPSHOT'
+		}
+	}
+}
