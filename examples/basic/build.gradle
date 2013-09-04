@@ -8,24 +8,7 @@ stopKey = 'stop'
 
 repositories { mavenCentral() }
 
-dependencies {
-	providedCompile 'com.google.gwt:gwt-user:2.5.0'
-    providedCompile 'com.google.gwt:gwt-dev:2.5.0'
-    compile('javax.validation:validation-api:1.0.0.GA') { 
-        artifact {
-            name = 'validation-api'
-            type = 'jar'
-        }
-        artifact {
-            name = 'validation-api'
-            type = 'jar'
-            classifier = 'sources'
-        }
-    }
-    runtime 'com.google.gwt:gwt-servlet:2.5.0'
-    runtime 'org.json:json:20090211'
-}
-
 gwt {
+	gwtVersion='2.5.1'
 	modules=['de.richsource.gradle.plugins.gwt.example.Basic']
 }
