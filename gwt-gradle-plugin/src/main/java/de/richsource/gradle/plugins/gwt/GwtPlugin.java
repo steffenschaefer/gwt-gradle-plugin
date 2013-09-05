@@ -8,6 +8,7 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.WarPlugin;
@@ -21,6 +22,10 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String OUT_DIR = "out";
 	public static final String EXTRA_DIR = "extra";
 	public static final String WORK_DIR = "work";
+	public static final String GWT_GROUP = "com.google.gwt";
+	public static final String GWT_DEV = "gwt-dev";
+	public static final String GWT_USER = "gwt-user";
+	public static final String GWT_SERVLET = "gwt-servlet";
 
 	@Override
 	public void apply(final Project project) {
@@ -29,6 +34,7 @@ public class GwtPlugin implements Plugin<Project> {
 		final GwtPluginExtension extension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
+		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
 		
 		final GwtCompileTask compileTask = project.getTasks().create(GwtCompileTask.NAME, GwtCompileTask.class);
 		final File buildDir = new File(project.getBuildDir(), BUILD_DIR);
@@ -74,15 +80,9 @@ public class GwtPlugin implements Plugin<Project> {
 			public void execute(Project arg0) {
 				final String gwtVersion = extension.getGwtVersion();
 				if(gwtVersion != null && !extension.getGwtVersion().isEmpty()) {
-					
-					project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
-
-						@Override
-						public void execute(WarPlugin warPlugin) {
-							project.getDependencies().add(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME, "com.google.gwt:gwt-dev:"+gwtVersion);
-							project.getDependencies().add(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME, "com.google.gwt:gwt-user:"+gwtVersion);
-							project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, "com.google.gwt:gwt-servlet:"+gwtVersion);
-						}});
+					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
+					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
+					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
 				}
 			}});
 		
