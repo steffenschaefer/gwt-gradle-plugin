@@ -7,11 +7,17 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.file.CopySpec;
+import org.gradle.api.file.FileTreeElement;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.WarPlugin;
+import org.gradle.api.plugins.WarPluginConvention;
+import org.gradle.api.specs.Spec;
+import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.War;
 
@@ -46,7 +52,7 @@ public class GwtPlugin implements Plugin<Project> {
 		compileTask.setWorkDir(workDir);
 		
 		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-		SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 		compileTask.classpath(mainSourceSet.getAllJava().getSrcDirs());
 		compileTask.classpath(mainSourceSet.getOutput().getResourcesDir());
 		compileTask.classpath(mainSourceSet.getOutput().getClassesDir());
@@ -73,6 +79,31 @@ public class GwtPlugin implements Plugin<Project> {
 				warTask.from(compileTask.getWar());
 				
 				project.getConfigurations().getByName(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
+				
+				Copy warTemplateTask = project.getTasks().create("warTemplate", Copy.class);
+				warTemplateTask.with(warTask);
+				warTemplateTask.into(project.file("war"));
+				
+				GwtDev devModeTask = project.getTasks().create("gwtDev", GwtDev.class);
+				devModeTask.dependsOn(warTemplateTask);
+				devModeTask.classpath(mainSourceSet.getAllJava().getSrcDirs());
+				devModeTask.classpath(mainSourceSet.getOutput().getResourcesDir());
+				devModeTask.classpath(mainSourceSet.getOutput().getClassesDir());
+				devModeTask.classpath(mainSourceSet.getCompileClasspath());
+				
+				compileTask.getOutputs().upToDateWhen(new Spec<Task>(){
+					@Override
+					public boolean isSatisfiedBy(Task arg0) {
+						return false;
+					}});
+				
+				devModeTask.conventionMapping("modules", new Callable<List<String>>() {
+
+					@Override
+					public List<String> call() throws Exception {
+						return extension.getModules();
+					}
+				});
 			}});
 		
 		project.afterEvaluate(new Action<Project>() {
