@@ -30,7 +30,8 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	public void run() {
 		javaExec.setMain(getClassName());
 		
-		javaExec.jvmArgs("-Xms"+ms, "-Xmx"+mx);
+		javaExec.setMinHeapSize(ms);
+		javaExec.setMaxHeapSize(mx);
 		
 		addArgs();
 		javaExec.args(getExtraArgs());
