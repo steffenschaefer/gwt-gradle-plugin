@@ -85,6 +85,12 @@ public class GwtPlugin implements Plugin<Project> {
 				warTemplateTask.into(project.file("war"));
 				
 				GwtDev devModeTask = project.getTasks().create("gwtDev", GwtDev.class);
+				for(Object dependsTask:warTask.getDependsOn()) {
+					System.out.println(dependsTask);
+					if(!compileTask.equals(dependsTask)) {
+						devModeTask.dependsOn(dependsTask);
+					}
+				}
 				devModeTask.dependsOn(warTemplateTask);
 				devModeTask.classpath(mainSourceSet.getAllJava().getSrcDirs());
 				devModeTask.classpath(mainSourceSet.getOutput().getResourcesDir());
