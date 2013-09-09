@@ -5,6 +5,4 @@
 	<source path="client" />
 	<entry-point
 		class="de.richsource.gradle.plugins.gwt.example.client.ExampleEntryPoint" />
-		
-	<collapse-all-properties/>
 </module>
