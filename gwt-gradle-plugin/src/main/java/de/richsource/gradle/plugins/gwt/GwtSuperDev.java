@@ -1,6 +1,10 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.concurrent.Callable;
+
+import org.gradle.api.Task;
+import org.gradle.api.specs.Spec;
 
 //CodeServer [-bindAddress address] [-port port] [-workDir dir] [-src
 // dir] [module]
@@ -14,11 +18,15 @@ import java.io.File;
 // module The GWT modules that the code server should compile. (Example: com.example.MyApp)
 public class GwtSuperDev extends AbstractGwtActionTask {
 	
-	private File workDir;
-
-	private String bindAddress;
-	private Integer port;
-	private Boolean noPrecompile;
+	private final GwtSuperDevOptions options = new GwtSuperDevOptions();
+	
+	public GwtSuperDev() {
+		getOutputs().upToDateWhen(new Spec<Task>(){
+			@Override
+			public boolean isSatisfiedBy(Task task) {
+				return false;
+			}});
+	}
 
 	@Override
 	protected String getClassName() {
@@ -39,39 +47,60 @@ public class GwtSuperDev extends AbstractGwtActionTask {
 		argIfEnabled(getNoPrecompile(), "-noprecompile");
 	}
 	
+	protected void configure(final GwtSuperDevOptions options) {
+		conventionMapping("bindAddress", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return options.getBindAddress();
+			}
+		});
+		conventionMapping("port", new Callable<Integer>() {
+			@Override
+			public Integer call() throws Exception {
+				return options.getPort();
+			}
+		});
+		conventionMapping("noPrecompile", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getNoPrecompile();
+			}
+		});
+	}
+	
 	protected boolean prependSrcToClasspath() {
 		return false;
 	}
 
 	public File getWorkDir() {
-		return workDir;
+		return options.getWorkDir();
 	}
 
 	public void setWorkDir(File workDir) {
-		this.workDir = workDir;
+		options.setWorkDir(workDir);
 	}
 
 	public String getBindAddress() {
-		return bindAddress;
+		return options.getBindAddress();
 	}
 
 	public void setBindAddress(String bindAddress) {
-		this.bindAddress = bindAddress;
+		options.setBindAddress(bindAddress);
 	}
 
 	public Integer getPort() {
-		return port;
+		return options.getPort();
 	}
 
 	public void setPort(Integer port) {
-		this.port = port;
+		options.setPort(port);
 	}
 
 	public Boolean getNoPrecompile() {
-		return noPrecompile;
+		return options.getNoPrecompile();
 	}
 
 	public void setNoPrecompile(Boolean noPrecompile) {
-		this.noPrecompile = noPrecompile;
+		options.setNoPrecompile(noPrecompile);
 	}
 }

@@ -23,6 +23,7 @@ public class GwtPluginExtension {
 	private String maxHeapSize = "256M";
 	
 	private final GwtDevOptions dev = new GwtDevOptions();
+	private final GwtSuperDevOptions superDev = new GwtSuperDevOptions();
 
 	public List<String> getModules() {
 		return modules;
@@ -118,6 +119,15 @@ public class GwtPluginExtension {
 	
 	public GwtPluginExtension dev(Closure<GwtDevOptions> c) {
 		ConfigureUtil.configure(c, dev);
+		return this;
+	}
+	
+	public GwtSuperDevOptions getSuperDev() {
+		return superDev;
+	}
+	
+	public GwtPluginExtension superDev(Closure<GwtDevOptions> c) {
+		ConfigureUtil.configure(c, superDev);
 		return this;
 	}
 }

@@ -60,6 +60,7 @@ public class GwtPlugin implements Plugin<Project> {
 		configureAbstractTasks(project, extension);
 		configureGwtCompile(project, extension);
 		configureGwtDev(project, extension);
+		configureSuperGwtDev(project, extension);
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
 		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
@@ -246,6 +247,15 @@ public class GwtPlugin implements Plugin<Project> {
 			@Override
 			public void execute(final GwtDev task) {
 				task.configure(extension.getDev());
+			}
+		});
+	}
+	
+	private void configureSuperGwtDev(final Project project, final GwtPluginExtension extension) {
+		project.getTasks().withType(GwtSuperDev.class, new Action<GwtSuperDev>() {
+			@Override
+			public void execute(final GwtSuperDev task) {
+				task.configure(extension.getSuperDev());
 			}
 		});
 	}

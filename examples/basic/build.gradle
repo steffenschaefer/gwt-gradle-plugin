@@ -34,10 +34,10 @@ gwt {
 //		bindAddress='192.168.178.22'
 //		startupUrl='foo.html'
 //	}
-}
-
-gwtSuperDev {
-	noPrecompile=true
+	superDev {
+		noPrecompile=true
+//		port = 1337
+	}
 }
 
 cargo {
