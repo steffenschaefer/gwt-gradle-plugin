@@ -1,5 +1,6 @@
 apply plugin: 'war'
 apply plugin: 'cargo'
+apply plugin: 'jetty'
 apply plugin: 'gwt'
 apply plugin: 'eclipse'
 
@@ -25,6 +26,18 @@ gwt {
 	gwtVersion='2.5.1'
 	modules=['de.richsource.gradle.plugins.gwt.example.Basic']
 	devModules=['de.richsource.gradle.plugins.gwt.example.Basic-dev']
+//	cacheDir=file("$buildDir/gwt/cache")
+}
+
+//gwtDev {
+//	codeServerPort=1338
+//	port=1337
+//	bindAddress='192.168.178.22'
+//	startupUrl='foo.html'
+//}
+
+gwtSuperDev {
+	noPrecompile=true
 }
 
 cargo {
@@ -43,6 +56,10 @@ cargo {
             extractDir = file("$buildDir/extract")
         }
 	}
+}
+
+task jettyDraftWar(type: JettyRunWar, dependsOn: 'draftWar') {
+	webApp=draftWar.archivePath
 }
 
 afterEvaluate {
