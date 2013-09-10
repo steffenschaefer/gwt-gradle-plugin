@@ -26,8 +26,8 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	private FileCollection classpath;
 	private List<String> extraArgs = new ArrayList<String>();
 	
-	private String ms = "256M";
-	private String mx = "512M";
+	private String minHeapSize;
+	private String maxHeapSize;
 
 	public AbstractGwtActionTask() {
 		FileResolver fileResolver = getServices().get(FileResolver.class);
@@ -43,8 +43,8 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		}
 		javaExec.classpath(getClasspath());
 		
-		javaExec.setMinHeapSize(ms);
-		javaExec.setMaxHeapSize(mx);
+		javaExec.setMinHeapSize(getMinHeapSize());
+		javaExec.setMaxHeapSize(getMaxHeapSize());
 		
 		addArgs();
 		javaExec.args(getExtraArgs());
@@ -110,27 +110,27 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		return true;
 	}
 
-	public String getMs() {
-		return ms;
+	public String getMinHeapSize() {
+		return minHeapSize;
 	}
 
-	public void setMs(String ms) {
-		this.ms = ms;
-	}
-
-	public String getMx() {
-		return mx;
-	}
-
-	public void setMx(String mx) {
-		this.mx = mx;
+	public void setMinHeapSize(String minHeapSize) {
+		this.minHeapSize = minHeapSize;
 	}
 	
+	public String getMaxHeapSize() {
+		return maxHeapSize;
+	}
+	
+	public void setMaxHeapSize(String maxHeapSize) {
+		this.maxHeapSize = maxHeapSize;
+	}
+	
+	@InputFiles
 	public Set<File> getSrc() {
 		return src;
 	}
 
-	@InputFiles
 	public void setSrc(Set<File> src) {
 		this.src = src;
 	}

@@ -58,7 +58,9 @@ public class GwtPlugin implements Plugin<Project> {
 		extension.setWorkDir(new File(buildDir, WORK_DIR));
 		extension.setGenDir(new File(buildDir, GEN_DIR));
 		
-		configureConventions(project, extension);
+		configureAbstractActionTasks(project, extension);
+		configureAbstractTasks(project, extension);
+		configureGwtCompile(project, extension);
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
 		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
@@ -146,7 +148,7 @@ public class GwtPlugin implements Plugin<Project> {
 		
 	}
 
-	private void configureConventions(final Project project,
+	private void configureAbstractTasks(final Project project,
 			final GwtPluginExtension extension) {
 		project.getTasks().withType(AbstractGwtTask.class, new Action<AbstractGwtTask>() {
 			@Override
@@ -177,7 +179,10 @@ public class GwtPlugin implements Plugin<Project> {
 						return extension.getLogLevel();
 					}});
 			}});
-		
+	}
+	
+	private void configureAbstractActionTasks(final Project project,
+			final GwtPluginExtension extension) {
 		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
 		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 		project.getTasks().withType(AbstractGwtActionTask.class, new Action<AbstractGwtActionTask>() {
@@ -208,8 +213,34 @@ public class GwtPlugin implements Plugin<Project> {
 						return mainSourceSet.getCompileClasspath().plus(project.files(mainSourceSet.getOutput().getClassesDir()));
 					}
 				});
+				task.conventionMapping("minHeapSize", new Callable<String>() {
+					@Override
+					public String call() throws Exception {
+						return extension.getMinHeapSize();
+					}
+				});
+				task.conventionMapping("maxHeapSize", new Callable<String>() {
+					@Override
+					public String call() throws Exception {
+						return extension.getMaxHeapSize();
+					}
+				});
 			}});
-		
+	}
+	
+	private void configureGwtCompile(final Project project,
+			final GwtPluginExtension extension) {
+		project.getTasks().withType(GwtCompile.class, new Action<GwtCompile>() {
+			@Override
+			public void execute(final GwtCompile task) {
+				task.conventionMapping("localWorkers", new Callable<Integer>() {
+					@Override
+					public Integer call() throws Exception {
+						return Runtime.getRuntime().availableProcessors();
+					}
+				});
+			}
+		});
 	}
 	
 	private void configureNeverUpToDate(Task devModeTask) {

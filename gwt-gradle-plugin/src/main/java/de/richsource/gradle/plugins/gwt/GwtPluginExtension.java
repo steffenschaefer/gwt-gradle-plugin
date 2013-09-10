@@ -14,6 +14,9 @@ public class GwtPluginExtension {
 	private LogLevel logLevel;
 	private List<String> modules = new ArrayList<String>();
 	private List<String> devModules = new ArrayList<String>();
+	
+	private String minHeapSize = "256M";
+	private String maxHeapSize = "256M";
 
 	public List<String> getModules() {
 		return modules;
@@ -85,5 +88,21 @@ public class GwtPluginExtension {
 
 	public void setLogLevel(LogLevel logLevel) {
 		this.logLevel = logLevel;
+	}
+
+	public String getMinHeapSize() {
+		return minHeapSize;
+	}
+
+	public void setMinHeapSize(String minHeapSize) {
+		this.minHeapSize = minHeapSize;
+	}
+
+	public String getMaxHeapSize() {
+		return maxHeapSize;
+	}
+
+	public void setMaxHeapSize(String maxHeapSize) {
+		this.maxHeapSize = maxHeapSize;
 	}
 }
