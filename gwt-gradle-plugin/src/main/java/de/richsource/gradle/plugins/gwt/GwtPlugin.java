@@ -151,7 +151,7 @@ public class GwtPlugin implements Plugin<Project> {
 		
 	}
 
-	private void configureSpecialDirs(final AbstractGwtActionTaskWithDirs task,
+	private void configureSpecialDirs(final AbstractGwtTask task,
 			final GwtPluginExtension extension) {
 		
 		task.conventionMapping("extra", new Callable<File>(){

@@ -21,12 +21,11 @@ import org.gradle.api.tasks.OutputDirectory;
 //-war                    The directory into which deployable output files will be written (defaults to 'war')
 //-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra                  The directory into which extra files, not intended for deployment, will be written
-public class GwtCompile extends AbstractGwtActionTaskWithDirs {
+public class GwtCompile extends AbstractGwtTask {
 	
 	public static final String NAME = "compileGwt";
 	
 	private Integer localWorkers;
-	private LogLevel logLevel;
 	private Boolean draftCompile;
 	private Boolean compileReport;
 	
@@ -61,10 +60,9 @@ public class GwtCompile extends AbstractGwtActionTaskWithDirs {
 	
 	@Override
 	protected void addArgs() {
-		addDirArgs();
+		super.addArgs();
 		
 		argIfSet("-localWorkers", getLocalWorkers());
-		argIfSet("-logLevel", getLogLevel());
 		argIfEnabled(getDraftCompile(), "-draftCompile");
 		argIfEnabled(getCompileReport(), "-compileReport");
 
@@ -99,14 +97,6 @@ public class GwtCompile extends AbstractGwtActionTaskWithDirs {
 
 	public void setLocalWorkers(Integer localWorkers) {
 		this.localWorkers = localWorkers;
-	}
-
-	public LogLevel getLogLevel() {
-		return logLevel;
-	}
-
-	public void setLogLevel(LogLevel logLevel) {
-		this.logLevel = logLevel;
 	}
 
 	public Boolean getDraftCompile() {

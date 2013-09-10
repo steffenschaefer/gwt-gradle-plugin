@@ -2,20 +2,24 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
-public abstract class AbstractGwtActionTaskWithDirs extends AbstractGwtActionTask {
+public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 	private File war;
 	private File deploy;
 	private File extra;
 	private File workDir;
 	private File gen;
 	private File cacheDir;
+	private LogLevel logLevel;
 	
-	protected void addDirArgs() {
+	@Override
+	protected void addArgs() {
 		dirArgIfSet("-war", getWar());
 		dirArgIfSet("-deploy", getDeploy());
 		dirArgIfSet("-extra", getExtra());
 		dirArgIfSet("-workDir", getWorkDir());
 		dirArgIfSet("-gen", getGen());
+		
+		argIfSet("-logLevel", getLogLevel());
 		
 		final File cacheDir = getCacheDir();
 		if(cacheDir != null) {
@@ -70,5 +74,13 @@ public abstract class AbstractGwtActionTaskWithDirs extends AbstractGwtActionTas
 
 	public void setCacheDir(File cacheDir) {
 		this.cacheDir = cacheDir;
+	}
+
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+
+	public void setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
 	}
 }
