@@ -23,8 +23,6 @@ import org.gradle.api.tasks.OutputDirectory;
 //-extra                  The directory into which extra files, not intended for deployment, will be written
 public class GwtCompile extends AbstractGwtTask {
 	
-	public static final String NAME = "compileGwt";
-	
 	private Integer localWorkers;
 	private Boolean draftCompile;
 	private Boolean compileReport;
@@ -53,6 +51,8 @@ public class GwtCompile extends AbstractGwtTask {
 	// -XfragmentCount
 	private Integer fragmentCount;
 
+	private boolean devTask = false;
+	
 	@Override
 	protected String getClassName() {
 		return "com.google.gwt.dev.Compiler";
@@ -82,6 +82,16 @@ public class GwtCompile extends AbstractGwtTask {
 		argIfEnabled(getDisableSoycHtml(), "-XdisableSoycHtml");
 		argIfEnabled(getEnableClosureCompiler(), "-XenableClosureCompiler");
 		argIfSet("-XfragmentCount", getFragmentCount());
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	protected boolean isDevTask() {
+		return devTask;
+	}
+	
+	protected void setDevTask(boolean devTask) {
+		this.devTask = devTask;
 	}
 
 	/** {@inheritDoc} */

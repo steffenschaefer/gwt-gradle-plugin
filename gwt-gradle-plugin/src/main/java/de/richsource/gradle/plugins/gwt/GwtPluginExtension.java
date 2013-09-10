@@ -11,6 +11,7 @@ public class GwtPluginExtension {
 	private File workDir;
 	private File genDir;
 	private File cacheDir;
+	private LogLevel logLevel;
 	private List<String> modules = new ArrayList<String>();
 	private List<String> devModules = new ArrayList<String>();
 
@@ -76,5 +77,13 @@ public class GwtPluginExtension {
 
 	public void setCacheDir(File cacheDir) {
 		this.cacheDir = cacheDir;
+	}
+
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+
+	public void setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
 	}
 }

@@ -105,6 +105,10 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	protected abstract String getClassName();
 	
 	protected abstract void addArgs();
+	
+	protected boolean isDevTask() {
+		return true;
+	}
 
 	public String getMs() {
 		return ms;
