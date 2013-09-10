@@ -31,6 +31,7 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String EXTRA_DIR = "extra";
 	public static final String WORK_DIR = "work";
 	
+	private static final String DEV_WAR = "war";
 	private static final String TASK_WAR_TEMPLATE = "warTemplate";
 	
 	public static final String GWT_GROUP = "com.google.gwt";
@@ -43,7 +44,13 @@ public class GwtPlugin implements Plugin<Project> {
 	public void apply(final Project project) {
 		project.getPlugins().apply(JavaPlugin.class);
 		
+		final File buildDir = new File(project.getBuildDir(), BUILD_DIR);
+		
 		final GwtPluginExtension extension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
+		extension.setDevWar(project.file(DEV_WAR));
+		extension.setExtraDir(new File(buildDir, EXTRA_DIR));
+		extension.setWorkDir(new File(buildDir, WORK_DIR));
+		extension.setGenDir(new File(buildDir, "gen"));
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
 		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
@@ -51,26 +58,20 @@ public class GwtPlugin implements Plugin<Project> {
 		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
 		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 		
-		final File buildDir = new File(project.getBuildDir(), BUILD_DIR);
-		final File outDir = new File(buildDir, OUT_DIR);
-		final File draftOutDir = new File(buildDir, "draftOut");
-		final File extraDir = new File(buildDir, EXTRA_DIR);
-		final File workDir = new File(buildDir, WORK_DIR);
-		// configurable / convention mapping?
-		final File warDir = project.file("war");
-		
 		final Set<File> src = new HashSet<File>();
 		src.addAll(mainSourceSet.getAllJava().getSrcDirs());
 		src.add(mainSourceSet.getOutput().getResourcesDir());
 		final FileCollection compileClasspath = mainSourceSet.getCompileClasspath().plus(project.files(mainSourceSet.getOutput().getClassesDir()));
 		
 		final GwtCompile compileTask = project.getTasks().create(GwtCompile.NAME, GwtCompile.class);
-		configureDirs(compileTask, outDir, extraDir, workDir);
+		compileTask.setWar(new File(buildDir, OUT_DIR));
+		configureSpecialDirs(compileTask, extension);
 		configureSrcAndClasspath(compileTask, src, compileClasspath);
 		configureModules(extension, compileTask, false);
 		
 		final GwtCompile draftCompileTask = project.getTasks().create("draftCompileGwt", GwtCompile.class);
-		configureDirs(draftCompileTask, draftOutDir, extraDir, workDir);
+		draftCompileTask.setWar(new File(buildDir, "draftOut"));
+		configureSpecialDirs(draftCompileTask, extension);
 		configureSrcAndClasspath(draftCompileTask, src, compileClasspath);
 		configureModules(extension, draftCompileTask, true);
 		draftCompileTask.setDraftCompile(true);
@@ -83,25 +84,41 @@ public class GwtPlugin implements Plugin<Project> {
 			public void execute(WarPlugin warPlugin) {
 				War warTask = (War) project.getTasks().getByName(WarPlugin.WAR_TASK_NAME);
 				
-				// TODO convention mapping
-				warTask.from(compileTask.getWar());
+				warTask.from(new Callable<Object>() {
+					@Override
+					public Object call() throws Exception {
+						return compileTask.getWar();
+					}});
 				
 				project.getConfigurations().getByName(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
 				
 				final Copy warTemplateTask = project.getTasks().create(TASK_WAR_TEMPLATE, Copy.class);
 				warTemplateTask.with(warTask);
-				warTemplateTask.into(warDir);
+				warTemplateTask.conventionMapping("destinationDir", new Callable<File>(){
+					@Override
+					public File call() throws Exception {
+						return extension.getDevWar();
+					}});
+//				warTemplateTask.into(extension.getDevWar());
 				
 				final GwtDev devModeTask = project.getTasks().create("gwtDev", GwtDev.class);
-				configureDirs(devModeTask, warDir, extraDir, workDir);
+				devModeTask.conventionMapping("war", new Callable<File>(){
+					@Override
+					public File call() throws Exception {
+						return extension.getDevWar();
+					}});
+				configureSpecialDirs(devModeTask, extension);
 				configureSrcAndClasspath(devModeTask, src, compileClasspath);
 				configureNeverUpToDate(devModeTask);
 				configureModules(extension, devModeTask, true);
 				
 				
 				final War draftWar = project.getTasks().create("draftWar", War.class);
-				// TODO convention mapping
-				draftWar.from(draftCompileTask.getWar());
+				draftWar.from(new Callable<Object>() {
+					@Override
+					public Object call() throws Exception {
+						return draftCompileTask.getWar();
+					}});
 				draftWar.dependsOn(draftCompileTask);
 				draftWar.setBaseName(warTask.getBaseName()+"-draft");
 				
@@ -134,11 +151,24 @@ public class GwtPlugin implements Plugin<Project> {
 		
 	}
 
-	private void configureDirs(final AbstractGwtActionTaskWithDirs task, final File outDir,
-			final File extraDir, final File workDir) {
-		task.setWar(outDir);
-		task.setExtra(extraDir);
-		task.setWorkDir(workDir);
+	private void configureSpecialDirs(final AbstractGwtActionTaskWithDirs task,
+			final GwtPluginExtension extension) {
+		
+		task.conventionMapping("extra", new Callable<File>(){
+			@Override
+			public File call() throws Exception {
+				return extension.getExtraDir();
+			}});
+		task.conventionMapping("workDir", new Callable<File>(){
+			@Override
+			public File call() throws Exception {
+				return extension.getWorkDir();
+			}});
+		task.conventionMapping("gen", new Callable<File>(){
+			@Override
+			public File call() throws Exception {
+				return extension.getGenDir();
+			}});
 	}
 
 	private void configureSrcAndClasspath(final AbstractGwtActionTask task, final Set<File> src, final FileCollection classpath) {
