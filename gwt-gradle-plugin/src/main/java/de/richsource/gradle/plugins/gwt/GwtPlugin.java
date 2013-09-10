@@ -20,6 +20,8 @@ import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.War;
+import org.gradle.plugins.ide.eclipse.EclipsePlugin;
+import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 
 public class GwtPlugin implements Plugin<Project> {
 	public static final String CONFIGURATION_NAME = "gwt";
@@ -28,6 +30,8 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String OUT_DIR = "out";
 	public static final String EXTRA_DIR = "extra";
 	public static final String WORK_DIR = "work";
+	
+	private static final String TASK_WAR_TEMPLATE = "warTemplate";
 	
 	public static final String GWT_GROUP = "com.google.gwt";
 	public static final String GWT_DEV = "gwt-dev";
@@ -80,7 +84,7 @@ public class GwtPlugin implements Plugin<Project> {
 				
 				project.getConfigurations().getByName(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
 				
-				Copy warTemplateTask = project.getTasks().create("warTemplate", Copy.class);
+				Copy warTemplateTask = project.getTasks().create(TASK_WAR_TEMPLATE, Copy.class);
 				warTemplateTask.with(warTask);
 				warTemplateTask.into(project.file("war"));
 				
@@ -104,6 +108,8 @@ public class GwtPlugin implements Plugin<Project> {
 				
 			}
 		});
+		
+		configureEclipse(project);
 		
 		project.afterEvaluate(new Action<Project>() {
 			@Override
@@ -178,4 +184,22 @@ public class GwtPlugin implements Plugin<Project> {
 		});
 	}
 
+	private void configureEclipse(final Project project) {
+		project.getPlugins().withType(EclipsePlugin.class, new Action<EclipsePlugin>(){
+			@Override
+			public void execute(EclipsePlugin eclipsePlugin) {
+				final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
+				eclipseModel.getProject().natures("com.google.gwt.eclipse.core.gwtNature");
+				eclipseModel.getProject().buildCommand("com.google.gwt.eclipse.core.gwtProjectValidator");
+				
+				project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
+					@Override
+					public void execute(WarPlugin warPlugin) {
+						eclipseModel.getProject().buildCommand("com.google.gdt.eclipse.core.webAppProjectValidator");
+						
+						project.getTasks().getByName(EclipsePlugin.getECLIPSE_PROJECT_TASK_NAME()).dependsOn(TASK_WAR_TEMPLATE);
+					}
+				});
+			}});
+	}
 }

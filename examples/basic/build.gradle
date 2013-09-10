@@ -1,6 +1,7 @@
 apply plugin: 'war'
 apply plugin: 'cargo'
 apply plugin: 'gwt'
+apply plugin: 'eclipse'
 
 buildscript {
 	repositories {
