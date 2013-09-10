@@ -3,6 +3,7 @@ package de.richsource.gradle.plugins.gwt;
 import java.io.File;
 import java.util.concurrent.Callable;
 
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.OutputDirectory;
 
 
@@ -38,6 +39,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		argIfSet("-localWorkers", getLocalWorkers());
 		argIfEnabled(getDraftCompile(), "-draftCompile");
 		argIfEnabled(getCompileReport(), "-compileReport");
+		argIfEnabled(getCompilerMetrics(), "-XcompilerMetrics");
 
 		argIfEnabled(getValidateOnly(), "-validateOnly");
 		argIfEnabled(getDisableGeneratingOnShards(), "-XdisableGeneratingOnShards");
@@ -49,7 +51,6 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		argIfEnabled(getEa(), "-ea");
 		argIfEnabled(getDisableRunAsync(), "-XdisableRunAsync");
 		argIfSet("-style", getStyle());
-		argIfEnabled(getSoyc(), "-soyc");
 		argIfEnabled(getSoycDetailed(), "-XsoycDetailed");
 		argIfEnabled(getStrict(), "-strict");
 		argIfEnabled(getDisableSoycHtml(), "-XdisableSoycHtml");
@@ -81,6 +82,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setLocalWorkers(localWorkers);
 	}
 
+	@Input
 	public Boolean getDraftCompile() {
 		return options.getDraftCompile();
 	}
@@ -89,6 +91,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDraftCompile(draftCompile);
 	}
 
+	@Input
 	public Boolean getCompileReport() {
 		return options.getCompileReport();
 	}
@@ -97,6 +100,16 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setCompileReport(compileReport);
 	}
 
+	@Input
+	public Boolean getCompilerMetrics() {
+		return options.getCompilerMetrics();
+	}
+
+	public void setCompilerMetrics(Boolean compilerMetrics) {
+		options.setCompilerMetrics(compilerMetrics);
+	}
+
+	@Input
 	public Boolean getValidateOnly() {
 		return options.getValidateOnly();
 	}
@@ -105,6 +118,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setValidateOnly(validateOnly);
 	}
 
+	@Input
 	public Boolean getDisableGeneratingOnShards() {
 		return options.getDisableGeneratingOnShards();
 	}
@@ -113,6 +127,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDisableGeneratingOnShards(disableGeneratingOnShards);
 	}
 
+	@Input
 	public Integer getOptimize() {
 		return options.getOptimize();
 	}
@@ -121,6 +136,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setOptimize(optimize);
 	}
 
+	@Input
 	public Boolean getDisableAggressiveOptimization() {
 		return options.getDisableAggressiveOptimization();
 	}
@@ -130,6 +146,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDisableAggressiveOptimization(disableAggressiveOptimization);
 	}
 
+	@Input
 	public Boolean getDisableClassMetadata() {
 		return options.getDisableClassMetadata();
 	}
@@ -138,6 +155,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDisableClassMetadata(disableClassMetadata);
 	}
 
+	@Input
 	public Boolean getDisableCastChecking() {
 		return options.getDisableCastChecking();
 	}
@@ -146,6 +164,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDisableCastChecking(disableCastChecking);
 	}
 
+	@Input
 	public Boolean getEa() {
 		return options.getEa();
 	}
@@ -154,6 +173,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setEa(ea);
 	}
 
+	@Input
 	public Boolean getDisableRunAsync() {
 		return options.getDisableRunAsync();
 	}
@@ -162,6 +182,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDisableRunAsync(disableRunAsync);
 	}
 
+	@Input
 	public Style getStyle() {
 		return options.getStyle();
 	}
@@ -170,14 +191,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setStyle(style);
 	}
 
-	public Boolean getSoyc() {
-		return options.getSoyc();
-	}
-
-	public void setSoyc(Boolean soyc) {
-		options.setSoyc(soyc);
-	}
-
+	@Input
 	public Boolean getSoycDetailed() {
 		return options.getSoycDetailed();
 	}
@@ -186,6 +200,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setSoycDetailed(soycDetailed);
 	}
 
+	@Input
 	public Boolean getStrict() {
 		return options.getStrict();
 	}
@@ -194,6 +209,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setStrict(strict);
 	}
 
+	@Input
 	public Boolean getDisableSoycHtml() {
 		return options.getDisableSoycHtml();
 	}
@@ -202,6 +218,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setDisableSoycHtml(disableSoycHtml);
 	}
 
+	@Input
 	public Boolean getEnableClosureCompiler() {
 		return options.getEnableClosureCompiler();
 	}
@@ -210,6 +227,7 @@ public class AbstractGwtCompile extends AbstractGwtTask {
 		options.setEnableClosureCompiler(enableClosureCompiler);
 	}
 
+	@Input
 	public Integer getFragmentCount() {
 		return options.getFragmentCount();
 	}

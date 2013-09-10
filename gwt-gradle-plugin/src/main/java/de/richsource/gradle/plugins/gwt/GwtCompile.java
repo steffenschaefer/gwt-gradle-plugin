@@ -26,6 +26,12 @@ public class GwtCompile extends AbstractGwtCompile {
 				return options.getCompileReport();
 			}
 		});
+		conventionMapping("compilerMetrics", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getCompilerMetrics();
+			}
+		});
 		conventionMapping("validateOnly", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
@@ -78,12 +84,6 @@ public class GwtCompile extends AbstractGwtCompile {
 			@Override
 			public Style call() throws Exception {
 				return options.getStyle();
-			}
-		});
-		conventionMapping("soyc", new Callable<Boolean>() {
-			@Override
-			public Boolean call() throws Exception {
-				return options.getSoyc();
 			}
 		});
 		conventionMapping("soycDetailed", new Callable<Boolean>() {

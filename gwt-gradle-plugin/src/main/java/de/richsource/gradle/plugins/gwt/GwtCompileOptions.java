@@ -5,6 +5,8 @@ public class GwtCompileOptions {
 	private Integer localWorkers;
 	private Boolean draftCompile;
 	private Boolean compileReport;
+	// -XcompilerMetrics
+	private Boolean compilerMetrics;
 	
 	private Boolean validateOnly;
 	// -XdisableGeneratingOnShards
@@ -19,8 +21,6 @@ public class GwtCompileOptions {
 	// -XdisableRunAsync
 	private Boolean disableRunAsync;
 	private Style style;
-	// -soyc
-	private Boolean soyc;
 	// -XsoycDetailed
 	private Boolean soycDetailed;
 	private Boolean strict;
@@ -52,6 +52,14 @@ public class GwtCompileOptions {
 
 	public void setCompileReport(Boolean compileReport) {
 		this.compileReport = compileReport;
+	}
+	
+	public Boolean getCompilerMetrics() {
+		return compilerMetrics;
+	}
+	
+	public void setCompilerMetrics(Boolean compilerMetrics) {
+		this.compilerMetrics = compilerMetrics;
 	}
 
 	public Boolean getValidateOnly() {
@@ -125,14 +133,6 @@ public class GwtCompileOptions {
 
 	public void setStyle(Style style) {
 		this.style = style;
-	}
-
-	public Boolean getSoyc() {
-		return soyc;
-	}
-
-	public void setSoyc(Boolean soyc) {
-		this.soyc = soyc;
 	}
 
 	public Boolean getSoycDetailed() {
