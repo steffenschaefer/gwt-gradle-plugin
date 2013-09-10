@@ -23,7 +23,7 @@ import de.richsource.gradle.plugins.gwt.internal.HasDirs;
 //-war                    The directory into which deployable output files will be written (defaults to 'war')
 //-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra                  The directory into which extra files, not intended for deployment, will be written
-public class GwtCompileTask extends AbstractGwtActionTask implements HasDirs {
+public class GwtCompile extends AbstractGwtActionTask implements HasDirs {
 	
 	public static final String NAME = "compileGwt";
 	

@@ -66,12 +66,12 @@ public class GwtPlugin implements Plugin<Project> {
 		src.add(mainSourceSet.getOutput().getResourcesDir());
 		final FileCollection compileClasspath = mainSourceSet.getCompileClasspath().plus(project.files(mainSourceSet.getOutput().getClassesDir()));
 		
-		final GwtCompileTask compileTask = project.getTasks().create(GwtCompileTask.NAME, GwtCompileTask.class);
+		final GwtCompile compileTask = project.getTasks().create(GwtCompile.NAME, GwtCompile.class);
 		configureDirs(compileTask, outDir, extraDir, workDir);
 		configureSrcAndClasspath(compileTask, src, compileClasspath);
 		configureModules(extension, compileTask, false);
 		
-		final GwtCompileTask draftCompileTask = project.getTasks().create("draftCompileGwt", GwtCompileTask.class);
+		final GwtCompile draftCompileTask = project.getTasks().create("draftCompileGwt", GwtCompile.class);
 		configureDirs(draftCompileTask, draftOutDir, extraDir, workDir);
 		configureSrcAndClasspath(draftCompileTask, src, compileClasspath);
 		configureModules(extension, draftCompileTask, true);
