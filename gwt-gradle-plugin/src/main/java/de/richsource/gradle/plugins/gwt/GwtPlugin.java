@@ -55,6 +55,7 @@ public class GwtPlugin implements Plugin<Project> {
 		extension.setExtraDir(new File(buildDir, EXTRA_DIR));
 		extension.setWorkDir(new File(buildDir, WORK_DIR));
 		extension.setGenDir(new File(buildDir, GEN_DIR));
+		extension.getCompiler().setLocalWorkers(Runtime.getRuntime().availableProcessors());
 		
 		configureAbstractActionTasks(project, extension);
 		configureAbstractTasks(project, extension);
@@ -68,13 +69,8 @@ public class GwtPlugin implements Plugin<Project> {
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
 		compileTask.setWar(new File(buildDir, OUT_DIR));
 		
-		final GwtCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtCompile.class, new Action<GwtCompile>(){
-			@Override
-			public void execute(GwtCompile task) {
-				task.setDevTask(true);
-			}});
+		final GwtDraftCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtDraftCompile.class);
 		draftCompileTask.setWar(new File(buildDir, DRAFT_OUT_DIR));
-		draftCompileTask.setDraftCompile(true);
 		
 		final GwtSuperDev superDevTask = project.getTasks().create(TASK_GWT_SUPER_DEV, GwtSuperDev.class);
 		superDevTask.setWorkDir(compileTask.getWorkDir());
@@ -229,15 +225,10 @@ public class GwtPlugin implements Plugin<Project> {
 	
 	private void configureGwtCompile(final Project project,
 			final GwtPluginExtension extension) {
-		project.getTasks().withType(GwtCompile.class, new Action<GwtCompile>() {
+		project.getTasks().withType(AbstractGwtCompile.class, new Action<AbstractGwtCompile>() {
 			@Override
-			public void execute(final GwtCompile task) {
-				task.conventionMapping("localWorkers", new Callable<Integer>() {
-					@Override
-					public Integer call() throws Exception {
-						return Runtime.getRuntime().availableProcessors();
-					}
-				});
+			public void execute(final AbstractGwtCompile task) {
+				task.configure(extension.getCompiler());
 			}
 		});
 	}

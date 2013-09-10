@@ -38,6 +38,12 @@ gwt {
 		noPrecompile=true
 //		port = 1337
 	}
+	compiler {
+		strict = true;
+		enableClosureCompiler = true;
+		disableClassMetadata = true;
+		disableCastChecking = true;
+	}
 }
 
 cargo {

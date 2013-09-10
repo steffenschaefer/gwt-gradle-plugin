@@ -24,6 +24,7 @@ public class GwtPluginExtension {
 	
 	private final GwtDevOptions dev = new GwtDevOptions();
 	private final GwtSuperDevOptions superDev = new GwtSuperDevOptions();
+	private final GwtCompileOptions compiler = new GwtCompileOptions();
 
 	public List<String> getModules() {
 		return modules;
@@ -128,6 +129,15 @@ public class GwtPluginExtension {
 	
 	public GwtPluginExtension superDev(Closure<GwtDevOptions> c) {
 		ConfigureUtil.configure(c, superDev);
+		return this;
+	}
+	
+	public GwtCompileOptions getCompiler() {
+		return compiler;
+	}
+	
+	public GwtPluginExtension compiler(Closure<GwtCompileOptions> c) {
+		ConfigureUtil.configure(c, compiler);
 		return this;
 	}
 }
