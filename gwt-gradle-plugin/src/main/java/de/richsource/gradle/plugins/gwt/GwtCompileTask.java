@@ -2,10 +2,11 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
+import org.gradle.api.tasks.OutputDirectory;
+
 import de.richsource.gradle.plugins.gwt.option.CompilerOptions;
 import de.richsource.gradle.plugins.gwt.option.LogLevel;
 import de.richsource.gradle.plugins.gwt.option.Style;
-import de.richsource.gradle.plugins.gwt.option.impl.CompilerOptionsImpl;
 
 
 //-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
@@ -28,11 +29,42 @@ public class GwtCompileTask extends AbstractGwtActionTask implements CompilerOpt
 	
 	public static final String NAME = "compileGwt";
 	
-	private CompilerOptions options = new CompilerOptionsImpl();
-
-//	private Boolean noserver;
-//	private Integer port;
-//	private String whitelist;
+	@OutputDirectory
+	private File war;
+	private File deploy;
+	private File extra;
+	private File workDir;
+	
+	private Integer localWorkers;
+	private LogLevel logLevel;
+	private Boolean draftCompile;
+	private Boolean compileReport;
+	
+	// -gen
+	private File gen;
+	private Boolean validateOnly;
+	// -XdisableGeneratingOnShards
+	private Boolean disableGeneratingOnShards;
+	
+	private Integer optimize;
+	// -XdisableAggressiveOptimization
+	private Boolean disableAggressiveOptimization;
+	private Boolean disableClassMetadata;
+	private Boolean disableCastChecking;
+	private Boolean ea;
+	// -XdisableRunAsync
+	private Boolean disableRunAsync;
+	private Style style;
+	// -soyc
+	private Boolean soyc;
+	// -XsoycDetailed
+	private Boolean soycDetailed;
+	private Boolean strict;
+	// -XdisableSoycHtml
+	private Boolean disableSoycHtml;
+	private Boolean enableClosureCompiler;
+	// -XfragmentCount
+	private Integer fragmentCount;
 
 	@Override
 	protected String getClassName() {
@@ -76,196 +108,196 @@ public class GwtCompileTask extends AbstractGwtActionTask implements CompilerOpt
 		argIfEnabled(getCompileReport(), "-compileReport");
 	}
 
-	public Integer getOptimize() {
-		return options.getOptimize();
-	}
-
-	public File getGen() {
-		return options.getGen();
-	}
-
 	public File getWar() {
-		return options.getWar();
-	}
-
-	public void setGen(File gen) {
-		options.setGen(gen);
-	}
-
-	public void setOptimize(Integer optimize) {
-		options.setOptimize(optimize);
+		return war;
 	}
 
 	public void setWar(File war) {
-		options.setWar(war);
-	}
-
-	public Boolean getValidateOnly() {
-		return options.getValidateOnly();
+		this.war = war;
 	}
 
 	public File getDeploy() {
-		return options.getDeploy();
-	}
-
-	public Boolean getDisableAggressiveOptimization() {
-		return options.getDisableAggressiveOptimization();
+		return deploy;
 	}
 
 	public void setDeploy(File deploy) {
-		options.setDeploy(deploy);
-	}
-
-	public void setValidateOnly(Boolean validateOnly) {
-		options.setValidateOnly(validateOnly);
+		this.deploy = deploy;
 	}
 
 	public File getExtra() {
-		return options.getExtra();
+		return extra;
+	}
+
+	public void setExtra(File extra) {
+		this.extra = extra;
+	}
+
+	public File getWorkDir() {
+		return workDir;
+	}
+
+	public void setWorkDir(File workDir) {
+		this.workDir = workDir;
+	}
+
+	public Integer getLocalWorkers() {
+		return localWorkers;
+	}
+
+	public void setLocalWorkers(Integer localWorkers) {
+		this.localWorkers = localWorkers;
+	}
+
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+
+	public void setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
+	}
+
+	public Boolean getDraftCompile() {
+		return draftCompile;
+	}
+
+	public void setDraftCompile(Boolean draftCompile) {
+		this.draftCompile = draftCompile;
+	}
+
+	public Boolean getCompileReport() {
+		return compileReport;
+	}
+
+	public void setCompileReport(Boolean compileReport) {
+		this.compileReport = compileReport;
+	}
+
+	public File getGen() {
+		return gen;
+	}
+
+	public void setGen(File gen) {
+		this.gen = gen;
+	}
+
+	public Boolean getValidateOnly() {
+		return validateOnly;
+	}
+
+	public void setValidateOnly(Boolean validateOnly) {
+		this.validateOnly = validateOnly;
+	}
+
+	public Boolean getDisableGeneratingOnShards() {
+		return disableGeneratingOnShards;
+	}
+
+	public void setDisableGeneratingOnShards(Boolean disableGeneratingOnShards) {
+		this.disableGeneratingOnShards = disableGeneratingOnShards;
+	}
+
+	public Integer getOptimize() {
+		return optimize;
+	}
+
+	public void setOptimize(Integer optimize) {
+		this.optimize = optimize;
+	}
+
+	public Boolean getDisableAggressiveOptimization() {
+		return disableAggressiveOptimization;
 	}
 
 	public void setDisableAggressiveOptimization(
 			Boolean disableAggressiveOptimization) {
-		options.setDisableAggressiveOptimization(disableAggressiveOptimization);
-	}
-
-	public Boolean getDisableGeneratingOnShards() {
-		return options.getDisableGeneratingOnShards();
-	}
-
-	public void setExtra(File extra) {
-		options.setExtra(extra);
-	}
-
-	public void setDisableGeneratingOnShards(Boolean disableGeneratingOnShards) {
-		options.setDisableGeneratingOnShards(disableGeneratingOnShards);
+		this.disableAggressiveOptimization = disableAggressiveOptimization;
 	}
 
 	public Boolean getDisableClassMetadata() {
-		return options.getDisableClassMetadata();
-	}
-
-	public File getWorkDir() {
-		return options.getWorkDir();
-	}
-
-	public void setWorkDir(File workDir) {
-		options.setWorkDir(workDir);
+		return disableClassMetadata;
 	}
 
 	public void setDisableClassMetadata(Boolean disableClassMetadata) {
-		options.setDisableClassMetadata(disableClassMetadata);
-	}
-
-	public Integer getLocalWorkers() {
-		return options.getLocalWorkers();
-	}
-
-	public void setLocalWorkers(Integer localWorkers) {
-		options.setLocalWorkers(localWorkers);
+		this.disableClassMetadata = disableClassMetadata;
 	}
 
 	public Boolean getDisableCastChecking() {
-		return options.getDisableCastChecking();
-	}
-
-	public LogLevel getLogLevel() {
-		return options.getLogLevel();
+		return disableCastChecking;
 	}
 
 	public void setDisableCastChecking(Boolean disableCastChecking) {
-		options.setDisableCastChecking(disableCastChecking);
-	}
-
-	public void setLogLevel(LogLevel logLevel) {
-		options.setLogLevel(logLevel);
+		this.disableCastChecking = disableCastChecking;
 	}
 
 	public Boolean getEa() {
-		return options.getEa();
-	}
-
-	public Boolean getDraftCompile() {
-		return options.getDraftCompile();
+		return ea;
 	}
 
 	public void setEa(Boolean ea) {
-		options.setEa(ea);
-	}
-
-	public void setDraftCompile(Boolean draftCompile) {
-		options.setDraftCompile(draftCompile);
+		this.ea = ea;
 	}
 
 	public Boolean getDisableRunAsync() {
-		return options.getDisableRunAsync();
-	}
-
-	public Boolean getCompileReport() {
-		return options.getCompileReport();
+		return disableRunAsync;
 	}
 
 	public void setDisableRunAsync(Boolean disableRunAsync) {
-		options.setDisableRunAsync(disableRunAsync);
-	}
-
-	public void setCompileReport(Boolean compileReport) {
-		options.setCompileReport(compileReport);
+		this.disableRunAsync = disableRunAsync;
 	}
 
 	public Style getStyle() {
-		return options.getStyle();
+		return style;
 	}
 
 	public void setStyle(Style style) {
-		options.setStyle(style);
+		this.style = style;
 	}
 
 	public Boolean getSoyc() {
-		return options.getSoyc();
+		return soyc;
 	}
 
 	public void setSoyc(Boolean soyc) {
-		options.setSoyc(soyc);
+		this.soyc = soyc;
 	}
 
 	public Boolean getSoycDetailed() {
-		return options.getSoycDetailed();
+		return soycDetailed;
 	}
 
 	public void setSoycDetailed(Boolean soycDetailed) {
-		options.setSoycDetailed(soycDetailed);
+		this.soycDetailed = soycDetailed;
 	}
 
 	public Boolean getStrict() {
-		return options.getStrict();
+		return strict;
 	}
 
 	public void setStrict(Boolean strict) {
-		options.setStrict(strict);
+		this.strict = strict;
 	}
 
 	public Boolean getDisableSoycHtml() {
-		return options.getDisableSoycHtml();
+		return disableSoycHtml;
 	}
 
 	public void setDisableSoycHtml(Boolean disableSoycHtml) {
-		options.setDisableSoycHtml(disableSoycHtml);
+		this.disableSoycHtml = disableSoycHtml;
 	}
 
 	public Boolean getEnableClosureCompiler() {
-		return options.getEnableClosureCompiler();
+		return enableClosureCompiler;
 	}
 
 	public void setEnableClosureCompiler(Boolean enableClosureCompiler) {
-		options.setEnableClosureCompiler(enableClosureCompiler);
+		this.enableClosureCompiler = enableClosureCompiler;
 	}
 
 	public Integer getFragmentCount() {
-		return options.getFragmentCount();
+		return fragmentCount;
 	}
 
 	public void setFragmentCount(Integer fragmentCount) {
-		options.setFragmentCount(fragmentCount);
+		this.fragmentCount = fragmentCount;
 	}
 }

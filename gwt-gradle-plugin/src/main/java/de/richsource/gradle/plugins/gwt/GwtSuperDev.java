@@ -1,15 +1,9 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class GwtSuperDev extends AbstractGwtActionTask {
-
-	public static final String NAME = "compileGwt";
-
-	private List<File> src = new ArrayList<File>();
+	
 	private File workDir;
 
 	// private Boolean noserver;
@@ -61,13 +55,9 @@ public class GwtSuperDev extends AbstractGwtActionTask {
 		// private SourceLevel sourceLevel = SourceLevel.DEFAULT_SOURCE_LEVEL;
 
 	}
-
-	public List<File> getSrc() {
-		return src;
-	}
-
-	public void setSrc(List<File> src) {
-		this.src = src;
+	
+	protected boolean prependSrcToClasspath() {
+		return false;
 	}
 
 	public File getWorkDir() {
@@ -77,13 +67,4 @@ public class GwtSuperDev extends AbstractGwtActionTask {
 	public void setWorkDir(File workDir) {
 		this.workDir = workDir;
 	}
-	
-	public void src(File src) {
-		this.src.add(src);
-	}
-	
-	public void src(Collection<File> src) {
-		this.src.addAll(src);
-	}
-
 }

@@ -1,7 +1,9 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
@@ -9,6 +11,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
@@ -25,6 +28,7 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String OUT_DIR = "out";
 	public static final String EXTRA_DIR = "extra";
 	public static final String WORK_DIR = "work";
+	
 	public static final String GWT_GROUP = "com.google.gwt";
 	public static final String GWT_DEV = "gwt-dev";
 	public static final String GWT_USER = "gwt-user";
@@ -49,16 +53,21 @@ public class GwtPlugin implements Plugin<Project> {
 		final File extraDir = new File(buildDir, EXTRA_DIR);
 		final File workDir = new File(buildDir, WORK_DIR);
 		
+		final Set<File> src = new HashSet<File>();
+		src.addAll(mainSourceSet.getAllJava().getSrcDirs());
+		src.add(mainSourceSet.getOutput().getResourcesDir());
+		final FileCollection compileClasspath = mainSourceSet.getCompileClasspath().plus(project.files(mainSourceSet.getOutput().getClassesDir()));
+		
 		final GwtCompileTask compileTask = project.getTasks().create(GwtCompileTask.NAME, GwtCompileTask.class);
-		configureCompileTask(project, extension, mainSourceSet,
+		configureCompileTask(extension, src, compileClasspath,
 				compileTask, outDir, extraDir, workDir, false);
 		
 		final GwtCompileTask draftCompileTask = project.getTasks().create("draftCompileGwt", GwtCompileTask.class);
-		configureCompileTask(project, extension, mainSourceSet,
+		configureCompileTask(extension, src, compileClasspath,
 				draftCompileTask, draftOutDir, extraDir, workDir, true);
 		draftCompileTask.setDraftCompile(true);
 		
-		final GwtSuperDev superDevTask = configureSuperDevMode(project, extension, compileTask.getWorkDir(), mainSourceSet);
+		final GwtSuperDev superDevTask = configureSuperDevMode(project, extension, compileTask.getWorkDir(), src, compileClasspath);
 		
 		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 
@@ -75,7 +84,7 @@ public class GwtPlugin implements Plugin<Project> {
 				warTemplateTask.with(warTask);
 				warTemplateTask.into(project.file("war"));
 				
-				GwtDev devModeTask = configureDevMode(project, extension, compileTask, mainSourceSet);
+				GwtDev devModeTask = configureDevMode(project, extension, compileTask, src, compileClasspath);
 				
 				final War draftWar = project.getTasks().create("draftWar", War.class);
 				// TODO convention mapping
@@ -110,20 +119,14 @@ public class GwtPlugin implements Plugin<Project> {
 		
 	}
 
-	private File configureCompileTask(final Project project,
-			final GwtPluginExtension extension, final SourceSet mainSourceSet,
+	private File configureCompileTask(final GwtPluginExtension extension, final Set<File> src, final FileCollection classpath,
 			final GwtCompileTask compileTask, final File outDir, final File extraDir, final File workDir, final boolean dev) {
 		compileTask.setWar(outDir);
 		compileTask.setExtra(extraDir);
 		compileTask.setWorkDir(workDir);
 		
-		compileTask.classpath(mainSourceSet.getAllJava().getSrcDirs());
-		compileTask.classpath(mainSourceSet.getOutput().getResourcesDir());
-		compileTask.classpath(mainSourceSet.getOutput().getClassesDir());
-		compileTask.classpath(mainSourceSet.getCompileClasspath());
-		
-		compileTask.getInputs().source(mainSourceSet.getAllJava().getSrcDirs());
-		compileTask.getInputs().source(mainSourceSet.getOutput().getResourcesDir());
+		compileTask.setSrc(src);
+		compileTask.setClasspath(classpath);
 		
 		configureModules(extension, compileTask, dev);
 		return workDir;
@@ -132,12 +135,10 @@ public class GwtPlugin implements Plugin<Project> {
 	private GwtDev configureDevMode(final Project project,
 			final GwtPluginExtension extension,
 			final GwtCompileTask compileTask,
-			final SourceSet mainSourceSet) {
+			final Set<File> src, final FileCollection classpath) {
 		GwtDev devModeTask = project.getTasks().create("gwtDev", GwtDev.class);
-		devModeTask.classpath(mainSourceSet.getAllJava().getSrcDirs());
-		devModeTask.classpath(mainSourceSet.getOutput().getResourcesDir());
-		devModeTask.classpath(mainSourceSet.getOutput().getClassesDir());
-		devModeTask.classpath(mainSourceSet.getCompileClasspath());
+		devModeTask.setSrc(src);
+		devModeTask.setClasspath(classpath);
 		
 		devModeTask.getOutputs().upToDateWhen(new Spec<Task>(){
 			@Override
@@ -152,13 +153,11 @@ public class GwtPlugin implements Plugin<Project> {
 
 	private GwtSuperDev configureSuperDevMode(final Project project,
 			final GwtPluginExtension extension, final File workDir,
-			final SourceSet mainSourceSet) {
+			final Set<File> src, final FileCollection classpath) {
 		GwtSuperDev superDevTask = project.getTasks().create("gwtSuperDev", GwtSuperDev.class);
 		superDevTask.setWorkDir(workDir);
-		superDevTask.src(mainSourceSet.getAllJava().getSrcDirs());
-		superDevTask.src(mainSourceSet.getOutput().getResourcesDir());
-		superDevTask.classpath(mainSourceSet.getOutput().getClassesDir());
-		superDevTask.classpath(mainSourceSet.getCompileClasspath());
+		superDevTask.setSrc(src);
+		superDevTask.setClasspath(classpath);
 		configureModules(extension, superDevTask, true);
 		
 		return superDevTask;
