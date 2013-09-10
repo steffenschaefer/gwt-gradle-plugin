@@ -1,8 +1,12 @@
 package de.richsource.gradle.plugins.gwt;
 
+import groovy.lang.Closure;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.gradle.util.ConfigureUtil;
 
 public class GwtPluginExtension {
 	private String gwtVersion;
@@ -17,6 +21,8 @@ public class GwtPluginExtension {
 	
 	private String minHeapSize = "256M";
 	private String maxHeapSize = "256M";
+	
+	private final GwtDevOptions dev = new GwtDevOptions();
 
 	public List<String> getModules() {
 		return modules;
@@ -104,5 +110,14 @@ public class GwtPluginExtension {
 
 	public void setMaxHeapSize(String maxHeapSize) {
 		this.maxHeapSize = maxHeapSize;
+	}
+	
+	public GwtDevOptions getDev() {
+		return dev;
+	}
+	
+	public GwtPluginExtension dev(Closure<GwtDevOptions> c) {
+		ConfigureUtil.configure(c, dev);
+		return this;
 	}
 }

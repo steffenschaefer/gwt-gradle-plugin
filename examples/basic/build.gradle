@@ -27,14 +27,14 @@ gwt {
 	modules=['de.richsource.gradle.plugins.gwt.example.Basic']
 	devModules=['de.richsource.gradle.plugins.gwt.example.Basic-dev']
 //	cacheDir=file("$buildDir/gwt/cache")
+//	maxHeapSize='1337M'
+//	dev {
+//		codeServerPort=1338
+//		port=1337
+//		bindAddress='192.168.178.22'
+//		startupUrl='foo.html'
+//	}
 }
-
-//gwtDev {
-//	codeServerPort=1338
-//	port=1337
-//	bindAddress='192.168.178.22'
-//	startupUrl='foo.html'
-//}
 
 gwtSuperDev {
 	noPrecompile=true

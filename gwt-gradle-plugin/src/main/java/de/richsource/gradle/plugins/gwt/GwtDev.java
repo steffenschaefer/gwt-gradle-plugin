@@ -1,6 +1,10 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.concurrent.Callable;
+
+import org.gradle.api.Task;
+import org.gradle.api.specs.Spec;
 
 //-noserver        Prevents the embedded web server from running
 //-port            Specifies the TCP port for the embedded web server (defaults to 8888)
@@ -19,15 +23,15 @@ import java.io.File;
 //-workDir         The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
 public class GwtDev extends AbstractGwtTask {
 	
-	private Boolean noserver;
-	private Integer port;
-	private String whitelist;
-	private String blacklist;
-	private File logDir;
-	private String bindAddress;
-	private Integer codeServerPort;
-	private String server;
-	private String startupUrl;
+	private final GwtDevOptions options = new GwtDevOptions();
+	
+	public GwtDev() {
+		getOutputs().upToDateWhen(new Spec<Task>(){
+			@Override
+			public boolean isSatisfiedBy(Task task) {
+				return false;
+			}});
+	}
 
 	@Override
 	protected String getClassName() {
@@ -39,85 +43,170 @@ public class GwtDev extends AbstractGwtTask {
 		super.addArgs();
 
 		argIfEnabled(getNoserver(), "-noserver");
-		argIfSet("-port", getPort());
+		argIfSet("-port", Boolean.TRUE.equals(getAutoPort())? "auto" : getPort());
 		argIfSet("-whitelist", getWhitelist());
 		argIfSet("-blacklist", getBlacklist());
 		argIfSet("-logDir", getLogDir());
 		argIfSet("-bindAddress", getBindAddress());
-		argIfSet("-codeServerPort", getCodeServerPort());
+		argIfSet("-codeServerPort", Boolean.TRUE.equals(getAutoCodeServerPort())? "auto" : getCodeServerPort());
 		argIfSet("-server", getServer());
 		argIfSet("-startupUrl", getStartupUrl());
 	}
+	
+	protected void configure(final GwtDevOptions options) {
+		conventionMapping("noserver", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getNoserver();
+			}
+		});
+		conventionMapping("port", new Callable<Integer>() {
+			@Override
+			public Integer call() throws Exception {
+				return options.getPort();
+			}
+		});
+		conventionMapping("autoPort", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getAutoPort();
+			}
+		});
+		conventionMapping("whitelist", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return options.getWhitelist();
+			}
+		});
+		conventionMapping("blacklist", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return options.getBlacklist();
+			}
+		});
+		conventionMapping("logDir", new Callable<File>() {
+			@Override
+			public File call() throws Exception {
+				return options.getLogDir();
+			}
+		});
+		conventionMapping("bindAddress", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return options.getBindAddress();
+			}
+		});
+		conventionMapping("codeServerPort", new Callable<Integer>() {
+			@Override
+			public Integer call() throws Exception {
+				return options.getCodeServerPort();
+			}
+		});
+		conventionMapping("autoCodeServerPort", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getAutoCodeServerPort();
+			}
+		});
+		conventionMapping("server", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return options.getServer();
+			}
+		});
+		conventionMapping("startupUrl", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return options.getStartupUrl();
+			}
+		});
+	}
 
 	public Boolean getNoserver() {
-		return noserver;
+		return options.getNoserver();
 	}
 
 	public void setNoserver(Boolean noserver) {
-		this.noserver = noserver;
+		options.setNoserver(noserver);
 	}
 
 	public Integer getPort() {
-		return port;
+		return options.getPort();
 	}
 
 	public void setPort(Integer port) {
-		this.port = port;
+		options.setPort(port);
 	}
 
 	public String getWhitelist() {
-		return whitelist;
+		return options.getWhitelist();
 	}
 
 	public void setWhitelist(String whitelist) {
-		this.whitelist = whitelist;
+		options.setWhitelist(whitelist);
 	}
 
 	public String getBlacklist() {
-		return blacklist;
+		return options.getBlacklist();
 	}
 
 	public void setBlacklist(String blacklist) {
-		this.blacklist = blacklist;
+		options.setBlacklist(blacklist);
 	}
 
 	public File getLogDir() {
-		return logDir;
+		return options.getLogDir();
 	}
 
 	public void setLogDir(File logDir) {
-		this.logDir = logDir;
+		options.setLogDir(logDir);
 	}
 
 	public String getBindAddress() {
-		return bindAddress;
+		return options.getBindAddress();
 	}
 
 	public void setBindAddress(String bindAddress) {
-		this.bindAddress = bindAddress;
+		options.setBindAddress(bindAddress);
 	}
 
 	public Integer getCodeServerPort() {
-		return codeServerPort;
+		return options.getCodeServerPort();
 	}
 
 	public void setCodeServerPort(Integer codeServerPort) {
-		this.codeServerPort = codeServerPort;
+		options.setCodeServerPort(codeServerPort);
 	}
 
 	public String getServer() {
-		return server;
+		return options.getServer();
 	}
 
 	public void setServer(String server) {
-		this.server = server;
+		options.setServer(server);
 	}
 
 	public String getStartupUrl() {
-		return startupUrl;
+		return options.getStartupUrl();
 	}
 
 	public void setStartupUrl(String startupUrl) {
-		this.startupUrl = startupUrl;
+		options.setStartupUrl(startupUrl);
+	}
+
+	public Boolean getAutoPort() {
+		return options.getAutoPort();
+	}
+
+	public void setAutoPort(Boolean autoPort) {
+		options.setAutoPort(autoPort);
+	}
+
+	public Boolean getAutoCodeServerPort() {
+		return options.getAutoCodeServerPort();
+	}
+
+	public void setAutoCodeServerPort(Boolean autoCodeServerPort) {
+		options.setAutoCodeServerPort(autoCodeServerPort);
 	}
 }

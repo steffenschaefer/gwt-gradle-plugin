@@ -9,14 +9,12 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.WarPlugin;
-import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.War;
@@ -61,6 +59,7 @@ public class GwtPlugin implements Plugin<Project> {
 		configureAbstractActionTasks(project, extension);
 		configureAbstractTasks(project, extension);
 		configureGwtCompile(project, extension);
+		configureGwtDev(project, extension);
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
 		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
@@ -107,7 +106,6 @@ public class GwtPlugin implements Plugin<Project> {
 					public File call() throws Exception {
 						return extension.getDevWar();
 					}});
-				configureNeverUpToDate(devModeTask);
 				
 				
 				final War draftWar = project.getTasks().create("draftWar", War.class);
@@ -242,13 +240,14 @@ public class GwtPlugin implements Plugin<Project> {
 			}
 		});
 	}
-	
-	private void configureNeverUpToDate(Task devModeTask) {
-		devModeTask.getOutputs().upToDateWhen(new Spec<Task>(){
+
+	private void configureGwtDev(final Project project, final GwtPluginExtension extension) {
+		project.getTasks().withType(GwtDev.class, new Action<GwtDev>() {
 			@Override
-			public boolean isSatisfiedBy(Task task) {
-				return false;
-			}});
+			public void execute(final GwtDev task) {
+				task.configure(extension.getDev());
+			}
+		});
 	}
 
 	private void configureEclipse(final Project project) {
