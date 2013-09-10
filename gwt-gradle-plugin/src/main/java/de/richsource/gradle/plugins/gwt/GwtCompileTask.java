@@ -4,10 +4,6 @@ import java.io.File;
 
 import org.gradle.api.tasks.OutputDirectory;
 
-import de.richsource.gradle.plugins.gwt.option.CompilerOptions;
-import de.richsource.gradle.plugins.gwt.option.LogLevel;
-import de.richsource.gradle.plugins.gwt.option.Style;
-
 
 //-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
 //-workDir                The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
@@ -25,7 +21,7 @@ import de.richsource.gradle.plugins.gwt.option.Style;
 //-war                    The directory into which deployable output files will be written (defaults to 'war')
 //-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra                  The directory into which extra files, not intended for deployment, will be written
-public class GwtCompileTask extends AbstractGwtActionTask implements CompilerOptions {
+public class GwtCompileTask extends AbstractGwtActionTask {
 	
 	public static final String NAME = "compileGwt";
 	

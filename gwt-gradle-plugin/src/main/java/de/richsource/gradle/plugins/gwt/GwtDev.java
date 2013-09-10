@@ -1,11 +1,5 @@
 package de.richsource.gradle.plugins.gwt;
 
-import java.io.File;
-
-import de.richsource.gradle.plugins.gwt.option.CompilerOptions;
-import de.richsource.gradle.plugins.gwt.option.LogLevel;
-import de.richsource.gradle.plugins.gwt.option.Style;
-import de.richsource.gradle.plugins.gwt.option.impl.CompilerOptionsImpl;
 
 public class GwtDev extends AbstractGwtActionTask {
 	

@@ -48,6 +48,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		
 		addArgs();
 		javaExec.args(getExtraArgs());
+		// the module names are expected to be the last parameters
 		javaExec.args(getModules());
 		
 		javaExec.execute();
