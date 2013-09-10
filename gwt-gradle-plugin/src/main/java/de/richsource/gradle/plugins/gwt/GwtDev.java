@@ -1,13 +1,19 @@
 package de.richsource.gradle.plugins.gwt;
 
+import java.io.File;
 
-public class GwtDev extends AbstractGwtActionTask {
+import de.richsource.gradle.plugins.gwt.internal.HasDirs;
+
+
+public class GwtDev extends AbstractGwtActionTask implements HasDirs {
 	
 	public static final String NAME = "compileGwt";
 	
-//	private Boolean noserver;
-//	private Integer port;
-//	private String whitelist;
+	private File war;
+	private File deploy;
+	private File extra;
+	private File workDir;
+	private File gen;
 
 	@Override
 	protected String getClassName() {
@@ -33,6 +39,66 @@ public class GwtDev extends AbstractGwtActionTask {
 //		  -extra           The directory into which extra files, not intended for deployment, will be written
 //		  -workDir         The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
 		
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public File getWar() {
+		return war;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setWar(File war) {
+		this.war = war;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getDeploy() {
+		return deploy;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDeploy(File deploy) {
+		this.deploy = deploy;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getExtra() {
+		return extra;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setExtra(File extra) {
+		this.extra = extra;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getWorkDir() {
+		return workDir;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setWorkDir(File workDir) {
+		this.workDir = workDir;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public File getGen() {
+		return gen;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setGen(File gen) {
+		this.gen = gen;
 	}
 
 }

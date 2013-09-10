@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.gradle.api.tasks.OutputDirectory;
 
+import de.richsource.gradle.plugins.gwt.internal.HasDirs;
+
 
 //-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
 //-workDir                The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
@@ -21,7 +23,7 @@ import org.gradle.api.tasks.OutputDirectory;
 //-war                    The directory into which deployable output files will be written (defaults to 'war')
 //-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra                  The directory into which extra files, not intended for deployment, will be written
-public class GwtCompileTask extends AbstractGwtActionTask {
+public class GwtCompileTask extends AbstractGwtActionTask implements HasDirs {
 	
 	public static final String NAME = "compileGwt";
 	
@@ -30,14 +32,13 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 	private File deploy;
 	private File extra;
 	private File workDir;
+	private File gen;
 	
 	private Integer localWorkers;
 	private LogLevel logLevel;
 	private Boolean draftCompile;
 	private Boolean compileReport;
 	
-	// -gen
-	private File gen;
 	private Boolean validateOnly;
 	// -XdisableGeneratingOnShards
 	private Boolean disableGeneratingOnShards;
@@ -67,7 +68,18 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 		return "com.google.gwt.dev.Compiler";
 	}
 	
-	private void addJJSOptions() {
+	@Override
+	protected void addArgs() {
+		addDirArgs(this);
+		
+		argIfSet("-localWorkers", getLocalWorkers());
+		argIfSet("-logLevel", getLogLevel());
+		argIfEnabled(getDraftCompile(), "-draftCompile");
+		argIfEnabled(getCompileReport(), "-compileReport");
+
+		argIfEnabled(getValidateOnly(), "-validateOnly");
+		argIfEnabled(getDisableGeneratingOnShards(), "-XdisableGeneratingOnShards");
+		
 		argIfSet("-optimize", getOptimize());
 		argIfEnabled(getDisableAggressiveOptimization(), "-XdisableAggressiveOptimization");
 		argIfEnabled(getDisableClassMetadata(), "-XdisableClassMetadata");
@@ -82,58 +94,65 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 		argIfEnabled(getEnableClosureCompiler(), "-XenableClosureCompiler");
 		argIfSet("-XfragmentCount", getFragmentCount());
 	}
-	
-	private void addPrecompileOptions() {
-		addJJSOptions();
-		dirArgIfSet("-gen", getGen());
-		argIfEnabled(getValidateOnly(), "-validateOnly");
-		argIfEnabled(getDisableGeneratingOnShards(), "-XdisableGeneratingOnShards");
-	}
-	
-	@Override
-	protected void addArgs() {
-		addPrecompileOptions();
-		
-		dirArgIfSet("-war", getWar());
-		dirArgIfSet("-deploy", getDeploy());
-		dirArgIfSet("-extra", getExtra());
-		dirArgIfSet("-workDir", getWorkDir());
-		argIfSet("-localWorkers", getLocalWorkers());
-		argIfSet("-logLevel", getLogLevel());
-		argIfEnabled(getDraftCompile(), "-draftCompile");
-		argIfEnabled(getCompileReport(), "-compileReport");
-	}
 
+	/** {@inheritDoc} */
+	@Override
 	public File getWar() {
 		return war;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setWar(File war) {
 		this.war = war;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public File getDeploy() {
 		return deploy;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setDeploy(File deploy) {
 		this.deploy = deploy;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public File getExtra() {
 		return extra;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setExtra(File extra) {
 		this.extra = extra;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public File getWorkDir() {
 		return workDir;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setWorkDir(File workDir) {
 		this.workDir = workDir;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public File getGen() {
+		return gen;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setGen(File gen) {
+		this.gen = gen;
 	}
 
 	public Integer getLocalWorkers() {
@@ -166,14 +185,6 @@ public class GwtCompileTask extends AbstractGwtActionTask {
 
 	public void setCompileReport(Boolean compileReport) {
 		this.compileReport = compileReport;
-	}
-
-	public File getGen() {
-		return gen;
-	}
-
-	public void setGen(File gen) {
-		this.gen = gen;
 	}
 
 	public Boolean getValidateOnly() {
