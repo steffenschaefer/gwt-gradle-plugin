@@ -16,10 +16,6 @@ public interface CompilerOptions extends PrecompileTaskOptions {
 
 	void setExtra(File extra);
 
-	File getOut();
-
-	void setOut(File out);
-
 	File getWorkDir();
 
 	void setWorkDir(File workDir);

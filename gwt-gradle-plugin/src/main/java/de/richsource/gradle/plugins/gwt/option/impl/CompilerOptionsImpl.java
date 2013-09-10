@@ -17,8 +17,6 @@ public class CompilerOptionsImpl extends PrecompileTaskOptionsImpl implements
 	@OutputDirectory
 	private File extra;
 	@OutputDirectory
-	private File out;
-	@OutputDirectory
 	private File workDir;
 	private Integer localWorkers;
 	private LogLevel logLevel;
@@ -53,16 +51,6 @@ public class CompilerOptionsImpl extends PrecompileTaskOptionsImpl implements
 	@Override
 	public void setExtra(File extra) {
 		this.extra = extra;
-	}
-
-	@Override
-	public File getOut() {
-		return out;
-	}
-
-	@Override
-	public void setOut(File out) {
-		this.out = out;
 	}
 
 	@Override
