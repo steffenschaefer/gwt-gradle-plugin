@@ -10,6 +10,7 @@ public class GwtPluginExtension {
 	private File extraDir;
 	private File workDir;
 	private File genDir;
+	private File cacheDir;
 	private List<String> modules = new ArrayList<String>();
 	private List<String> devModules = new ArrayList<String>();
 
@@ -67,5 +68,13 @@ public class GwtPluginExtension {
 
 	public void setGenDir(File genDir) {
 		this.genDir = genDir;
+	}
+
+	public File getCacheDir() {
+		return cacheDir;
+	}
+
+	public void setCacheDir(File cacheDir) {
+		this.cacheDir = cacheDir;
 	}
 }

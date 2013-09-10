@@ -8,6 +8,7 @@ public abstract class AbstractGwtActionTaskWithDirs extends AbstractGwtActionTas
 	private File extra;
 	private File workDir;
 	private File gen;
+	private File cacheDir;
 	
 	protected void addDirArgs() {
 		dirArgIfSet("-war", getWar());
@@ -15,6 +16,12 @@ public abstract class AbstractGwtActionTaskWithDirs extends AbstractGwtActionTas
 		dirArgIfSet("-extra", getExtra());
 		dirArgIfSet("-workDir", getWorkDir());
 		dirArgIfSet("-gen", getGen());
+		
+		final File cacheDir = getCacheDir();
+		if(cacheDir != null) {
+			cacheDir.mkdirs();
+			javaArgs("-Dgwt.persistentunitcachedir="+cacheDir.toString());
+		}
 	}
 	
 	public File getWar() {
@@ -55,5 +62,13 @@ public abstract class AbstractGwtActionTaskWithDirs extends AbstractGwtActionTas
 
 	public void setGen(File gen) {
 		this.gen = gen;
+	}
+
+	public File getCacheDir() {
+		return cacheDir;
+	}
+
+	public void setCacheDir(File cacheDir) {
+		this.cacheDir = cacheDir;
 	}
 }

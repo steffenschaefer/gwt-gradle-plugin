@@ -169,6 +169,11 @@ public class GwtPlugin implements Plugin<Project> {
 			public File call() throws Exception {
 				return extension.getGenDir();
 			}});
+		task.conventionMapping("cacheDir", new Callable<File>(){
+			@Override
+			public File call() throws Exception {
+				return extension.getCacheDir();
+			}});
 	}
 
 	private void configureSrcAndClasspath(final AbstractGwtActionTask task, final Set<File> src, final FileCollection classpath) {
