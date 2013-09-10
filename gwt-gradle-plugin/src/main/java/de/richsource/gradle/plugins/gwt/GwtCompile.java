@@ -4,8 +4,6 @@ import java.io.File;
 
 import org.gradle.api.tasks.OutputDirectory;
 
-import de.richsource.gradle.plugins.gwt.internal.HasDirs;
-
 
 //-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
 //-workDir                The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
@@ -23,16 +21,9 @@ import de.richsource.gradle.plugins.gwt.internal.HasDirs;
 //-war                    The directory into which deployable output files will be written (defaults to 'war')
 //-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra                  The directory into which extra files, not intended for deployment, will be written
-public class GwtCompile extends AbstractGwtActionTask implements HasDirs {
+public class GwtCompile extends AbstractGwtActionTaskWithDirs {
 	
 	public static final String NAME = "compileGwt";
-	
-	@OutputDirectory
-	private File war;
-	private File deploy;
-	private File extra;
-	private File workDir;
-	private File gen;
 	
 	private Integer localWorkers;
 	private LogLevel logLevel;
@@ -70,7 +61,7 @@ public class GwtCompile extends AbstractGwtActionTask implements HasDirs {
 	
 	@Override
 	protected void addArgs() {
-		addDirArgs(this);
+		addDirArgs();
 		
 		argIfSet("-localWorkers", getLocalWorkers());
 		argIfSet("-logLevel", getLogLevel());
@@ -97,62 +88,9 @@ public class GwtCompile extends AbstractGwtActionTask implements HasDirs {
 
 	/** {@inheritDoc} */
 	@Override
+	@OutputDirectory
 	public File getWar() {
-		return war;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setWar(File war) {
-		this.war = war;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public File getDeploy() {
-		return deploy;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setDeploy(File deploy) {
-		this.deploy = deploy;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public File getExtra() {
-		return extra;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setExtra(File extra) {
-		this.extra = extra;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public File getWorkDir() {
-		return workDir;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setWorkDir(File workDir) {
-		this.workDir = workDir;
-	}
-	
-	/** {@inheritDoc} */
-	@Override
-	public File getGen() {
-		return gen;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setGen(File gen) {
-		this.gen = gen;
+		return super.getWar();
 	}
 
 	public Integer getLocalWorkers() {

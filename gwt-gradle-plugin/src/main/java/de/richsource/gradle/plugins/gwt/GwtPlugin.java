@@ -23,8 +23,6 @@ import org.gradle.api.tasks.bundling.War;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 
-import de.richsource.gradle.plugins.gwt.internal.HasDirs;
-
 public class GwtPlugin implements Plugin<Project> {
 	public static final String CONFIGURATION_NAME = "gwt";
 	public static final String EXTENSION_NAME = "gwt";
@@ -136,7 +134,7 @@ public class GwtPlugin implements Plugin<Project> {
 		
 	}
 
-	private void configureDirs(final HasDirs task, final File outDir,
+	private void configureDirs(final AbstractGwtActionTaskWithDirs task, final File outDir,
 			final File extraDir, final File workDir) {
 		task.setWar(outDir);
 		task.setExtra(extraDir);

@@ -16,8 +16,6 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.internal.DefaultJavaExecAction;
 import org.gradle.process.internal.JavaExecAction;
 
-import de.richsource.gradle.plugins.gwt.internal.HasDirs;
-
 public abstract class AbstractGwtActionTask extends ConventionTask {
 	
 	private JavaExecAction javaExec;
@@ -98,14 +96,6 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		if(value != null) {
 			arg(arg, value);
 		}
-	}
-	
-	protected void addDirArgs(HasDirs hasDirs) {
-		dirArgIfSet("-war", hasDirs.getWar());
-		dirArgIfSet("-deploy", hasDirs.getDeploy());
-		dirArgIfSet("-extra", hasDirs.getExtra());
-		dirArgIfSet("-workDir", hasDirs.getWorkDir());
-		dirArgIfSet("-gen", hasDirs.getGen());
 	}
 	
 	public void extraArg(String arg) {
