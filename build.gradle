@@ -1,11 +1,29 @@
 task publish
 
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	
+	dependencies {
+		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.6.0'
+	}
+}
+
 subprojects {
+	
 	apply plugin: 'java'
 	apply plugin: 'maven-publish'
-
+	apply plugin: 'license'
+	
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
+	
+	license {
+		ext.year = Calendar.getInstance().get(Calendar.YEAR)
+		ext.name = 'Steffen Schaefer'
+		header rootProject.file('LICENSE')
+	}
 
 	repositories { mavenCentral() }
 
@@ -30,6 +48,12 @@ subprojects {
 				from components.java
 				artifact javadocJar { classifier = 'javadoc' }
 				artifact sourceJar { classifier = 'sources' }
+				pom.withXml {
+					def root = asNode()
+					def license = root.appendNode('licenses').appendNode('license')
+					license.appendNode('name', 'The Apache Software License, Version 2.0')
+					license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+				}
 			}
 		}
 		repositories {
