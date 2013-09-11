@@ -83,12 +83,15 @@ public class GwtPlugin implements Plugin<Project> {
 		
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
 		compileTask.setWar(new File(buildDir, OUT_DIR));
+		compileTask.setDescription("Runs the GWT compiler to translate Java sources to JavaScript for production ready output");
 		
 		final GwtDraftCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtDraftCompile.class);
 		draftCompileTask.setWar(new File(buildDir, DRAFT_OUT_DIR));
+		draftCompileTask.setDescription("Runs the GWT compiler to produce draft quality output used for development");
 		
 		final GwtSuperDev superDevTask = project.getTasks().create(TASK_GWT_SUPER_DEV, GwtSuperDev.class);
 		superDevTask.setWorkDir(compileTask.getWorkDir());
+		superDevTask.setDescription("Runs the GWT super dev mode");
 		
 		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 
@@ -111,6 +114,7 @@ public class GwtPlugin implements Plugin<Project> {
 					public File call() throws Exception {
 						return extension.getDevWar();
 					}});
+				warTemplateTask.setDescription("Creates a exploded webapplication template to be used by GWT dev mode and eclipse to ensure src/main/webapp stays clean");
 				
 				final GwtDev devModeTask = project.getTasks().create(TASK_GWT_DEV, GwtDev.class);
 				devModeTask.conventionMapping("war", new Callable<File>(){
@@ -128,6 +132,7 @@ public class GwtPlugin implements Plugin<Project> {
 					}});
 				draftWar.dependsOn(draftCompileTask);
 				draftWar.setBaseName(warTask.getBaseName()+"-draft");
+				draftWar.setDescription("Creates a war using the output of the task "+TASK_DRAFT_COMPILE_GWT);
 				
 				for(Object dependsTask:warTask.getDependsOn()) {
 					devModeTask.dependsOn(dependsTask);
