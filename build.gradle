@@ -67,8 +67,11 @@ subprojects {
 				artifact sourceJar { classifier = 'sources' }
 				pom.withXml {
 					def root = asNode()
+	                root.appendNode('name', 'Gradle GWT plugin')
+	                root.appendNode('description', 'Gradle plugin to support GWT related tasks.')
+	                root.appendNode('inceptionYear', '2013')
 					def license = root.appendNode('licenses').appendNode('license')
-					license.appendNode('name', 'The Apache Software License, Version 2.0')
+					license.appendNode('name', 'Apache License, Version 2.0')
 					license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
 				}
 			}
