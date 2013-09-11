@@ -10,8 +10,21 @@ buildscript {
 	}
 }
 
+ext {
+	encoding = 'UTF-8'
+}
+
+allprojects {
+	apply plugin: 'eclipse'
+	tasks.eclipse << {
+		File prefs = project.file('.settings/org.eclipse.core.resources.prefs');
+		if(!prefs.exists()) {
+			project.file('.settings/org.eclipse.core.resources.prefs')<< "eclipse.preferences.version=1\nencoding/<project>=$encoding\n";
+		}
+	}
+}
+
 subprojects {
-	
 	apply plugin: 'java'
 	apply plugin: 'maven-publish'
 	apply plugin: 'license'
@@ -30,6 +43,10 @@ subprojects {
 	dependencies {
 		compile gradleApi()
 		testCompile group: 'junit', name: 'junit', version: '4.+'
+	}
+	
+	tasks.withType(Compile) {
+		options.encoding = rootProject.encoding
 	}
 	
 	task sourceJar(type: Jar) {
