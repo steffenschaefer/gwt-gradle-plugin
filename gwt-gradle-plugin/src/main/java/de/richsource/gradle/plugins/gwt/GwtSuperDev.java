@@ -6,6 +6,8 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Task;
 import org.gradle.api.specs.Spec;
 
+import de.richsource.gradle.plugins.gwt.internal.GwtSuperDevOptionsImpl;
+
 //CodeServer [-bindAddress address] [-port port] [-workDir dir] [-src
 // dir] [module]
 //
@@ -16,9 +18,9 @@ import org.gradle.api.specs.Spec;
 // -src A directory containing GWT source to be prepended to the classpath for compiling.
 // and
 // module The GWT modules that the code server should compile. (Example: com.example.MyApp)
-public class GwtSuperDev extends AbstractGwtActionTask {
+public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOptions {
 	
-	private final GwtSuperDevOptions options = new GwtSuperDevOptions();
+	private final GwtSuperDevOptions options = new GwtSuperDevOptionsImpl();
 	
 	public GwtSuperDev() {
 		getOutputs().upToDateWhen(new Spec<Task>(){
@@ -72,34 +74,50 @@ public class GwtSuperDev extends AbstractGwtActionTask {
 		return false;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public File getWorkDir() {
 		return options.getWorkDir();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setWorkDir(File workDir) {
 		options.setWorkDir(workDir);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public String getBindAddress() {
 		return options.getBindAddress();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setBindAddress(String bindAddress) {
 		options.setBindAddress(bindAddress);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Integer getPort() {
 		return options.getPort();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setPort(Integer port) {
 		options.setPort(port);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Boolean getNoPrecompile() {
 		return options.getNoPrecompile();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setNoPrecompile(Boolean noPrecompile) {
 		options.setNoPrecompile(noPrecompile);
 	}

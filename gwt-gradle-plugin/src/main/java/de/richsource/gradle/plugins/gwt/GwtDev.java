@@ -6,6 +6,8 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Task;
 import org.gradle.api.specs.Spec;
 
+import de.richsource.gradle.plugins.gwt.internal.GwtDevOptionsImpl;
+
 //-noserver        Prevents the embedded web server from running
 //-port            Specifies the TCP port for the embedded web server (defaults to 8888)
 //-whitelist       Allows the user to browse URLs that match the specified regexes (comma or space separated)
@@ -21,9 +23,9 @@ import org.gradle.api.specs.Spec;
 //-deploy          The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
 //-extra           The directory into which extra files, not intended for deployment, will be written
 //-workDir         The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
-public class GwtDev extends AbstractGwtTask {
+public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	
-	private final GwtDevOptions options = new GwtDevOptions();
+	private final GwtDevOptions options = new GwtDevOptionsImpl();
 	
 	public GwtDev() {
 		getOutputs().upToDateWhen(new Spec<Task>(){
@@ -122,90 +124,134 @@ public class GwtDev extends AbstractGwtTask {
 		});
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Boolean getNoserver() {
 		return options.getNoserver();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setNoserver(Boolean noserver) {
 		options.setNoserver(noserver);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Integer getPort() {
 		return options.getPort();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setPort(Integer port) {
 		options.setPort(port);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public String getWhitelist() {
 		return options.getWhitelist();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setWhitelist(String whitelist) {
 		options.setWhitelist(whitelist);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public String getBlacklist() {
 		return options.getBlacklist();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setBlacklist(String blacklist) {
 		options.setBlacklist(blacklist);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public File getLogDir() {
 		return options.getLogDir();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setLogDir(File logDir) {
 		options.setLogDir(logDir);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public String getBindAddress() {
 		return options.getBindAddress();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setBindAddress(String bindAddress) {
 		options.setBindAddress(bindAddress);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Integer getCodeServerPort() {
 		return options.getCodeServerPort();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setCodeServerPort(Integer codeServerPort) {
 		options.setCodeServerPort(codeServerPort);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public String getServer() {
 		return options.getServer();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setServer(String server) {
 		options.setServer(server);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public String getStartupUrl() {
 		return options.getStartupUrl();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setStartupUrl(String startupUrl) {
 		options.setStartupUrl(startupUrl);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Boolean getAutoPort() {
 		return options.getAutoPort();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setAutoPort(Boolean autoPort) {
 		options.setAutoPort(autoPort);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Boolean getAutoCodeServerPort() {
 		return options.getAutoCodeServerPort();
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void setAutoCodeServerPort(Boolean autoCodeServerPort) {
 		options.setAutoCodeServerPort(autoCodeServerPort);
 	}

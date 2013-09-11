@@ -2,104 +2,59 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
-public class GwtDevOptions {
-	private Boolean noserver;
-	private Integer port;
-	private Boolean autoPort;
-	private String whitelist;
-	private String blacklist;
-	private File logDir;
-	private String bindAddress;
-	private Integer codeServerPort;
-	private Boolean autoCodeServerPort;
-	private String server;
-	private String startupUrl;
+public interface GwtDevOptions {
 
-	public Boolean getNoserver() {
-		return noserver;
-	}
+	Boolean getNoserver();
 
-	public void setNoserver(Boolean noserver) {
-		this.noserver = noserver;
-	}
+	/**
+	 * Sets the "-noserver" flag that causes the GWT dev mode to not start the
+	 * internal webserver (jetty) but only the code server that runs the GWT
+	 * client part. The developer must ensure that an appropriate webserver is
+	 * running to serve the static files/backend.
+	 * 
+	 * @param noserver
+	 *            true if the "-noserver" flag should be set.
+	 */
+	void setNoserver(Boolean noserver);
 
-	public Integer getPort() {
-		return port;
-	}
+	Integer getPort();
 
-	public void setPort(Integer port) {
-		this.port = port;
-	}
+	void setPort(Integer port);
 
-	public String getWhitelist() {
-		return whitelist;
-	}
+	String getWhitelist();
 
-	public void setWhitelist(String whitelist) {
-		this.whitelist = whitelist;
-	}
+	void setWhitelist(String whitelist);
 
-	public String getBlacklist() {
-		return blacklist;
-	}
+	String getBlacklist();
 
-	public void setBlacklist(String blacklist) {
-		this.blacklist = blacklist;
-	}
+	void setBlacklist(String blacklist);
 
-	public File getLogDir() {
-		return logDir;
-	}
+	File getLogDir();
 
-	public void setLogDir(File logDir) {
-		this.logDir = logDir;
-	}
+	void setLogDir(File logDir);
 
-	public String getBindAddress() {
-		return bindAddress;
-	}
+	String getBindAddress();
 
-	public void setBindAddress(String bindAddress) {
-		this.bindAddress = bindAddress;
-	}
+	void setBindAddress(String bindAddress);
 
-	public Integer getCodeServerPort() {
-		return codeServerPort;
-	}
+	Integer getCodeServerPort();
 
-	public void setCodeServerPort(Integer codeServerPort) {
-		this.codeServerPort = codeServerPort;
-	}
+	void setCodeServerPort(Integer codeServerPort);
 
-	public String getServer() {
-		return server;
-	}
+	String getServer();
 
-	public void setServer(String server) {
-		this.server = server;
-	}
+	void setServer(String server);
 
-	public String getStartupUrl() {
-		return startupUrl;
-	}
+	String getStartupUrl();
 
-	public void setStartupUrl(String startupUrl) {
-		this.startupUrl = startupUrl;
-	}
+	void setStartupUrl(String startupUrl);
 
-	public Boolean getAutoPort() {
-		return autoPort;
-	}
+	Boolean getAutoPort();
 
-	public void setAutoPort(Boolean autoPort) {
-		this.autoPort = autoPort;
-	}
+	void setAutoPort(Boolean autoPort);
 
-	public Boolean getAutoCodeServerPort() {
-		return autoCodeServerPort;
-	}
+	Boolean getAutoCodeServerPort();
 
-	public void setAutoCodeServerPort(Boolean autoCodeServerPort) {
-		this.autoCodeServerPort = autoCodeServerPort;
-	}
+	void setAutoCodeServerPort(Boolean autoCodeServerPort);
+
 }

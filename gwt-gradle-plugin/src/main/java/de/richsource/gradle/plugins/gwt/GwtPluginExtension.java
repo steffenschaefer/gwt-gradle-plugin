@@ -8,6 +8,10 @@ import java.util.List;
 
 import org.gradle.util.ConfigureUtil;
 
+import de.richsource.gradle.plugins.gwt.internal.GwtCompileOptionsImpl;
+import de.richsource.gradle.plugins.gwt.internal.GwtDevOptionsImpl;
+import de.richsource.gradle.plugins.gwt.internal.GwtSuperDevOptionsImpl;
+
 public class GwtPluginExtension {
 	private String gwtVersion;
 	private File devWar;
@@ -22,9 +26,9 @@ public class GwtPluginExtension {
 	private String minHeapSize = "256M";
 	private String maxHeapSize = "256M";
 	
-	private final GwtDevOptions dev = new GwtDevOptions();
-	private final GwtSuperDevOptions superDev = new GwtSuperDevOptions();
-	private final GwtCompileOptions compiler = new GwtCompileOptions();
+	private final GwtDevOptions dev = new GwtDevOptionsImpl();
+	private final GwtSuperDevOptions superDev = new GwtSuperDevOptionsImpl();
+	private final GwtCompileOptions compiler = new GwtCompileOptionsImpl();
 
 	public List<String> getModules() {
 		return modules;

@@ -1,177 +1,78 @@
 package de.richsource.gradle.plugins.gwt;
 
 
-public class GwtCompileOptions {
-	private Integer localWorkers;
-	private Boolean draftCompile;
-	private Boolean compileReport;
-	// -XcompilerMetrics
-	private Boolean compilerMetrics;
-	
-	private Boolean validateOnly;
-	// -XdisableGeneratingOnShards
-	private Boolean disableGeneratingOnShards;
-	
-	private Integer optimize;
-	// -XdisableAggressiveOptimization
-	private Boolean disableAggressiveOptimization;
-	private Boolean disableClassMetadata;
-	private Boolean disableCastChecking;
-	private Boolean ea;
-	// -XdisableRunAsync
-	private Boolean disableRunAsync;
-	private Style style;
-	// -XsoycDetailed
-	private Boolean soycDetailed;
-	private Boolean strict;
-	// -XdisableSoycHtml
-	private Boolean disableSoycHtml;
-	private Boolean enableClosureCompiler;
-	// -XfragmentCount
-	private Integer fragmentCount;
+public interface GwtCompileOptions {
 
-	public Integer getLocalWorkers() {
-		return localWorkers;
-	}
+	Integer getLocalWorkers();
 
-	public void setLocalWorkers(Integer localWorkers) {
-		this.localWorkers = localWorkers;
-	}
+	void setLocalWorkers(Integer localWorkers);
 
-	public Boolean getDraftCompile() {
-		return draftCompile;
-	}
+	Boolean getDraftCompile();
 
-	public void setDraftCompile(Boolean draftCompile) {
-		this.draftCompile = draftCompile;
-	}
+	void setDraftCompile(Boolean draftCompile);
 
-	public Boolean getCompileReport() {
-		return compileReport;
-	}
+	Boolean getCompileReport();
 
-	public void setCompileReport(Boolean compileReport) {
-		this.compileReport = compileReport;
-	}
-	
-	public Boolean getCompilerMetrics() {
-		return compilerMetrics;
-	}
-	
-	public void setCompilerMetrics(Boolean compilerMetrics) {
-		this.compilerMetrics = compilerMetrics;
-	}
+	void setCompileReport(Boolean compileReport);
 
-	public Boolean getValidateOnly() {
-		return validateOnly;
-	}
+	Boolean getCompilerMetrics();
 
-	public void setValidateOnly(Boolean validateOnly) {
-		this.validateOnly = validateOnly;
-	}
+	void setCompilerMetrics(Boolean compilerMetrics);
 
-	public Boolean getDisableGeneratingOnShards() {
-		return disableGeneratingOnShards;
-	}
+	Boolean getValidateOnly();
 
-	public void setDisableGeneratingOnShards(Boolean disableGeneratingOnShards) {
-		this.disableGeneratingOnShards = disableGeneratingOnShards;
-	}
+	void setValidateOnly(Boolean validateOnly);
 
-	public Integer getOptimize() {
-		return optimize;
-	}
+	Boolean getDisableGeneratingOnShards();
 
-	public void setOptimize(Integer optimize) {
-		this.optimize = optimize;
-	}
+	void setDisableGeneratingOnShards(Boolean disableGeneratingOnShards);
 
-	public Boolean getDisableAggressiveOptimization() {
-		return disableAggressiveOptimization;
-	}
+	Integer getOptimize();
 
-	public void setDisableAggressiveOptimization(
-			Boolean disableAggressiveOptimization) {
-		this.disableAggressiveOptimization = disableAggressiveOptimization;
-	}
+	void setOptimize(Integer optimize);
 
-	public Boolean getDisableClassMetadata() {
-		return disableClassMetadata;
-	}
+	Boolean getDisableAggressiveOptimization();
 
-	public void setDisableClassMetadata(Boolean disableClassMetadata) {
-		this.disableClassMetadata = disableClassMetadata;
-	}
+	void setDisableAggressiveOptimization(Boolean disableAggressiveOptimization);
 
-	public Boolean getDisableCastChecking() {
-		return disableCastChecking;
-	}
+	Boolean getDisableClassMetadata();
 
-	public void setDisableCastChecking(Boolean disableCastChecking) {
-		this.disableCastChecking = disableCastChecking;
-	}
+	void setDisableClassMetadata(Boolean disableClassMetadata);
 
-	public Boolean getEa() {
-		return ea;
-	}
+	Boolean getDisableCastChecking();
 
-	public void setEa(Boolean ea) {
-		this.ea = ea;
-	}
+	void setDisableCastChecking(Boolean disableCastChecking);
 
-	public Boolean getDisableRunAsync() {
-		return disableRunAsync;
-	}
+	Boolean getEa();
 
-	public void setDisableRunAsync(Boolean disableRunAsync) {
-		this.disableRunAsync = disableRunAsync;
-	}
+	void setEa(Boolean ea);
 
-	public Style getStyle() {
-		return style;
-	}
+	Boolean getDisableRunAsync();
 
-	public void setStyle(Style style) {
-		this.style = style;
-	}
+	void setDisableRunAsync(Boolean disableRunAsync);
 
-	public Boolean getSoycDetailed() {
-		return soycDetailed;
-	}
+	Style getStyle();
 
-	public void setSoycDetailed(Boolean soycDetailed) {
-		this.soycDetailed = soycDetailed;
-	}
+	void setStyle(Style style);
 
-	public Boolean getStrict() {
-		return strict;
-	}
+	Boolean getSoycDetailed();
 
-	public void setStrict(Boolean strict) {
-		this.strict = strict;
-	}
+	void setSoycDetailed(Boolean soycDetailed);
 
-	public Boolean getDisableSoycHtml() {
-		return disableSoycHtml;
-	}
+	Boolean getStrict();
 
-	public void setDisableSoycHtml(Boolean disableSoycHtml) {
-		this.disableSoycHtml = disableSoycHtml;
-	}
+	void setStrict(Boolean strict);
 
-	public Boolean getEnableClosureCompiler() {
-		return enableClosureCompiler;
-	}
+	Boolean getDisableSoycHtml();
 
-	public void setEnableClosureCompiler(Boolean enableClosureCompiler) {
-		this.enableClosureCompiler = enableClosureCompiler;
-	}
+	void setDisableSoycHtml(Boolean disableSoycHtml);
 
-	public Integer getFragmentCount() {
-		return fragmentCount;
-	}
+	Boolean getEnableClosureCompiler();
 
-	public void setFragmentCount(Integer fragmentCount) {
-		this.fragmentCount = fragmentCount;
-	}
+	void setEnableClosureCompiler(Boolean enableClosureCompiler);
+
+	Integer getFragmentCount();
+
+	void setFragmentCount(Integer fragmentCount);
+
 }

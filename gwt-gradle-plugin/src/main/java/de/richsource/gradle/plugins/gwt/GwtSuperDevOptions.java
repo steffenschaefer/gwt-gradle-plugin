@@ -2,42 +2,54 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
-public class GwtSuperDevOptions {
-	private File workDir;
+public interface GwtSuperDevOptions {
 
-	private String bindAddress;
-	private Integer port;
-	private Boolean noPrecompile;
+	/**
+	 * @see #setWorkDir(File)
+	 * 
+	 * @return the working dir
+	 */
+	File getWorkDir();
 
-	public File getWorkDir() {
-		return workDir;
-	}
+	/**
+	 * Sets the "-workDir" option that specifies the directory where the Super Dev Mode outputs its
+	 * generated files.
+	 * 
+	 * @param workDir
+	 *            the workDir to set
+	 */
+	void setWorkDir(File workDir);
 
-	public void setWorkDir(File workDir) {
-		this.workDir = workDir;
-	}
+	String getBindAddress();
 
-	public String getBindAddress() {
-		return bindAddress;
-	}
+	/**
+	 * Sets the "-bindAddress" option that defines to which network ip the socket should be bound.
+	 * This is relevant if the Super Dev Mode should be reachable from a remote
+	 * host.
+	 * 
+	 * @param bindAddress
+	 *            the bindAddress to set
+	 */
+	void setBindAddress(String bindAddress);
 
-	public void setBindAddress(String bindAddress) {
-		this.bindAddress = bindAddress;
-	}
+	Integer getPort();
 
-	public Integer getPort() {
-		return port;
-	}
+	/**
+	 * Sets the "-port" option that defines to which port the socket should be bound.
+	 * 
+	 * @param port
+	 *            the port to set. Valid range is [1; 65535].
+	 */
+	void setPort(Integer port);
 
-	public void setPort(Integer port) {
-		this.port = port;
-	}
+	Boolean getNoPrecompile();
 
-	public Boolean getNoPrecompile() {
-		return noPrecompile;
-	}
+	/**
+	 * Sets the "-noprecompile" flag that causes the Super Dev Mode to not compile the
+	 * modules on startup but only at access.
+	 * 
+	 * @param noPrecompile true if the noPrecompile flag should be set, false otherwise
+	 */
+	void setNoPrecompile(Boolean noPrecompile);
 
-	public void setNoPrecompile(Boolean noPrecompile) {
-		this.noPrecompile = noPrecompile;
-	}
 }
