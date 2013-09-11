@@ -7,7 +7,7 @@ public interface GwtSuperDevOptions {
 	/**
 	 * @see #setWorkDir(File)
 	 * 
-	 * @return the working dir
+	 * @return the workDir
 	 */
 	File getWorkDir();
 

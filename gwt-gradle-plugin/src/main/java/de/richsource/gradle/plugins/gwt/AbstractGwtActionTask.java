@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionTask;
 import org.gradle.api.internal.file.FileResolver;
@@ -36,6 +37,16 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	
 	@TaskAction
 	public void run() {
+		if(getSrc() == null || getSrc().isEmpty()) {
+			throw new InvalidUserDataException("No Source is set");
+		}
+		if(getClasspath() == null) {
+			throw new InvalidUserDataException("Classpath is not set");
+		}
+		if(getModules() == null || getModules().isEmpty()) {
+			throw new InvalidUserDataException("No module[s] given");
+		}
+		
 		javaExec.setMain(getClassName());
 		
 		if(prependSrcToClasspath()) {
