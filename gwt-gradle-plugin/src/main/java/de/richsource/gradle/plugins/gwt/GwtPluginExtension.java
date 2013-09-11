@@ -127,7 +127,7 @@ public class GwtPluginExtension {
 		return superDev;
 	}
 	
-	public GwtPluginExtension superDev(Closure<GwtDevOptions> c) {
+	public GwtPluginExtension superDev(Closure<GwtSuperDevOptions> c) {
 		ConfigureUtil.configure(c, superDev);
 		return this;
 	}
