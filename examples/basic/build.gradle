@@ -30,6 +30,8 @@ gwt {
 	modules=['de.richsource.gradle.plugins.gwt.example.Basic']
 	// remove the following line if testing with GWT < 2.5
 	devModules=['de.richsource.gradle.plugins.gwt.example.BasicDev']
+	
+//	devWar = file("fooWar")
 
 //	cacheDir=file("$buildDir/gwt/cache")
 //	maxHeapSize='1337M'

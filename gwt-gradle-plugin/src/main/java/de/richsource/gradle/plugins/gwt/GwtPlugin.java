@@ -148,7 +148,7 @@ public class GwtPlugin implements Plugin<Project> {
 			}
 		});
 		
-		configureEclipse(project);
+		configureEclipse(project, extension);
 		
 		project.afterEvaluate(new Action<Project>() {
 			@Override
@@ -314,7 +314,7 @@ public class GwtPlugin implements Plugin<Project> {
 		});
 	}
 
-	private void configureEclipse(final Project project) {
+	private void configureEclipse(final Project project, final GwtPluginExtension extension) {
 		project.getPlugins().withType(EclipsePlugin.class, new Action<EclipsePlugin>(){
 			@Override
 			public void execute(EclipsePlugin eclipsePlugin) {
@@ -328,6 +328,15 @@ public class GwtPlugin implements Plugin<Project> {
 						eclipseModel.getProject().buildCommand("com.google.gdt.eclipse.core.webAppProjectValidator");
 						
 						project.getTasks().getByName(EclipsePlugin.getECLIPSE_PROJECT_TASK_NAME()).dependsOn(TASK_WAR_TEMPLATE);
+						
+						project.afterEvaluate(new Action<Project>() {
+							@Override
+							public void execute(final Project project) {
+								final File devWar = extension.getDevWar();
+								final File classes = new File(devWar, "WEB-INF/classes");
+								eclipseModel.getClasspath().setDefaultOutputDir(classes);
+							}
+						});
 					}
 				});
 			}});
