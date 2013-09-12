@@ -27,6 +27,8 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.WarPlugin;
@@ -58,7 +60,10 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String GWT_DEV = "gwt-dev";
 	public static final String GWT_USER = "gwt-user";
 	public static final String GWT_CODESERVER = "gwt-codeserver";
+	public static final String GWT_ELEMENTAL = "gwt-elemental";
 	public static final String GWT_SERVLET = "gwt-servlet";
+	
+	private static final Logger logger = Logging.getLogger(GwtPlugin.class);
 
 	@Override
 	public void apply(final Project project) {
@@ -90,10 +95,6 @@ public class GwtPlugin implements Plugin<Project> {
 		final GwtDraftCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtDraftCompile.class);
 		draftCompileTask.setWar(new File(buildDir, DRAFT_OUT_DIR));
 		draftCompileTask.setDescription("Runs the GWT compiler to produce draft quality output used for development");
-		
-		final GwtSuperDev superDevTask = project.getTasks().create(TASK_GWT_SUPER_DEV, GwtSuperDev.class);
-		superDevTask.setWorkDir(compileTask.getWorkDir());
-		superDevTask.setDescription("Runs the GWT super dev mode");
 		
 		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 
@@ -138,8 +139,6 @@ public class GwtPlugin implements Plugin<Project> {
 				
 				for(Object dependsTask:warTask.getDependsOn()) {
 					devModeTask.dependsOn(dependsTask);
-					// TODO dirty...
-					superDevTask.dependsOn(dependsTask);
 				}
 				devModeTask.dependsOn(warTemplateTask);
 				
@@ -153,16 +152,52 @@ public class GwtPlugin implements Plugin<Project> {
 		
 		project.afterEvaluate(new Action<Project>() {
 			@Override
-			public void execute(Project arg0) {
+			public void execute(final Project project) {
+				if(extension.isCodeserver()) {
+					createSuperDevModeTask(project);
+				}
+				
 				final String gwtVersion = extension.getGwtVersion();
 				if(gwtVersion != null && !extension.getGwtVersion().isEmpty()) {
 					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
 					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
-					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
 					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
+					
+					if(!extension.isCodeserver() && !extension.isElemental()) {
+						return;
+					}
+					
+					final String[] token = gwtVersion.split("\\.");
+					if(token.length>=2) {
+						try {
+							final Integer major = Integer.parseInt(token[0]);
+							final Integer minor = Integer.parseInt(token[1]);
+							
+							if((major==2 && minor>=5)||major>2) {
+								if(extension.isCodeserver()) {
+									project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
+								}
+								if(extension.isElemental()) {
+									project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_ELEMENTAL, gwtVersion));
+								}
+								
+							} else {
+								logger.warn("GWT version is <2.5 -> additional dependencies are not added.");
+							}
+							return;
+						} catch(NumberFormatException e) {
+						}
+					}
+					logger.warn("GWT version "+extension.getGwtVersion()+" can not be parsed -> additional dependencies are not added.. Valid versions must have the format major.minor.patch where major ad minor are positive integer numbers.");
 				}
 			}});
-		
+	}
+
+
+	private void createSuperDevModeTask(final Project project) {
+		final GwtSuperDev superDevTask = project.getTasks().create(TASK_GWT_SUPER_DEV, GwtSuperDev.class);
+		superDevTask.dependsOn(JavaPlugin.COMPILE_JAVA_TASK_NAME, JavaPlugin.PROCESS_RESOURCES_TASK_NAME);
+		superDevTask.setDescription("Runs the GWT super dev mode");
 	}
 
 	private void configureAbstractTasks(final Project project,
@@ -269,6 +304,12 @@ public class GwtPlugin implements Plugin<Project> {
 			@Override
 			public void execute(final GwtSuperDev task) {
 				task.configure(extension.getSuperDev());
+				task.conventionMapping("workDir", new Callable<File>() {
+
+					@Override
+					public File call() throws Exception {
+						return extension.getWorkDir();
+					}});
 			}
 		});
 	}

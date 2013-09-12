@@ -24,8 +24,12 @@ dependencies {
 
 gwt {
 	gwtVersion='2.5.1'
+//	codeserver = false
+//	elemental = true
+
 	modules=['de.richsource.gradle.plugins.gwt.example.Basic']
 	devModules=['de.richsource.gradle.plugins.gwt.example.Basic-dev']
+
 //	cacheDir=file("$buildDir/gwt/cache")
 //	maxHeapSize='1337M'
 //	dev {
@@ -38,12 +42,12 @@ gwt {
 		noPrecompile=true
 //		port = 1337
 	}
-	compiler {
-		strict = true;
-		enableClosureCompiler = true;
-		disableClassMetadata = true;
-		disableCastChecking = true;
-	}
+//	compiler {
+//		strict = true;
+//		enableClosureCompiler = true;
+//		disableClassMetadata = true;
+//		disableCastChecking = true;
+//	}
 }
 
 cargo {

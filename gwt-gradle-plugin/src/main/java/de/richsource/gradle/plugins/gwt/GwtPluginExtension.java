@@ -29,6 +29,8 @@ import de.richsource.gradle.plugins.gwt.internal.GwtSuperDevOptionsImpl;
 
 public class GwtPluginExtension {
 	private String gwtVersion;
+	private boolean codeserver = true;
+	private boolean elemental = false;
 	private File devWar;
 	private File extraDir;
 	private File workDir;
@@ -59,6 +61,22 @@ public class GwtPluginExtension {
 
 	public void setGwtVersion(String gwtVersion) {
 		this.gwtVersion = gwtVersion;
+	}
+	
+	public boolean isCodeserver() {
+		return codeserver;
+	}
+	
+	public void setCodeserver(boolean codeserver) {
+		this.codeserver = codeserver;
+	}
+	
+	public boolean isElemental() {
+		return elemental;
+	}
+	
+	public void setElemental(boolean elemental) {
+		this.elemental = elemental;
 	}
 
 	public List<String> getDevModules() {
