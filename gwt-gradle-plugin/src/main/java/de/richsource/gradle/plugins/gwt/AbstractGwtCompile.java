@@ -24,7 +24,6 @@ import org.gradle.api.tasks.OutputDirectory;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtCompileOptionsImpl;
 
-
 //-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
 //-workDir                The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
 //-gen                    Debugging: causes normally-transient generated types to be saved in the specified directory

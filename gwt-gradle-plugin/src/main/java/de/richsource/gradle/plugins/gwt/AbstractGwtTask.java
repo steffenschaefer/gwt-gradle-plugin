@@ -47,6 +47,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return war;
 	}
 
+	/**
+	 * Sets the "-war" option.
+	 * 
+	 * @param war
+	 */
 	public void setWar(File war) {
 		this.war = war;
 	}
@@ -55,6 +60,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return deploy;
 	}
 
+	/**
+	 * Sets the "-deploy" option.
+	 * 
+	 * @param deploy
+	 */
 	public void setDeploy(File deploy) {
 		this.deploy = deploy;
 	}
@@ -63,6 +73,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return extra;
 	}
 
+	/**
+	 * Sets the "-extra" option.
+	 * 
+	 * @param extra
+	 */
 	public void setExtra(File extra) {
 		this.extra = extra;
 	}
@@ -71,6 +86,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return workDir;
 	}
 
+	/**
+	 * Sets the "-workDir" option.
+	 * 
+	 * @param workDir
+	 */
 	public void setWorkDir(File workDir) {
 		this.workDir = workDir;
 	}
@@ -79,6 +99,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return gen;
 	}
 
+	/**
+	 * Sets the "-gen" option.
+	 * 
+	 * @param gen
+	 */
 	public void setGen(File gen) {
 		this.gen = gen;
 	}
@@ -87,6 +112,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return cacheDir;
 	}
 
+	/**
+	 * Sets the directory where to put the persistent unit cache.
+	 * 
+	 * @param cacheDir
+	 */
 	public void setCacheDir(File cacheDir) {
 		this.cacheDir = cacheDir;
 	}

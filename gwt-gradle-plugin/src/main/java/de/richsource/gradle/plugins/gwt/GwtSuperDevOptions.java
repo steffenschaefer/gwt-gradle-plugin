@@ -17,6 +17,9 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
+/**
+ * Defines the options known by the {@link GwtSuperDev} task.
+ */
 public interface GwtSuperDevOptions {
 
 	/**

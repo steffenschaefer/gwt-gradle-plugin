@@ -17,6 +17,9 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
+/**
+ * Defines the options known by the {@link GwtDev} task.
+ */
 public interface GwtDevOptions {
 
 	Boolean getNoserver();
@@ -34,42 +37,92 @@ public interface GwtDevOptions {
 
 	Integer getPort();
 
+	/**
+	 * Sets the "-port" option.
+	 * 
+	 * @param port Valid range is [1, 65535]
+	 */
 	void setPort(Integer port);
 
 	String getWhitelist();
 
+	/**
+	 * Sets the "-whitelist" option
+	 * 
+	 * @param whitelist
+	 */
 	void setWhitelist(String whitelist);
 
 	String getBlacklist();
 
+	/**
+	 * Sets the "-blacklist" option.
+	 * 
+	 * @param blacklist
+	 */
 	void setBlacklist(String blacklist);
 
 	File getLogDir();
 
+	/**
+	 * Sets the "-logDir" option.
+	 * 
+	 * @param logDir
+	 */
 	void setLogDir(File logDir);
 
 	String getBindAddress();
 
+	/**
+	 * Sets the "-bindAddress" option.
+	 * 
+	 * @param bindAddress
+	 */
 	void setBindAddress(String bindAddress);
 
 	Integer getCodeServerPort();
 
+	/**
+	 * Sets the "-codeServerPort" option.
+	 * 
+	 * @param codeServerPort Valid range is [1, 65535]
+	 */
 	void setCodeServerPort(Integer codeServerPort);
 
 	String getServer();
 
+	/**
+	 * Sets the "-server" option.
+	 * 
+	 * @param server
+	 */
 	void setServer(String server);
 
 	String getStartupUrl();
 
+	/**
+	 * Sets the "-startupUrl" option.
+	 * 
+	 * @param startupUrl
+	 */
 	void setStartupUrl(String startupUrl);
 
 	Boolean getAutoPort();
 
+	/**
+	 * Is set to true, this causes the "-port" to be automatically assigned using a free port.
+	 * 
+	 * @param autoPort
+	 */
 	void setAutoPort(Boolean autoPort);
 
 	Boolean getAutoCodeServerPort();
 
+	/**
+	 * Is set to true, this causes the "-codeServerPort" to be automatically assigned using a free port.
+	 * 
+	 * @param autoCodeServerPort
+	 */
 	void setAutoCodeServerPort(Boolean autoCodeServerPort);
 
 }
