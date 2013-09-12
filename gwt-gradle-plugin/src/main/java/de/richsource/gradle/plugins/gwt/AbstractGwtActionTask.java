@@ -17,6 +17,7 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -33,15 +34,15 @@ import org.gradle.process.internal.DefaultJavaExecAction;
 import org.gradle.process.internal.JavaExecAction;
 
 public abstract class AbstractGwtActionTask extends ConventionTask {
-	
+
 	private JavaExecAction javaExec;
-	
+
 	private List<String> modules;
-	
+
 	private Set<File> src = new HashSet<File>();
 	private FileCollection classpath;
 	private List<String> extraArgs = new ArrayList<String>();
-	
+
 	private String minHeapSize;
 	private String maxHeapSize;
 
@@ -49,89 +50,123 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		FileResolver fileResolver = getServices().get(FileResolver.class);
 		javaExec = new DefaultJavaExecAction(fileResolver);
 	}
-	
+
 	@TaskAction
 	public void run() {
-		if(getSrc() == null || getSrc().isEmpty()) {
+		if (getSrc() == null || getSrc().isEmpty()) {
 			throw new InvalidUserDataException("No Source is set");
 		}
-		if(getClasspath() == null) {
+		if (getClasspath() == null) {
 			throw new InvalidUserDataException("Classpath is not set");
 		}
-		if(getModules() == null || getModules().isEmpty()) {
+		if (getModules() == null || getModules().isEmpty()) {
 			throw new InvalidUserDataException("No module[s] given");
 		}
-		
+
 		javaExec.setMain(getClassName());
-		
-		if(prependSrcToClasspath()) {
+
+		if (prependSrcToClasspath()) {
 			javaExec.classpath(getSrc().toArray());
 		}
 		javaExec.classpath(getClasspath());
-		
+
 		javaExec.setMinHeapSize(getMinHeapSize());
 		javaExec.setMaxHeapSize(getMaxHeapSize());
-		
+
 		addArgs();
 		javaExec.args(getExtraArgs());
 		// the module names are expected to be the last parameters
 		javaExec.args(getModules());
-		
+
 		javaExec.execute();
 	}
-	
+
 	protected boolean prependSrcToClasspath() {
 		return true;
 	}
-	
+
 	@Input
 	public List<String> getModules() {
 		return modules;
 	}
 
+	/**
+	 * Sets the GWT modules (fully qualified names) to be used by this task.
+	 * 
+	 * @param modules
+	 *            GWT modules to be set for this task
+	 */
 	public void setModules(List<String> modules) {
 		this.modules = modules;
 	}
-	
+
+	/**
+	 * Adds additional arguments for the Java VM spawned by this task.
+	 * 
+	 * @param args
+	 *            java args to be added
+	 */
 	public void javaArgs(Object... args) {
 		javaExec.jvmArgs(args);
 	}
-	
+
 	public List<String> getExtraArgs() {
 		return extraArgs;
 	}
-	
+
+	/**
+	 * Adds arguments that are given to the task.
+	 * 
+	 * @param arg
+	 *            arguments to be added
+	 */
 	protected void arg(Object... arg) {
 		javaExec.args(arg);
 	}
-	
+
 	protected void argIfEnabled(Boolean condition, String arg) {
-		if(Boolean.TRUE.equals(condition)) {
+		if (Boolean.TRUE.equals(condition)) {
 			arg(arg);
 		}
 	}
-	
+
 	protected void dirArgIfSet(String arg, File dir) {
-		if(dir != null) {
+		if (dir != null) {
 			dir.mkdirs();
 			arg(arg, dir);
 		}
 	}
-	
+
 	protected void argIfSet(String arg, Object value) {
-		if(value != null) {
+		if (value != null) {
 			arg(arg, value);
 		}
 	}
-	
-	public void extraArg(String arg) {
-		extraArgs.add(arg);
+
+	/**
+	 * Adds additional program arguments for the process spawned by this task.
+	 * 
+	 * @param args
+	 *            additional arguments to add
+	 */
+	public void extraArg(String... args) {
+		extraArgs.addAll(Arrays.asList(args));
 	}
-	
+
+	/**
+	 * Defines the main class to be called when this task is executed.
+	 * 
+	 * @return the fully qualified name of the main class to be executed. Must
+	 *         not be null.
+	 */
 	protected abstract String getClassName();
-	
+
+	/**
+	 * Called directly before executing this task. Subclasses are expected to
+	 * add all args/javaArgs needed for the execution.
+	 */
 	protected abstract void addArgs();
-	
+
 	protected boolean isDevTask() {
 		return true;
 	}
@@ -140,31 +175,66 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		return minHeapSize;
 	}
 
+	/**
+	 * Sets the minimum heap size (-Xms java arg) to be used by the java process
+	 * spawned by this task.
+	 * 
+	 * @param minHeapSize
+	 *            the minimum heap size to set. Examples: 128M, 2G
+	 */
 	public void setMinHeapSize(String minHeapSize) {
 		this.minHeapSize = minHeapSize;
 	}
-	
+
 	public String getMaxHeapSize() {
 		return maxHeapSize;
 	}
-	
+
+	/**
+	 * Sets the maximum heap size (-Xmx java arg) to be used by the java process
+	 * spawned by this task.
+	 * 
+	 * @param maxHeapSize
+	 *            the maximum heap size to set. Examples: 128M, 2G
+	 */
 	public void setMaxHeapSize(String maxHeapSize) {
 		this.maxHeapSize = maxHeapSize;
 	}
-	
+
 	@InputFiles
 	public Set<File> getSrc() {
 		return src;
 	}
 
+	/**
+	 * Sets the source directories used by this task instance. These source
+	 * directories are used by GWT to read java source files from.
+	 * 
+	 * @param src
+	 *            source directories to set
+	 */
 	public void setSrc(Set<File> src) {
 		this.src = src;
 	}
-	
+
+	/**
+	 * Adds a source directories used by this task instance. These source
+	 * directories are used by GWT to read java source files from.
+	 * 
+	 * @param src
+	 *            source directory to add
+	 */
 	public void src(File src) {
 		this.src.add(src);
 	}
-	
+
+	/**
+	 * Adds source directories used by this task instance. These source
+	 * directories are used by GWT to read java source files from.
+	 * 
+	 * @param src
+	 *            source directories to add
+	 */
 	public void src(Collection<File> src) {
 		this.src.addAll(src);
 	}
@@ -174,6 +244,14 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		return classpath;
 	}
 
+	/**
+	 * Sets the classpath for the java process spawned by this task. This
+	 * classpath must contain all libraries used by GWT (especially gwt-dev and
+	 * gwt-user libraries).
+	 * 
+	 * @param classpath
+	 *            the classpat to set
+	 */
 	public void setClasspath(FileCollection classpath) {
 		this.classpath = classpath;
 	}
