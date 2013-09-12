@@ -324,6 +324,8 @@ public class GwtPlugin implements Plugin<Project> {
 				eclipseModel.getProject().natures("com.google.gwt.eclipse.core.gwtNature");
 				eclipseModel.getProject().buildCommand("com.google.gwt.eclipse.core.gwtProjectValidator");
 				
+				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(TASK_WAR_TEMPLATE));
+				
 				project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 					@Override
 					public void execute(WarPlugin warPlugin) {
@@ -342,5 +344,11 @@ public class GwtPlugin implements Plugin<Project> {
 					}
 				});
 			}});
+	}
+	
+	private String getAssociatedCleanTask(final String taskName) {
+		final String first = taskName.substring(0, 1).toUpperCase();
+		final String rest = taskName.substring(1);
+		return "clean"+first+rest;
 	}
 }
