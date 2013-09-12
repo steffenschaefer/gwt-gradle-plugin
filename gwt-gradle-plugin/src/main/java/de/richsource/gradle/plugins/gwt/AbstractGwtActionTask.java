@@ -45,6 +45,8 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 
 	private String minHeapSize;
 	private String maxHeapSize;
+	
+	private boolean debug = false;
 
 	public AbstractGwtActionTask() {
 		FileResolver fileResolver = getServices().get(FileResolver.class);
@@ -72,6 +74,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 
 		javaExec.setMinHeapSize(getMinHeapSize());
 		javaExec.setMaxHeapSize(getMaxHeapSize());
+		javaExec.setDebug(isDebug());
 
 		addArgs();
 		javaExec.args(getExtraArgs());
@@ -254,5 +257,13 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	 */
 	public void setClasspath(FileCollection classpath) {
 		this.classpath = classpath;
+	}
+
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 }
