@@ -8,7 +8,7 @@ public class ExampleEntryPoint implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		RootPanel.get().add(new Label("Hello GWT World!!!"));
+		RootPanel.get().add(new Label("Hello GWT World!"));
 	}
 
 }
