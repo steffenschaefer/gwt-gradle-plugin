@@ -65,7 +65,7 @@ public interface GwtDevOptions {
 	File getLogDir();
 
 	/**
-	 * Sets the "-logDir" option.
+	 * Sets the "-logdir" option.
 	 * 
 	 * @param logDir
 	 */

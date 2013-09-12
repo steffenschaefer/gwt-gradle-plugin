@@ -63,7 +63,7 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 		argIfSet("-port", Boolean.TRUE.equals(getAutoPort())? "auto" : getPort());
 		argIfSet("-whitelist", getWhitelist());
 		argIfSet("-blacklist", getBlacklist());
-		argIfSet("-logDir", getLogDir());
+		argIfSet("-logdir", getLogDir());
 		argIfSet("-bindAddress", getBindAddress());
 		argIfSet("-codeServerPort", Boolean.TRUE.equals(getAutoCodeServerPort())? "auto" : getCodeServerPort());
 		argIfSet("-server", getServer());

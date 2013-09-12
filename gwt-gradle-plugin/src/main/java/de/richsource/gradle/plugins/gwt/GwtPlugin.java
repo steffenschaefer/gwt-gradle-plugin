@@ -45,6 +45,7 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String EXTRA_DIR = "extra";
 	public static final String WORK_DIR = "work";
 	public static final String GEN_DIR = "gen";
+	public static final String LOG_DIR = "log";
 	
 	private static final String DEV_WAR = "war";
 	private static final String TASK_WAR_TEMPLATE = "warTemplate";
@@ -70,6 +71,7 @@ public class GwtPlugin implements Plugin<Project> {
 		extension.setExtraDir(new File(buildDir, EXTRA_DIR));
 		extension.setWorkDir(new File(buildDir, WORK_DIR));
 		extension.setGenDir(new File(buildDir, GEN_DIR));
+		extension.getDev().setLogDir(new File(buildDir, LOG_DIR));
 		extension.getCompiler().setLocalWorkers(Runtime.getRuntime().availableProcessors());
 		
 		configureAbstractActionTasks(project, extension);
