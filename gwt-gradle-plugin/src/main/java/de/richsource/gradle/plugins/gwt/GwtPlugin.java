@@ -16,6 +16,8 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +27,7 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.ExcludeRule;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.logging.Logger;
@@ -68,6 +71,7 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String ECLIPSE_NATURE = "com.google.gwt.eclipse.core.gwtNature";
 	public static final String ECLIPSE_BUILDER_PROJECT_VALIDATOR = "com.google.gwt.eclipse.core.gwtProjectValidator";
 	public static final String ECLIPSE_BUILDER_WEBAPP_VALIDATOR = "com.google.gdt.eclipse.core.webAppProjectValidator";
+	public static final String ECLIPSE_GWT_CONTAINER = "com.google.gwt.eclipse.core.GWT_CONTAINER";
 	
 	private static final Logger logger = Logging.getLogger(GwtPlugin.class);
 
@@ -159,42 +163,58 @@ public class GwtPlugin implements Plugin<Project> {
 		project.afterEvaluate(new Action<Project>() {
 			@Override
 			public void execute(final Project project) {
-				if(extension.isCodeserver()) {
-					createSuperDevModeTask(project);
-				}
+				boolean versionSet = false;
+				int major = 2;
+				int minor = 5;
 				
 				final String gwtVersion = extension.getGwtVersion();
 				if(gwtVersion != null && !extension.getGwtVersion().isEmpty()) {
-					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
-					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
-					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
-					
-					if(!extension.isCodeserver() && !extension.isElemental()) {
-						return;
-					}
-					
 					final String[] token = gwtVersion.split("\\.");
 					if(token.length>=2) {
 						try {
-							final Integer major = Integer.parseInt(token[0]);
-							final Integer minor = Integer.parseInt(token[1]);
-							
-							if((major==2 && minor>=5)||major>2) {
-								if(extension.isCodeserver()) {
-									project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
-								}
-								if(extension.isElemental()) {
-									project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_ELEMENTAL, gwtVersion));
-								}
-								
-							} else {
-								logger.warn("GWT version is <2.5 -> additional dependencies are not added.");
-							}
-							return;
+							major = Integer.parseInt(token[0]);
+							minor = Integer.parseInt(token[1]);
+							versionSet = true;
 						} catch(NumberFormatException e) {
+							logger.warn("GWT version "+extension.getGwtVersion()+" can not be parsed. Valid versions must have the format major.minor.patch where major and minor are positive integer numbers.");
 						}
+					} else {
+						logger.warn("GWT version "+extension.getGwtVersion()+" can not be parsed. Valid versions must have the format major.minor.patch where major and minor are positive integer numbers.");
 					}
-					logger.warn("GWT version "+extension.getGwtVersion()+" can not be parsed -> additional dependencies are not added.. Valid versions must have the format major.minor.patch where major ad minor are positive integer numbers.");
+				}
+				
+				if ((major == 2 && minor >= 5) || major > 2) {
+					if(extension.isCodeserver()) {
+						project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
+						createSuperDevModeTask(project);
+					}
+					if(extension.isElemental()) {
+						project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_ELEMENTAL, gwtVersion));
+					}
+				} else {
+					logger.warn("GWT version is <2.5 -> additional dependencies are not added.");
+				}				
+				
+				if(versionSet) {
+					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
+					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
+					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
+				}
+				
+				if(extension.getEclipse().isAddGwtContainer()) {
+					project.getPlugins().withType(EclipsePlugin.class, new Action<EclipsePlugin>(){
+						@Override
+						public void execute(EclipsePlugin eclipsePlugin) {
+							final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
+							
+							eclipseModel.getClasspath().getContainers().add(ECLIPSE_GWT_CONTAINER);
+							
+							Collection<Configuration> configurations = eclipseModel.getClasspath().getPlusConfigurations();
+							for (Configuration configuration : configurations) {
+								configuration.exclude(Collections.singletonMap(ExcludeRule.GROUP_KEY, GWT_GROUP));
+							}
+						}
+					});
 				}
 			}});
 	}

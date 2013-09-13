@@ -51,6 +51,9 @@ gwt {
 //		disableClassMetadata = true;
 //		disableCastChecking = true;
 //	}
+//	eclipse {
+//		addGwtContainer = false
+//	}
 }
 
 cargo {
