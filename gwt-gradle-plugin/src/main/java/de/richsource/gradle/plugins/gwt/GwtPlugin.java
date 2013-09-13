@@ -49,10 +49,12 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String GEN_DIR = "gen";
 	public static final String LOG_DIR = "log";
 	
-	private static final String DEV_WAR = "war";
-	private static final String TASK_WAR_TEMPLATE = "warTemplate";
+	public static final String DEV_WAR = "war";
+	
+	public static final String TASK_WAR_TEMPLATE = "warTemplate";
 	public static final String TASK_COMPILE_GWT = "compileGwt";
 	public static final String TASK_DRAFT_COMPILE_GWT = "draftCompileGwt";
+	public static final String TASK_DRAFT_WAR = "draftWar";
 	public static final String TASK_GWT_DEV = "gwtDev";
 	public static final String TASK_GWT_SUPER_DEV = "gwtSuperDev";
 	
@@ -62,6 +64,10 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String GWT_CODESERVER = "gwt-codeserver";
 	public static final String GWT_ELEMENTAL = "gwt-elemental";
 	public static final String GWT_SERVLET = "gwt-servlet";
+
+	public static final String ECLIPSE_NATURE = "com.google.gwt.eclipse.core.gwtNature";
+	public static final String ECLIPSE_BUILDER_PROJECT_VALIDATOR = "com.google.gwt.eclipse.core.gwtProjectValidator";
+	public static final String ECLIPSE_BUILDER_WEBAPP_VALIDATOR = "com.google.gdt.eclipse.core.webAppProjectValidator";
 	
 	private static final Logger logger = Logging.getLogger(GwtPlugin.class);
 
@@ -127,7 +133,7 @@ public class GwtPlugin implements Plugin<Project> {
 					}});
 				
 				
-				final War draftWar = project.getTasks().create("draftWar", War.class);
+				final War draftWar = project.getTasks().create(TASK_DRAFT_WAR, War.class);
 				draftWar.from(new Callable<Object>() {
 					@Override
 					public Object call() throws Exception {
@@ -321,15 +327,15 @@ public class GwtPlugin implements Plugin<Project> {
 			@Override
 			public void execute(EclipsePlugin eclipsePlugin) {
 				final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
-				eclipseModel.getProject().natures("com.google.gwt.eclipse.core.gwtNature");
-				eclipseModel.getProject().buildCommand("com.google.gwt.eclipse.core.gwtProjectValidator");
+				eclipseModel.getProject().natures(ECLIPSE_NATURE);
+				eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_PROJECT_VALIDATOR);
 				
 				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(TASK_WAR_TEMPLATE));
 				
 				project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 					@Override
 					public void execute(WarPlugin warPlugin) {
-						eclipseModel.getProject().buildCommand("com.google.gdt.eclipse.core.webAppProjectValidator");
+						eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_WEBAPP_VALIDATOR);
 						
 						project.getTasks().getByName(EclipsePlugin.getECLIPSE_PROJECT_TASK_NAME()).dependsOn(TASK_WAR_TEMPLATE);
 						
