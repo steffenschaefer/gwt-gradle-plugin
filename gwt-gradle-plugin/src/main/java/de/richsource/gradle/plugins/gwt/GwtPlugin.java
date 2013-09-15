@@ -350,14 +350,13 @@ public class GwtPlugin implements Plugin<Project> {
 				eclipseModel.getProject().natures(ECLIPSE_NATURE);
 				eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_PROJECT_VALIDATOR);
 				
-				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(TASK_WAR_TEMPLATE));
-				
 				project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 					@Override
 					public void execute(WarPlugin warPlugin) {
 						eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_WEBAPP_VALIDATOR);
 						
-						project.getTasks().getByName(EclipsePlugin.getECLIPSE_PROJECT_TASK_NAME()).dependsOn(TASK_WAR_TEMPLATE);
+						project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(TASK_WAR_TEMPLATE);
+						project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(TASK_WAR_TEMPLATE));
 						
 						project.afterEvaluate(new Action<Project>() {
 							@Override
