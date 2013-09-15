@@ -1,0 +1,20 @@
+apply plugin: 'gwt'
+apply plugin: 'eclipse'
+
+repositories { mavenCentral() }
+
+dependencies {
+	testCompile group: 'junit', name: 'junit', version: '[4.11,5.0['
+}
+
+gwt {
+	gwtVersion='2.5.1'
+	
+	test {
+		hasGwtTests = true
+	}
+}
+
+test {
+	include 'de/richsource/gradle/plugins/gwt/example/client/ExampleTests'
+}

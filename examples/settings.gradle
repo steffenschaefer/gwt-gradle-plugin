@@ -1,1 +1,6 @@
 include 'basic'
+include 'testing'
+
+rootProject.children.each {project ->
+	project.name = "example-${project.name}"
+}

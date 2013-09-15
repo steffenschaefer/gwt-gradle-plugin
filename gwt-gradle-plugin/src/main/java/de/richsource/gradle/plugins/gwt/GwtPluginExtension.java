@@ -47,6 +47,7 @@ public class GwtPluginExtension {
 	private final GwtSuperDevOptions superDev = new GwtSuperDevOptionsImpl();
 	private final GwtCompileOptions compiler = new GwtCompileOptionsImpl();
 	private final GwtEclipseOptions eclipse = new GwtEclipseOptions();
+	private final GwtTestOptions test = new GwtTestOptions();
 
 	public List<String> getModules() {
 		return modules;
@@ -185,6 +186,15 @@ public class GwtPluginExtension {
 
 	public GwtPluginExtension eclipse(Closure<GwtEclipseOptions> c) {
 		ConfigureUtil.configure(c, eclipse);
+		return this;
+	}
+	
+	public GwtTestOptions getTest() {
+		return test;
+	}
+
+	public GwtPluginExtension test(Closure<GwtTestOptions> c) {
+		ConfigureUtil.configure(c, test);
 		return this;
 	}
 }

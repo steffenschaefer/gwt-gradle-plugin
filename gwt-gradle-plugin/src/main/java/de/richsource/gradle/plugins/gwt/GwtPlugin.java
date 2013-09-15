@@ -38,6 +38,7 @@ import org.gradle.api.plugins.WarPlugin;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.War;
+import org.gradle.api.tasks.testing.Test;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 
@@ -215,6 +216,20 @@ public class GwtPlugin implements Plugin<Project> {
 							}
 						}
 					});
+				}
+				
+				if(extension.getTest().isHasGwtTests()) {
+					final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+					final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+					final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
+					
+					Test testTask = (Test) project.getTasks().getByName(JavaPlugin.TEST_TASK_NAME);
+					FileCollection testClasspath = testTask.getClasspath().plus(project.files(mainSourceSet.getAllJava().getSrcDirs().toArray())).plus(project.files(testSourceSet.getAllJava().getSrcDirs().toArray()));
+					testTask.setClasspath(testClasspath);
+					
+					project.getConfigurations().getByName(JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
+					
+					testTask.jvmArgs("-Dgwt.args=\"-help\"");
 				}
 			}});
 	}
