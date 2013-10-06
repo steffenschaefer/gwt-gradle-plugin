@@ -1,5 +1,9 @@
+apply plugin: 'java'
 apply plugin: 'gwt'
 apply plugin: 'eclipse'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
 
 repositories { mavenCentral() }
 
@@ -13,8 +17,4 @@ gwt {
 	test {
 		hasGwtTests = true
 	}
-}
-
-test {
-	include 'de/richsource/gradle/plugins/gwt/example/client/ExampleTests'
 }

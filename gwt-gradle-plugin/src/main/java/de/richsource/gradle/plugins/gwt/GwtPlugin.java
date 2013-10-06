@@ -104,7 +104,14 @@ public class GwtPlugin implements Plugin<Project> {
 		mainSourceSet.setCompileClasspath(mainSourceSet.getCompileClasspath().plus(gwtConfiguration));
 		final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
 		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(gwtConfiguration));
-		testSourceSet.setRuntimeClasspath(testSourceSet.getRuntimeClasspath().plus(gwtConfiguration));
+		testSourceSet.setRuntimeClasspath(
+				project.files(
+						mainSourceSet.getAllJava().getSrcDirs().toArray())
+						.plus(project.files(testSourceSet.getAllJava()
+								.getSrcDirs().toArray()))
+				.plus(gwtConfiguration).plus(testSourceSet
+				.getRuntimeClasspath()));
+		
 		
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
 		compileTask.setWar(new File(buildDir, OUT_DIR));
@@ -193,20 +200,25 @@ public class GwtPlugin implements Plugin<Project> {
 				
 				if ((major == 2 && minor >= 5) || major > 2) {
 					if(extension.isCodeserver()) {
-						project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
 						createSuperDevModeTask(project);
 					}
-					if(extension.isElemental()) {
-						project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_ELEMENTAL, gwtVersion));
-					}
-				} else {
-					logger.warn("GWT version is <2.5 -> additional dependencies are not added.");
-				}				
+				}
 				
 				if(versionSet) {
 					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
 					project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
 					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
+					
+					if ((major == 2 && minor >= 5) || major > 2) {
+						if(extension.isCodeserver()) {
+							project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
+						}
+						if(extension.isElemental()) {
+							project.getDependencies().add(CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_ELEMENTAL, gwtVersion));
+						}
+					} else {
+						logger.warn("GWT version is <2.5 -> additional dependencies are not added.");
+					}
 				}
 				
 				if(extension.getEclipse().isAddGwtContainer()) {
@@ -236,15 +248,16 @@ public class GwtPlugin implements Plugin<Project> {
 //							testTask.bootstrapClasspath(mainSourceSet.getAllJava().getSrcDirs().toArray());
 //							testTask.bootstrapClasspath(testSourceSet.getAllJava().getSrcDirs().toArray());
 //							testTask.bootstrapClasspath(gwtConfiguration);
-							testTask.setClasspath(testTask.getClasspath().plus(
-									project.files(
-											mainSourceSet.getAllJava()
-													.getSrcDirs().toArray())
-											.plus(project.files(testSourceSet
-													.getAllJava().getSrcDirs()
-													.toArray()))).plus(gwtConfiguration));
+//							testTask.setClasspath(testTask.getClasspath().plus(
+//									project.files(
+//											mainSourceSet.getAllJava()
+//													.getSrcDirs().toArray())
+//											.plus(project.files(testSourceSet
+//													.getAllJava().getSrcDirs()
+//													.toArray()))).plus(gwtConfiguration));
 							
-							testTask.jvmArgs("-Dgwt.args=\"-help\"");
+//							testTask.jvmArgs("-Dgwt.args=\"-help\"");
+							testTask.systemProperty("gwt.args", "-help");
 						}});
 				}
 			}});
