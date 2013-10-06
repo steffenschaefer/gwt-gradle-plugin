@@ -97,7 +97,14 @@ public class GwtPlugin implements Plugin<Project> {
 		configureGwtSuperDev(project, extension);
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
-		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
+//		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
+		
+		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+		mainSourceSet.setCompileClasspath(mainSourceSet.getCompileClasspath().plus(gwtConfiguration));
+		final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
+		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(gwtConfiguration));
+		testSourceSet.setRuntimeClasspath(testSourceSet.getRuntimeClasspath().plus(gwtConfiguration));
 		
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
 		compileTask.setWar(new File(buildDir, OUT_DIR));
@@ -219,19 +226,23 @@ public class GwtPlugin implements Plugin<Project> {
 				}
 				
 				if(extension.getTest().isHasGwtTests()) {
-					project.getConfigurations().getByName(JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
+//					project.getConfigurations().getByName(JavaPlugin.TEST_RUNTIME_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
+//					project.getConfigurations().getByName(JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
 					
 					project.getTasks().withType(Test.class, new Action<Test>() {
 
 						@Override
 						public void execute(Test testTask) {
-							final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-							final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-							final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
-							
-							testTask.bootstrapClasspath(mainSourceSet.getAllJava().getSrcDirs().toArray());
-							testTask.bootstrapClasspath(testSourceSet.getAllJava().getSrcDirs().toArray());
-							
+//							testTask.bootstrapClasspath(mainSourceSet.getAllJava().getSrcDirs().toArray());
+//							testTask.bootstrapClasspath(testSourceSet.getAllJava().getSrcDirs().toArray());
+//							testTask.bootstrapClasspath(gwtConfiguration);
+							testTask.setClasspath(testTask.getClasspath().plus(
+									project.files(
+											mainSourceSet.getAllJava()
+													.getSrcDirs().toArray())
+											.plus(project.files(testSourceSet
+													.getAllJava().getSrcDirs()
+													.toArray()))).plus(gwtConfiguration));
 							
 							testTask.jvmArgs("-Dgwt.args=\"-help\"");
 						}});
