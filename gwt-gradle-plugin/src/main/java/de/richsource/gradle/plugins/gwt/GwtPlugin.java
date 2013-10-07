@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ExcludeRule;
 import org.gradle.api.file.FileCollection;
@@ -240,9 +241,26 @@ public class GwtPlugin implements Plugin<Project> {
 					
 					project.getTasks().withType(Test.class, new Action<Test>() {
 						@Override
-						public void execute(Test testTask) {
-							testTask.systemProperty("gwt.args", "-help");
-						}});
+						public void execute(final Test testTask) {
+							testTask.doFirst(new Action<Task>() {
+								@Override
+								public void execute(Task arg0) {
+									testTask.systemProperty("gwt.args",
+											extension.getTest()
+													.getParameterString());
+									System.out.println(extension.getTest()
+													.getParameterString());
+
+									if (extension.getCacheDir() != null) {
+										testTask.systemProperty(
+												"gwt.persistentunitcachedir",
+												extension.getCacheDir());
+										extension.getCacheDir().mkdirs();
+									}
+								}
+							});
+						}
+					});
 				}
 			}});
 	}
