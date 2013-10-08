@@ -30,6 +30,7 @@ import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ExcludeRule;
 import org.gradle.api.file.FileCollection;
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -228,41 +229,39 @@ public class GwtPlugin implements Plugin<Project> {
 					});
 				}
 				
-				if(extension.getTest().isHasGwtTests()) {
-					final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
-					testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(gwtConfiguration));
-					testSourceSet.setRuntimeClasspath(
-							project.files(
-									mainSourceSet.getAllJava().getSrcDirs().toArray())
-									.plus(project.files(testSourceSet.getAllJava()
-											.getSrcDirs().toArray()))
-							.plus(gwtConfiguration).plus(testSourceSet
-							.getRuntimeClasspath()));
-					
-					project.getTasks().withType(Test.class, new Action<Test>() {
-						@Override
-						public void execute(final Test testTask) {
-							testTask.doFirst(new Action<Task>() {
-								@Override
-								public void execute(Task arg0) {
-									testTask.systemProperty("gwt.args",
-											extension.getTest()
-													.getParameterString());
-									System.out.println(extension.getTest()
-													.getParameterString());
-
-									if (extension.getCacheDir() != null) {
-										testTask.systemProperty(
-												"gwt.persistentunitcachedir",
-												extension.getCacheDir());
-										extension.getCacheDir().mkdirs();
-									}
-								}
-							});
-						}
-					});
-				}
 			}});
+		
+		final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
+		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(gwtConfiguration));
+		testSourceSet.setRuntimeClasspath(
+				project.files(
+						mainSourceSet.getAllJava().getSrcDirs().toArray())
+						.plus(project.files(testSourceSet.getAllJava()
+								.getSrcDirs().toArray()))
+				.plus(gwtConfiguration).plus(testSourceSet
+				.getRuntimeClasspath()));
+		
+		project.getTasks().withType(Test.class, new Action<Test>() {
+			@Override
+			public void execute(final Test testTask) {
+				testTask.getTestLogging().setShowStandardStreams(true);
+				
+				final GwtTestExtension testExtension = testTask.getExtensions().create("gwt", GwtTestExtension.class);
+				testExtension.configure(extension, (IConventionAware) testExtension);
+
+				testTask.doFirst(new Action<Task>() {
+					@Override
+					public void execute(Task arg0) {
+						testTask.systemProperty("gwt.args", testExtension.getParameterString());
+
+						if (testExtension.getCacheDir() != null) {
+							testTask.systemProperty("gwt.persistentunitcachedir", testExtension.getCacheDir());
+							testExtension.getCacheDir().mkdirs();
+						}
+					}
+				});
+			}
+		});
 	}
 
 

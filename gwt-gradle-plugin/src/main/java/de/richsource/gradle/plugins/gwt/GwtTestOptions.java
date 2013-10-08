@@ -33,12 +33,6 @@ import java.io.File;
 //  -userAgents             Specify the user agents to reduce the number of permutations for remote browser tests; e.g. ie6,ie8,safari,gecko1_8,opera
 public class GwtTestOptions {
 	private boolean hasGwtTests = false;
-	private File war;
-	private File deploy;
-	private File extra;
-	private File workDir;
-	private File gen;
-//	private File cacheDir;
 	private LogLevel logLevel;
 	
 	private Integer port;
@@ -58,7 +52,7 @@ public class GwtTestOptions {
 	private Boolean prod;
 	private Integer testMethodTimeout;
 	private Integer testBeginTimeout;
-	// TODO -runStyle
+	private String runStyle;
 	private Boolean notHeadless;
 	private Boolean standardsMode;
 	private Boolean quirksMode;
@@ -66,68 +60,7 @@ public class GwtTestOptions {
 	private Integer tries;
 	private String userAgents;
 	
-	protected String getParameterString() {
-		final StringBuilder builder = new StringBuilder();
-		
-		dirArgIfSet(builder, "-war", getWar());
-		dirArgIfSet(builder, "-deploy", getDeploy());
-		dirArgIfSet(builder, "-extra", getExtra());
-		dirArgIfSet(builder, "-workDir", getWorkDir());
-		dirArgIfSet(builder, "-gen", getGen());
-		
-		argIfSet(builder, "-logLevel", getLogLevel());
-		
-		argIfSet(builder, "-port", Boolean.TRUE.equals(getAutoPort())? "auto" : getPort());
-		argIfSet(builder, "-whitelist", getWhitelist());
-		argIfSet(builder, "-blacklist", getBlacklist());
-		argIfSet(builder, "-logdir", getLogDir());
-		argIfSet(builder, "-codeServerPort", Boolean.TRUE.equals(getAutoCodeServerPort())? "auto" : getCodeServerPort());
-		
-		argIfSet(builder, "-style", getStyle());
-		argIfEnabled(builder, getEa(), "-ea");
-		argIfEnabled(builder, getDisableClassMetadata(), "-XdisableClassMetadata");
-		argIfEnabled(builder, getDisableCastChecking(), "-XdisableCastChecking");
-		argIfEnabled(builder, getDraftCompile(), "-draftCompile");
-		argIfSet(builder, "-localWorkers", getLocalWorkers());
-		argIfEnabled(builder, getProd(), "-prod");
-		argIfSet(builder, "-testMethodTimeout", getTestMethodTimeout());
-		argIfSet(builder, "-testBeginTimeout", getTestBeginTimeout());
-		argIfEnabled(builder, getNotHeadless(), "-notHeadless");
-		argIfEnabled(builder, getStandardsMode(), "-standardsMode");
-		argIfEnabled(builder, getQuirksMode(), "-quirksMode");
-		argIfSet(builder, "-Xtries", getTries());
-		argIfSet(builder, "-userAgents", getUserAgents());
-		
-		return builder.toString();
-	}
 	
-	private void argIfEnabled(StringBuilder builder, Boolean condition, String arg) {
-		if (Boolean.TRUE.equals(condition)) {
-			arg(builder, arg);
-		}
-	}
-
-	private void dirArgIfSet(StringBuilder builder, String arg, File dir) {
-		if (dir != null) {
-			dir.mkdirs();
-			arg(builder, arg, dir);
-		}
-	}
-
-	private void argIfSet(StringBuilder builder, String arg, Object value) {
-		if (value != null) {
-			arg(builder, arg, value);
-		}
-	}
-	
-	private void arg(StringBuilder builder, Object... args) {
-		for(Object arg : args) {
-			if(builder.length() > 0) {
-				builder.append(' ');
-			}
-			builder.append(arg.toString());
-		}
-	}
 
 	public boolean isHasGwtTests() {
 		return hasGwtTests;
@@ -143,46 +76,6 @@ public class GwtTestOptions {
 
 	public void setProd(boolean prod) {
 		this.prod = prod;
-	}
-
-	public File getWar() {
-		return war;
-	}
-
-	public void setWar(File war) {
-		this.war = war;
-	}
-
-	public File getDeploy() {
-		return deploy;
-	}
-
-	public void setDeploy(File deploy) {
-		this.deploy = deploy;
-	}
-
-	public File getExtra() {
-		return extra;
-	}
-
-	public void setExtra(File extra) {
-		this.extra = extra;
-	}
-
-	public File getWorkDir() {
-		return workDir;
-	}
-
-	public void setWorkDir(File workDir) {
-		this.workDir = workDir;
-	}
-
-	public File getGen() {
-		return gen;
-	}
-
-	public void setGen(File gen) {
-		this.gen = gen;
 	}
 
 	public LogLevel getLogLevel() {
@@ -359,5 +252,13 @@ public class GwtTestOptions {
 
 	public void setUserAgents(String userAgents) {
 		this.userAgents = userAgents;
+	}
+
+	public String getRunStyle() {
+		return runStyle;
+	}
+
+	public void setRunStyle(String runStyle) {
+		this.runStyle = runStyle;
 	}
 }
