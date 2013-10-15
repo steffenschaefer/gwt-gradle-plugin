@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gradle.api.file.FileCollection;
 import org.gradle.util.ConfigureUtil;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtCompileOptionsImpl;
@@ -39,6 +40,7 @@ public class GwtPluginExtension {
 	private LogLevel logLevel;
 	private List<String> modules = new ArrayList<String>();
 	private List<String> devModules = new ArrayList<String>();
+	private FileCollection src;
 	
 	private String minHeapSize = "256M";
 	private String maxHeapSize = "256M";
@@ -196,5 +198,13 @@ public class GwtPluginExtension {
 	public GwtPluginExtension test(Closure<GwtTestOptions> c) {
 		ConfigureUtil.configure(c, test);
 		return this;
+	}
+
+	public FileCollection getSrc() {
+		return src;
+	}
+
+	public void setSrc(FileCollection src) {
+		this.src = src;
 	}
 }

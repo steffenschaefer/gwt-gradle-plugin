@@ -18,9 +18,7 @@ package de.richsource.gradle.plugins.gwt;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
@@ -84,6 +82,9 @@ public class GwtPlugin implements Plugin<Project> {
 		
 		final File buildDir = new File(project.getBuildDir(), BUILD_DIR);
 		
+		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+		
 		final GwtPluginExtension extension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
 		extension.setDevWar(project.file(DEV_WAR));
 		extension.setExtraDir(new File(buildDir, EXTRA_DIR));
@@ -91,6 +92,7 @@ public class GwtPlugin implements Plugin<Project> {
 		extension.setGenDir(new File(buildDir, GEN_DIR));
 		extension.getDev().setLogDir(new File(buildDir, LOG_DIR));
 		extension.getCompiler().setLocalWorkers(Runtime.getRuntime().availableProcessors());
+		extension.setSrc(project.files(mainSourceSet.getAllJava().getSrcDirs()).plus(project.files(mainSourceSet.getOutput().getResourcesDir())));
 		
 		configureAbstractActionTasks(project, extension);
 		configureAbstractTasks(project, extension);
@@ -101,8 +103,6 @@ public class GwtPlugin implements Plugin<Project> {
 		final Configuration gwtConfiguration = project.getConfigurations().create(CONFIGURATION_NAME);
 //		project.getConfigurations().getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
 		
-		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 		mainSourceSet.setCompileClasspath(mainSourceSet.getCompileClasspath().plus(gwtConfiguration));
 		
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
@@ -252,11 +252,14 @@ public class GwtPlugin implements Plugin<Project> {
 				testTask.doFirst(new Action<Task>() {
 					@Override
 					public void execute(Task arg0) {
-						testTask.systemProperty("gwt.args", testExtension.getParameterString());
+						String gwtArgs = testExtension.getParameterString();
+						testTask.systemProperty("gwt.args", gwtArgs);
+						logger.info("Using gwt.args for test: "+ gwtArgs);
 
 						if (testExtension.getCacheDir() != null) {
 							testTask.systemProperty("gwt.persistentunitcachedir", testExtension.getCacheDir());
 							testExtension.getCacheDir().mkdirs();
+							logger.info("Using gwt.persistentunitcachedir for test: {0}", testExtension.getCacheDir());
 						}
 					}
 				});
@@ -321,13 +324,10 @@ public class GwtPlugin implements Plugin<Project> {
 						return extension.getModules();
 					}
 				});
-				task.conventionMapping("src", new Callable<Set<File>>() {
+				task.conventionMapping("src", new Callable<FileCollection>() {
 					@Override
-					public Set<File> call() throws Exception {
-						final Set<File> src = new HashSet<File>();
-						src.addAll(mainSourceSet.getAllJava().getSrcDirs());
-						src.add(mainSourceSet.getOutput().getResourcesDir());
-						return src;
+					public FileCollection call() throws Exception {
+						return extension.getSrc();
 					}
 				});
 				task.conventionMapping("classpath", new Callable<FileCollection>() {

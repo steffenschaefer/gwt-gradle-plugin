@@ -18,10 +18,7 @@ package de.richsource.gradle.plugins.gwt;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.file.FileCollection;
@@ -39,7 +36,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 
 	private List<String> modules;
 
-	private Set<File> src = new HashSet<File>();
+	private FileCollection src;
 	private FileCollection classpath;
 	private List<String> extraArgs = new ArrayList<String>();
 
@@ -55,7 +52,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 
 	@TaskAction
 	public void run() {
-		if (getSrc() == null || getSrc().isEmpty()) {
+		if (getSrc() == null) {
 			throw new InvalidUserDataException("No Source is set");
 		}
 		if (getClasspath() == null) {
@@ -68,7 +65,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		javaExec.setMain(getClassName());
 
 		if (prependSrcToClasspath()) {
-			javaExec.classpath(getSrc().toArray());
+			javaExec.classpath(getSrc());
 		}
 		javaExec.classpath(getClasspath());
 
@@ -205,7 +202,7 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	}
 
 	@InputFiles
-	public Set<File> getSrc() {
+	public FileCollection getSrc() {
 		return src;
 	}
 
@@ -216,30 +213,8 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	 * @param src
 	 *            source directories to set
 	 */
-	public void setSrc(Set<File> src) {
+	public void setSrc(FileCollection src) {
 		this.src = src;
-	}
-
-	/**
-	 * Adds a source directories used by this task instance. These source
-	 * directories are used by GWT to read java source files from.
-	 * 
-	 * @param src
-	 *            source directory to add
-	 */
-	public void src(File src) {
-		this.src.add(src);
-	}
-
-	/**
-	 * Adds source directories used by this task instance. These source
-	 * directories are used by GWT to read java source files from.
-	 * 
-	 * @param src
-	 *            source directories to add
-	 */
-	public void src(Collection<File> src) {
-		this.src.addAll(src);
 	}
 
 	@InputFiles
