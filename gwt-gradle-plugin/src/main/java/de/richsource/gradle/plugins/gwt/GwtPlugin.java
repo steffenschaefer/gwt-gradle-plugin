@@ -124,9 +124,7 @@ public class GwtPlugin implements Plugin<Project> {
 					public Object call() throws Exception {
 						return compileTask.getWar();
 					}});
-				
-				project.getConfigurations().getByName(WarPlugin.PROVIDED_COMPILE_CONFIGURATION_NAME).extendsFrom(gwtConfiguration);
-				
+								
 				final Copy warTemplateTask = project.getTasks().create(TASK_WAR_TEMPLATE, Copy.class);
 				warTemplateTask.with(warTask);
 				warTemplateTask.conventionMapping("destinationDir", new Callable<File>(){
