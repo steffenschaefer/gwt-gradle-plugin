@@ -176,7 +176,9 @@ But it’s also possible to do that using Gradle. The following chapters will sh
 
 Assumed that you added this plugin with “apply plugin: 'jetty'”, you can define a task “jettyDraftWar” with the following configuration:
 
-    task jettyDraftWar(type: JettyRunWar, dependsOn: 'draftWar') {
+    task jettyDraftWar(type: JettyRunWar) {
+        dependsOn draftWar
+        dependsOn.remove('war')
         webApp=draftWar.archivePath
     }
 
@@ -195,6 +197,7 @@ Assumed that you configured the servlet container of your choice using the docum
     }
 
 If you want the cargo plugin to automatically build the draft war when executed, add the following to the end of your “gradle.build”:
+
     afterEvaluate {
         tasks.cargoStartLocal.dependsOn(tasks.draftWar)
         tasks.cargoRunLocal.dependsOn(tasks.draftWar)
