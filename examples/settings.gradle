@@ -1,4 +1,4 @@
-include 'basic'
+include 'simple-war'
 include 'testing'
 
 rootProject.children.each {project ->
