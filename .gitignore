@@ -6,3 +6,4 @@ bin/
 build/
 /repo/
 war/
+gwt-unitCache/
