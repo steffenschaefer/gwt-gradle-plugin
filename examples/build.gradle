@@ -1,3 +1,15 @@
+task licenseFormat
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	
+	dependencies {
+		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.6.0'
+	}
+}
+
 subprojects {
 	buildscript {
 		repositories {
@@ -9,5 +21,21 @@ subprojects {
 		dependencies {
 			classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1-SNAPSHOT'
 		}
+	}
+	
+	apply plugin: 'license'
+	
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+	
+	license {
+		ext.year = Calendar.getInstance().get(Calendar.YEAR)
+		ext.name = 'Steffen Schaefer'
+		header rootProject.file('LICENSE')
+	}
+	
+	afterEvaluate {
+		rootProject.tasks.licenseFormat.dependsOn project.tasks.licenseFormatMain
+		rootProject.tasks.licenseFormat.dependsOn project.tasks.licenseFormatTest
 	}
 }
