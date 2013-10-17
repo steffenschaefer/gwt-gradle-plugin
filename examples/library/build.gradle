@@ -1,0 +1,9 @@
+apply plugin: 'java'
+apply plugin: 'gwt'
+apply plugin: 'eclipse'
+
+repositories { mavenCentral() }
+
+gwt {
+	gwtVersion='2.5.1'
+}
