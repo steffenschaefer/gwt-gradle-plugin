@@ -14,8 +14,6 @@ dependencies {
 gwt {
 	gwtVersion='2.5.1'
 	
-	cacheDir = new File(buildDir, 'gwt/cache');
-	
 	test {
 		hasGwtTests = true
 	}

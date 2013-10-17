@@ -33,7 +33,6 @@ gwt {
 	
 //	devWar = file("fooWar")
 
-//	cacheDir=file("$buildDir/gwt/cache")
 //	maxHeapSize='1337M'
 //	dev {
 //		codeServerPort=1338
