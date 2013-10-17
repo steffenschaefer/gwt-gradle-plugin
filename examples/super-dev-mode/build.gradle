@@ -1,0 +1,64 @@
+apply plugin: 'war'
+apply plugin: 'cargo'
+apply plugin: 'jetty'
+apply plugin: 'gwt'
+apply plugin: 'eclipse'
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'org.gradle.api.plugins:gradle-cargo-plugin:0.6.1'
+	}
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+	def cargoVersion = '1.4.4'
+	cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+		  "org.codehaus.cargo:cargo-ant:$cargoVersion"
+}
+
+gwt {
+	gwtVersion='2.5.1'
+
+	modules=['de.richsource.gradle.plugins.gwt.example.Example']
+	// remove the following line if testing with GWT < 2.5
+	devModules=['de.richsource.gradle.plugins.gwt.example.ExampleDev']
+	
+	superDev {
+		noPrecompile=true
+	}
+}
+
+cargo {
+	containerId = 'jetty9x'
+	port = 8080
+
+	deployable {
+		file = tasks.draftWar.archivePath
+		context = 'app'
+	}
+
+	local {
+		installer {
+            installUrl = file("$projectDir/etc/jetty-distribution-9.0.5.v20130815.zip").toURI()
+            downloadDir = file("$buildDir/download")
+            extractDir = file("$buildDir/extract")
+        }
+	}
+}
+
+task jettyDraftWar(type: JettyRunWar) {
+	dependsOn draftWar
+	dependsOn.remove('war')
+	webApp=draftWar.archivePath
+}
+
+afterEvaluate {
+	tasks.cargoStartLocal.dependsOn(tasks.draftWar)
+	tasks.cargoRunLocal.dependsOn(tasks.draftWar)
+}

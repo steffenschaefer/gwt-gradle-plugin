@@ -1,6 +1,7 @@
 include 'simple-war'
 include 'library'
 include 'war-using-library'
+include 'super-dev-mode'
 include 'testing'
 
 rootProject.children.each {project ->
