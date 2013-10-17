@@ -32,7 +32,7 @@ import java.io.File;
 //  -Xtries                 EXPERIMENTAL: Sets the maximum number of attempts for running each test method
 //  -userAgents             Specify the user agents to reduce the number of permutations for remote browser tests; e.g. ie6,ie8,safari,gecko1_8,opera
 public class GwtTestOptions {
-	private boolean hasGwtTests = false;
+	private boolean hasGwtTests = true;
 	private LogLevel logLevel;
 	
 	private Integer port;
