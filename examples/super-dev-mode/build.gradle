@@ -25,9 +25,8 @@ dependencies {
 gwt {
 	gwtVersion='2.5.1'
 
-	modules=['de.richsource.gradle.plugins.gwt.example.Example']
-	// remove the following line if testing with GWT < 2.5
-	devModules=['de.richsource.gradle.plugins.gwt.example.ExampleDev']
+	modules 'de.richsource.gradle.plugins.gwt.example.Example'
+	devModules 'de.richsource.gradle.plugins.gwt.example.ExampleDev'
 	
 	superDev {
 		noPrecompile=true

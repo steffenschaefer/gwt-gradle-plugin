@@ -11,7 +11,7 @@ dependencies {
 gwt {
 	gwtVersion='2.5.1'
 
-	modules=['de.richsource.gradle.plugins.gwt.example.Example']
+	modules 'de.richsource.gradle.plugins.gwt.example.Example'
 	
 	src += files(project(':example-library').sourceSets.main.allJava.srcDirs) + files(project(':example-library').sourceSets.main.output.resourcesDir)
 }

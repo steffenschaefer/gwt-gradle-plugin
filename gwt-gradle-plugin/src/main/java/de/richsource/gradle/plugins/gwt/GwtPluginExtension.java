@@ -19,6 +19,7 @@ import groovy.lang.Closure;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.gradle.api.file.FileCollection;
@@ -56,7 +57,12 @@ public class GwtPluginExtension {
 	}
 
 	public void setModules(List<String> modules) {
-		this.modules = modules;
+		this.modules.clear();
+		this.modules.addAll(modules);
+	}
+	
+	public void modules(String... modules) {
+		this.modules.addAll(Arrays.asList(modules));
 	}
 
 	public String getGwtVersion() {
@@ -88,7 +94,12 @@ public class GwtPluginExtension {
 	}
 
 	public void setDevModules(List<String> devModules) {
-		this.devModules = devModules;
+		this.devModules.clear();
+		this.devModules.addAll(modules);
+	}
+	
+	public void devModules(String... modules) {
+		this.devModules.addAll(Arrays.asList(modules));
 	}
 
 	public File getDevWar() {
