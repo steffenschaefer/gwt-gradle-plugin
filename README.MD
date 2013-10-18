@@ -1,16 +1,16 @@
 # GWT Gradle Plugin
 
-This plugin makes it easy to build projects using “Google Web Toolkit” (GWT). It provides several tasks (e.g. for running the GWT compiler) to support the development and configures several aspects of your project to automatically work with GWT.
+This plugin makes it easy to build projects using “Google Web Toolkit” (GWT). It provides several tasks (e.g. for running the GWT compiler) to support the development and configures several aspects of your project to work with GWT automatically.
 
 ## Compatibility
 
-The plugin is developed for GWT 2 only (GWT 1.x isn’t supported at all). Main testing was done with GWT 2.5 but it should work with older versions too.
+The plugin supports GWT 2 only (GWT 1.x isn’t supported at all). Main testing was done with GWT 2.5 but it should work with older versions too.
 The plugin is developed with Gradle 1.7 but should also work with Gradle 1.6. Due to used APIs it definitely won’t work with Gradle versions before 1.6.
 
 ## Plugin Design
 
 The plugin is designed to work with the following principles in mind (but can be configured to work different):
-* The webapp source (typically /src/main/webapp) is holy and will not be inundated with generated stuff. Instead a special working dir is set up with a exploded template of the webapp (typically /war)
+* The webapp source (typically /src/main/webapp) is holy and won't be polluted with generated stuff. Instead a special working dir is set up with an exploded template of the webapp (typically /war)
 * Compilation is done with a dedicated output folder to make incremental builds work
 * All output is configured to be written to “${buildDir}/gwt” with several sub directories for different purposes (look at the chapter “Default directory structure” for details)
 
@@ -133,7 +133,7 @@ Now you can configure your IDE to connect to that debug port.
 Be aware that the Super Dev Mode is ony available GWT 2.5+.
 Additionally be aware that Super Dev Mode requires specific browsers to work!
 
-This chapter does not describe the usage of “Super Dev Mode” in detail. Please refer to the official documentation to learn how to use it. Be aware that you need to adjust your *gwt.xml” fil or provide a special one for development.
+This chapter does not describe the usage of “Super Dev Mode” in detail. Please refer to the official documentation to learn how to use it. Be aware that you need to adjust your *gwt.xml” file or provide a special one for development.
 
 In contrast to the “normal” Development Mode, the Super Dev Mode does not start the complete web application for you. Instead you have to run the web application by yourselves. Please refer to the chapter “Running the draft war” for details on how to startup the draft war using a servlet container.
 
@@ -186,7 +186,7 @@ Simply run that task and navigate your browser to “http://localhost:8080/”.
 
 ### Cargo plugin
 
-The cargo plugin is not a standard plugn shipped with gradle itself. you can find the plugin on “https://github.com/bmuschko/gradle-cargo-plugin”.
+The cargo plugin is not a standard plugin shipped with gradle itself. you can find the plugin on “https://github.com/bmuschko/gradle-cargo-plugin”.
 Assumed that you configured the servlet container of your choice using the documentation of the cargo plugin, you can add the draft war to it by adding the following configuration:
 
     cargo {
