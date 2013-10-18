@@ -16,7 +16,7 @@ The plugin is designed to work with the following principles in mind (but can be
 
 ## Where to get the plugin?
 
-The plugin is in an early development state. That's why there's currently no hosted repository providing binaries of the plugin.
+Plugin binaries can be found in a Maven repository hosted at GitHub (URL: https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/). You can browse this repository [here](https://github.com/steffenschaefer/gwt-gradle-plugin/tree/maven-repo).
 
 To build a version on your own, simply run "gradle publish" in the root directory of the code repository. After the build finished, a directory named "repo" will appear. This directory is a maven repository containing the plugin binaries. You can copy this directory to your project and use it as local repository.
 
@@ -30,12 +30,12 @@ To configure your project to apply the plugin using the maven repository build b
         buildscript {
             repositories {
                 maven {
-                    url file('repo').toURI()
+                    url 'https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/'
                 }
                 mavenCentral()
             }
             dependencies {
-                classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1-SNAPSHOT'
+                classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1'
             }
         }
     }
@@ -52,14 +52,14 @@ Supposed you already applied the gradle "war" plugin to your project, you have t
 Now you have to configure the GWT modules to compile into your web application:
 
     gwt {
-        modules=['<YOUR-GWT-MODULE>’]
+        modules '<YOUR-GWT-MODULE>’
     }
     
 If you want to use automatically configured GWT dependencies (gwt-dev, gwt-user, ...) you have to extend the configuration this way:
 
     gwt {
         gwtVersion='2.5.1'
-        modules=['<YOUR-GWT-MODULE>’]
+        modules '<YOUR-GWT-MODULE>’
     }
 
 ## Examples
