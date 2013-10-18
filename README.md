@@ -1,6 +1,14 @@
 # GWT Gradle Plugin
 
-This plugin makes it easy to build projects using “Google Web Toolkit” (GWT - http://www.gwtproject.org/). It provides several tasks (e.g. for running the GWT compiler) to support the development and configures several aspects of your project to work with GWT automatically.
+This plugin makes it easy to build projects using “Google Web Toolkit” (GWT - http://www.gwtproject.org/). It provides several tasks to support the development and configures several aspects of your project to work with GWT automatically.
+
+Among other things, the plugin provides these features:
+
+* Running the GWT compiler and automatic inclusion of the compiled stuff in your *.war file
+* Starting GWT Dev Mode
+* Support for Super Dev Mode (GWT 2.5+)
+* Configuration of different GWT modules for development and production
+* GWT specific configuration of Eclipse projects
 
 ## Compatibility
 
@@ -39,8 +47,6 @@ To configure your project to apply the plugin using the maven repository build b
             }
         }
     }
-
-Adjust the repository URL according to your needs.
     
 ### Basic web application setup
 
@@ -55,7 +61,7 @@ Now you have to configure the GWT modules to compile into your web application:
         modules '<YOUR-GWT-MODULE>’
     }
     
-If you want to use automatically configured GWT dependencies (gwt-dev, gwt-user, ...) you have to extend the configuration this way:
+If you want to use automatically configured GWT dependencies (gwt-dev, gwt-user, ...) you have to extend the configuration to set the desired GWT version:
 
     gwt {
         gwtVersion='2.5.1'
