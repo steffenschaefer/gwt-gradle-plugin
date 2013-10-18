@@ -16,42 +16,22 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.internal.ConventionTask;
-import org.gradle.api.internal.file.FileResolver;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.process.internal.DefaultJavaExecAction;
-import org.gradle.process.internal.JavaExecAction;
+import org.gradle.api.tasks.JavaExec;
 
-public abstract class AbstractGwtActionTask extends ConventionTask {
-
-	private JavaExecAction javaExec;
+public abstract class AbstractGwtActionTask extends JavaExec {
 
 	private List<String> modules;
 
 	private FileCollection src;
-	private FileCollection classpath;
-	private List<String> extraArgs = new ArrayList<String>();
-
-	private String minHeapSize;
-	private String maxHeapSize;
 	
-	private boolean debug = false;
-
-	public AbstractGwtActionTask() {
-		FileResolver fileResolver = getServices().get(FileResolver.class);
-		javaExec = new DefaultJavaExecAction(fileResolver);
-	}
-
-	@TaskAction
-	public void run() {
+	@Override
+	public void exec() {
 		if (getSrc() == null) {
 			throw new InvalidUserDataException("No Source is set");
 		}
@@ -61,24 +41,22 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		if (getModules() == null || getModules().isEmpty()) {
 			throw new InvalidUserDataException("No module[s] given");
 		}
+		
+		// "Fixes" convention mapping
+		setMinHeapSize(getMinHeapSize());
+		setMaxHeapSize(getMaxHeapSize());
 
-		javaExec.setMain(getClassName());
-
+		FileCollection classpath = getClasspath();
 		if (prependSrcToClasspath()) {
-			javaExec.classpath(getSrc());
+			classpath = getSrc().plus(classpath);
 		}
-		javaExec.classpath(getClasspath());
-
-		javaExec.setMinHeapSize(getMinHeapSize());
-		javaExec.setMaxHeapSize(getMaxHeapSize());
-		javaExec.setDebug(isDebug());
+		setClasspath(classpath);
 
 		addArgs();
-		javaExec.args(getExtraArgs());
 		// the module names are expected to be the last parameters
-		javaExec.args(getModules());
+		args(getModules());
 
-		javaExec.execute();
+		super.exec();
 	}
 
 	protected boolean prependSrcToClasspath() {
@@ -100,66 +78,24 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 		this.modules = modules;
 	}
 
-	/**
-	 * Adds additional arguments for the Java VM spawned by this task.
-	 * 
-	 * @param args
-	 *            java args to be added
-	 */
-	public void javaArgs(Object... args) {
-		javaExec.jvmArgs(args);
-	}
-
-	public List<String> getExtraArgs() {
-		return extraArgs;
-	}
-
-	/**
-	 * Adds arguments that are given to the task.
-	 * 
-	 * @param arg
-	 *            arguments to be added
-	 */
-	protected void arg(Object... arg) {
-		javaExec.args(arg);
-	}
-
 	protected void argIfEnabled(Boolean condition, String arg) {
 		if (Boolean.TRUE.equals(condition)) {
-			arg(arg);
+			args(arg);
 		}
 	}
 
 	protected void dirArgIfSet(String arg, File dir) {
 		if (dir != null) {
 			dir.mkdirs();
-			arg(arg, dir);
+			args(arg, dir);
 		}
 	}
 
 	protected void argIfSet(String arg, Object value) {
 		if (value != null) {
-			arg(arg, value);
+			args(arg, value);
 		}
 	}
-
-	/**
-	 * Adds additional program arguments for the process spawned by this task.
-	 * 
-	 * @param args
-	 *            additional arguments to add
-	 */
-	public void extraArg(String... args) {
-		extraArgs.addAll(Arrays.asList(args));
-	}
-
-	/**
-	 * Defines the main class to be called when this task is executed.
-	 * 
-	 * @return the fully qualified name of the main class to be executed. Must
-	 *         not be null.
-	 */
-	protected abstract String getClassName();
 
 	/**
 	 * Called directly before executing this task. Subclasses are expected to
@@ -169,36 +105,6 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 
 	protected boolean isDevTask() {
 		return true;
-	}
-
-	public String getMinHeapSize() {
-		return minHeapSize;
-	}
-
-	/**
-	 * Sets the minimum heap size (-Xms java arg) to be used by the java process
-	 * spawned by this task.
-	 * 
-	 * @param minHeapSize
-	 *            the minimum heap size to set. Examples: 128M, 2G
-	 */
-	public void setMinHeapSize(String minHeapSize) {
-		this.minHeapSize = minHeapSize;
-	}
-
-	public String getMaxHeapSize() {
-		return maxHeapSize;
-	}
-
-	/**
-	 * Sets the maximum heap size (-Xmx java arg) to be used by the java process
-	 * spawned by this task.
-	 * 
-	 * @param maxHeapSize
-	 *            the maximum heap size to set. Examples: 128M, 2G
-	 */
-	public void setMaxHeapSize(String maxHeapSize) {
-		this.maxHeapSize = maxHeapSize;
 	}
 
 	@InputFiles
@@ -215,30 +121,5 @@ public abstract class AbstractGwtActionTask extends ConventionTask {
 	 */
 	public void setSrc(FileCollection src) {
 		this.src = src;
-	}
-
-	@InputFiles
-	public FileCollection getClasspath() {
-		return classpath;
-	}
-
-	/**
-	 * Sets the classpath for the java process spawned by this task. This
-	 * classpath must contain all libraries used by GWT (especially gwt-dev and
-	 * gwt-user libraries).
-	 * 
-	 * @param classpath
-	 *            the classpat to set
-	 */
-	public void setClasspath(FileCollection classpath) {
-		this.classpath = classpath;
-	}
-
-	public boolean isDebug() {
-		return debug;
-	}
-
-	public void setDebug(boolean debug) {
-		this.debug = debug;
 	}
 }

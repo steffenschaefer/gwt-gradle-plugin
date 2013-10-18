@@ -44,9 +44,8 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 	
 	private final GwtCompileOptions options = new GwtCompileOptionsImpl();
 
-	@Override
-	protected String getClassName() {
-		return "com.google.gwt.dev.Compiler";
+	public AbstractGwtCompile() {
+		setMain("com.google.gwt.dev.Compiler");
 	}
 	
 	@Override

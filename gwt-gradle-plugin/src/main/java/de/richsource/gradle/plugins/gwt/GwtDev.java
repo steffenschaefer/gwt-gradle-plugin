@@ -43,16 +43,13 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	private final GwtDevOptions options = new GwtDevOptionsImpl();
 	
 	public GwtDev() {
+		setMain("com.google.gwt.dev.DevMode");
+		
 		getOutputs().upToDateWhen(new Spec<Task>(){
 			@Override
 			public boolean isSatisfiedBy(Task task) {
 				return false;
 			}});
-	}
-
-	@Override
-	protected String getClassName() {
-		return "com.google.gwt.dev.DevMode";
 	}
 	
 	@Override

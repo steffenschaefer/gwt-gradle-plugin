@@ -38,16 +38,13 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 	private final GwtSuperDevOptions options = new GwtSuperDevOptionsImpl();
 	
 	public GwtSuperDev() {
+		setMain("com.google.gwt.dev.codeserver.CodeServer");
+		
 		getOutputs().upToDateWhen(new Spec<Task>(){
 			@Override
 			public boolean isSatisfiedBy(Task task) {
 				return false;
 			}});
-	}
-
-	@Override
-	protected String getClassName() {
-		return "com.google.gwt.dev.codeserver.CodeServer";
 	}
 
 	@Override

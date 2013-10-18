@@ -39,7 +39,8 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		final File cacheDir = getCacheDir();
 		if(cacheDir != null) {
 			cacheDir.mkdirs();
-			javaArgs("-Dgwt.persistentunitcachedir="+cacheDir.toString());
+			
+			jvmArgs("-Dgwt.persistentunitcachedir="+cacheDir.toString());
 		}
 	}
 	
