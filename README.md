@@ -64,7 +64,7 @@ If you want to use automatically configured GWT dependencies (gwt-dev, gwt-user,
 
 ## Examples
 
-Examples can be found in [/examples](./examples/README.MD)
+Examples can be found in [/examples](./examples)
 
 ## What does the plugin do with your project
 
