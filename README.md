@@ -1,6 +1,6 @@
 # GWT Gradle Plugin
 
-This plugin makes it easy to build projects using “Google Web Toolkit” (GWT). It provides several tasks (e.g. for running the GWT compiler) to support the development and configures several aspects of your project to work with GWT automatically.
+This plugin makes it easy to build projects using “Google Web Toolkit” (GWT - http://www.gwtproject.org/). It provides several tasks (e.g. for running the GWT compiler) to support the development and configures several aspects of your project to work with GWT automatically.
 
 ## Compatibility
 
