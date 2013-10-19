@@ -95,6 +95,7 @@ public class GwtPlugin implements Plugin<Project> {
 		extension.getDev().setLogDir(new File(buildDir, LOG_DIR));
 		extension.getCompiler().setLocalWorkers(Runtime.getRuntime().availableProcessors());
 		extension.setSrc(project.files(mainSourceSet.getAllJava().getSrcDirs()).plus(project.files(mainSourceSet.getOutput().getResourcesDir())));
+		extension.setLogLevel(getLogLevel());
 		
 		configureAbstractActionTasks(project, extension);
 		configureAbstractTasks(project, extension);
@@ -420,5 +421,19 @@ public class GwtPlugin implements Plugin<Project> {
 		final String first = taskName.substring(0, 1).toUpperCase();
 		final String rest = taskName.substring(1);
 		return "clean"+first+rest;
+	}
+	
+	private LogLevel getLogLevel() {
+		if(logger.isTraceEnabled()) {
+			return LogLevel.TRACE;
+		} else if(logger.isDebugEnabled()) {
+			return LogLevel.DEBUG;
+		} else if(logger.isInfoEnabled()) {
+			return LogLevel.INFO;
+		} else if(logger.isLifecycleEnabled() || logger.isWarnEnabled()) {
+			return LogLevel.WARN;
+		}
+		// QUIET or ERROR
+		return LogLevel.ERROR;
 	}
 }
