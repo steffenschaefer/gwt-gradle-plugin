@@ -56,6 +56,12 @@ subprojects {
 	task javadocJar (type: Jar, dependsOn: javadoc) {
 		from javadoc.destinationDir
 	}
+	
+	javadoc {
+		options {
+			links 'http://www.gradle.org/docs/current/javadoc/', 'http://docs.oracle.com/javase/6/docs/api/'
+		}
+	}
 
 	group='de.richsource.gradle.plugins'
 	version='0.2-SNAPSHOT'
