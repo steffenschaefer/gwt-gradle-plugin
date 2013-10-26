@@ -34,20 +34,19 @@ To build a version on your own, simply run "gradle publish" in the root director
 
 To configure your project to apply the plugin using the maven repository build by "gradle publish", you need the following:
 
-    subprojects {
-        buildscript {
-            repositories {
-                maven {
-                    url 'https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/'
-                }
-                mavenCentral()
+
+    buildscript {
+        repositories {
+            maven {
+                url 'https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/'
             }
-            dependencies {
-                classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1'
-            }
+            mavenCentral()
+        }
+        dependencies {
+            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1'
         }
     }
-    
+
 ### Basic web application setup
 
 Supposed you already applied the gradle "war" plugin to your project, you have to also apply the "gwt" plugin:
