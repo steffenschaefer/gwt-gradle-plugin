@@ -27,7 +27,9 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ExcludeRule;
+import org.gradle.api.artifacts.ModuleDependency;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
@@ -215,25 +217,36 @@ public class GwtPlugin implements Plugin<Project> {
 					}
 				}
 				
-				if(extension.getEclipse().isAddGwtContainer()) {
-					project.getPlugins().withType(EclipsePlugin.class, new Action<EclipsePlugin>(){
-						@Override
-						public void execute(EclipsePlugin eclipsePlugin) {
-							final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
-							
+				
+				project.getPlugins().withType(EclipsePlugin.class, new Action<EclipsePlugin>(){
+					@Override
+					public void execute(EclipsePlugin eclipsePlugin) {
+						final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
+						eclipseModel.getClasspath().getPlusConfigurations().add(gwtConfiguration);
+						
+						if(extension.getEclipse().isAddGwtContainer()) {
 							eclipseModel.getClasspath().getContainers().add(ECLIPSE_GWT_CONTAINER);
 							
 							Collection<Configuration> configurations = eclipseModel.getClasspath().getPlusConfigurations();
 							for (Configuration configuration : configurations) {
-								configuration.exclude(gwtExclude(GWT_DEV));
-								configuration.exclude(gwtExclude(GWT_USER));
-								configuration.exclude(gwtExclude(GWT_SERVLET));
-								configuration.exclude(gwtExclude(GWT_CODESERVER));
-								configuration.exclude(gwtExclude(GWT_ELEMENTAL));
+								configuration.getAllDependencies().all(new Action<Dependency>() {
+
+									@Override
+									public void execute(Dependency dependency) {
+										if(dependency instanceof ModuleDependency) {
+											ModuleDependency moduleDependency = (ModuleDependency) dependency;
+											moduleDependency.exclude(gwtExclude(GWT_DEV));
+											moduleDependency.exclude(gwtExclude(GWT_USER));
+											moduleDependency.exclude(gwtExclude(GWT_SERVLET));
+											moduleDependency.exclude(gwtExclude(GWT_CODESERVER));
+											moduleDependency.exclude(gwtExclude(GWT_ELEMENTAL));
+										}
+										
+									}});
 							}
 						}
-					});
-				}
+					}
+				});
 				
 			}});
 		
