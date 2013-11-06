@@ -17,8 +17,9 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
@@ -224,7 +225,11 @@ public class GwtPlugin implements Plugin<Project> {
 							
 							Collection<Configuration> configurations = eclipseModel.getClasspath().getPlusConfigurations();
 							for (Configuration configuration : configurations) {
-								configuration.exclude(Collections.singletonMap(ExcludeRule.GROUP_KEY, GWT_GROUP));
+								configuration.exclude(gwtExclude(GWT_DEV));
+								configuration.exclude(gwtExclude(GWT_USER));
+								configuration.exclude(gwtExclude(GWT_SERVLET));
+								configuration.exclude(gwtExclude(GWT_CODESERVER));
+								configuration.exclude(gwtExclude(GWT_ELEMENTAL));
 							}
 						}
 					});
@@ -266,6 +271,13 @@ public class GwtPlugin implements Plugin<Project> {
 				});
 			}
 		});
+	}
+
+	private Map<String, String> gwtExclude(String artifact) {
+		Map<String, String> exclude = new HashMap<String, String>();
+		exclude.put(ExcludeRule.GROUP_KEY, GWT_GROUP);
+		exclude.put(ExcludeRule.MODULE_KEY, artifact);
+		return exclude;
 	}
 
 
