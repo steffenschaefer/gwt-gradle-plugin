@@ -16,10 +16,7 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
@@ -27,9 +24,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.Dependency;
-import org.gradle.api.artifacts.ExcludeRule;
-import org.gradle.api.artifacts.ModuleDependency;
+import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
@@ -47,6 +42,7 @@ import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 
 public class GwtPlugin implements Plugin<Project> {
 	public static final String GWT_CONFIGURATION = "gwt";
+	public static final String GWT_SDK_CONFIGURATION = "gwtSdk";
 	public static final String EXTENSION_NAME = "gwt";
 	public static final String BUILD_DIR = "gwt";
 	public static final String OUT_DIR = "out";
@@ -79,7 +75,6 @@ public class GwtPlugin implements Plugin<Project> {
 	public static final String ECLIPSE_GWT_CONTAINER = "com.google.gwt.eclipse.core.GWT_CONTAINER";
 	
 	private static final Logger logger = Logging.getLogger(GwtPlugin.class);
-	
 	private Project project;
 	private GwtPluginExtension extension;
 
@@ -90,10 +85,7 @@ public class GwtPlugin implements Plugin<Project> {
 		
 		final File gwtBuildDir = new File(project.getBuildDir(), BUILD_DIR);
 		
-		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
-		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-		
-		extension = configureGwtExtension(gwtBuildDir, mainSourceSet);
+		extension = configureGwtExtension(gwtBuildDir);
 		
 		configureAbstractActionTasks();
 		configureAbstractTasks();
@@ -102,8 +94,10 @@ public class GwtPlugin implements Plugin<Project> {
 		configureGwtSuperDev();
 		
 		final Configuration gwtConfiguration = project.getConfigurations().create(GWT_CONFIGURATION);
+		final Configuration gwtSdkConfiguration = project.getConfigurations().create(GWT_SDK_CONFIGURATION);
+		final ConfigurableFileCollection allGwtConfigurations = project.files(gwtConfiguration, gwtSdkConfiguration);
 		
-		mainSourceSet.setCompileClasspath(mainSourceSet.getCompileClasspath().plus(gwtConfiguration));
+		addToMainSourceSetClasspath(allGwtConfigurations);
 		
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
 		compileTask.setWar(new File(gwtBuildDir, OUT_DIR));
@@ -195,8 +189,8 @@ public class GwtPlugin implements Plugin<Project> {
 				}
 				
 				if(versionSet) {
-					project.getDependencies().add(GWT_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
-					project.getDependencies().add(GWT_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
+					project.getDependencies().add(GWT_SDK_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
+					project.getDependencies().add(GWT_SDK_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
 					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
 					
 					if ((major == 2 && minor >= 5) || major > 2) {
@@ -220,38 +214,23 @@ public class GwtPlugin implements Plugin<Project> {
 						
 						if(extension.getEclipse().isAddGwtContainer()) {
 							eclipseModel.getClasspath().getContainers().add(ECLIPSE_GWT_CONTAINER);
-							
-							Collection<Configuration> configurations = eclipseModel.getClasspath().getPlusConfigurations();
-							for (Configuration configuration : configurations) {
-								configuration.getAllDependencies().all(new Action<Dependency>() {
-
-									@Override
-									public void execute(Dependency dependency) {
-										if(dependency instanceof ModuleDependency) {
-											ModuleDependency moduleDependency = (ModuleDependency) dependency;
-											moduleDependency.exclude(gwtExclude(GWT_DEV));
-											moduleDependency.exclude(gwtExclude(GWT_USER));
-											moduleDependency.exclude(gwtExclude(GWT_SERVLET));
-											moduleDependency.exclude(gwtExclude(GWT_CODESERVER));
-											moduleDependency.exclude(gwtExclude(GWT_ELEMENTAL));
-										}
-										
-									}});
-							}
+							eclipseModel.getClasspath().getMinusConfigurations().add(gwtSdkConfiguration);
+						} else {
+							eclipseModel.getClasspath().getPlusConfigurations().add(gwtSdkConfiguration);
 						}
 					}
 				});
 				
 			}});
 		
-		final SourceSet testSourceSet = javaConvention.getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
-		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(gwtConfiguration));
+		final SourceSet testSourceSet = getTestSourceSet();
+		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(allGwtConfigurations));
 		testSourceSet.setRuntimeClasspath(
 				project.files(
-						mainSourceSet.getAllJava().getSrcDirs().toArray())
+						getMainSourceSet().getAllJava().getSrcDirs().toArray())
 						.plus(project.files(testSourceSet.getAllJava()
 								.getSrcDirs().toArray()))
-				.plus(gwtConfiguration).plus(testSourceSet
+				.plus(allGwtConfigurations).plus(testSourceSet
 				.getRuntimeClasspath()));
 		
 		project.getTasks().withType(Test.class, new Action<Test>() {
@@ -280,7 +259,9 @@ public class GwtPlugin implements Plugin<Project> {
 		});
 	}
 
-	private GwtPluginExtension configureGwtExtension(final File buildDir, final SourceSet mainSourceSet) {
+	private GwtPluginExtension configureGwtExtension(final File buildDir) {
+		final SourceSet mainSourceSet = getMainSourceSet();
+		
 		final GwtPluginExtension extension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
 		extension.setDevWar(project.file(DEV_WAR));
 		extension.setExtraDir(new File(buildDir, EXTRA_DIR));
@@ -292,13 +273,6 @@ public class GwtPlugin implements Plugin<Project> {
 		extension.setSrc(project.files(mainSourceSet.getAllJava().getSrcDirs()).plus(project.files(mainSourceSet.getOutput().getResourcesDir())));
 		extension.setLogLevel(getLogLevel());
 		return extension;
-	}
-
-	private Map<String, String> gwtExclude(String artifact) {
-		Map<String, String> exclude = new HashMap<String, String>();
-		exclude.put(ExcludeRule.GROUP_KEY, GWT_GROUP);
-		exclude.put(ExcludeRule.MODULE_KEY, artifact);
-		return exclude;
 	}
 
 
@@ -341,7 +315,7 @@ public class GwtPlugin implements Plugin<Project> {
 	}
 	
 	private void configureAbstractActionTasks() {
-		final JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+		final JavaPluginConvention javaConvention = getJavaConvention();
 		final SourceSet mainSourceSet = javaConvention.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 		project.getTasks().withType(AbstractGwtActionTask.class, new Action<AbstractGwtActionTask>() {
 			@Override
@@ -465,5 +439,22 @@ public class GwtPlugin implements Plugin<Project> {
 		}
 		// QUIET or ERROR
 		return LogLevel.ERROR;
+	}
+	
+	private SourceSet getMainSourceSet() {
+		return getJavaConvention().getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+	}
+	
+	private SourceSet getTestSourceSet() {
+		return getJavaConvention().getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
+	}
+
+	private JavaPluginConvention getJavaConvention() {
+		return project.getConvention().getPlugin(JavaPluginConvention.class);
+	}
+	
+	private void addToMainSourceSetClasspath(FileCollection fileCollection) {
+		final SourceSet mainSourceSet = getMainSourceSet();
+		mainSourceSet.setCompileClasspath(getMainSourceSet().getCompileClasspath().plus(fileCollection));
 	}
 }
