@@ -41,7 +41,7 @@ public class GwtPluginTest {
 	
 	@Test
 	public void testConfigurationAvailable() {
-		assertNotNull(project.getConfigurations().findByName(GwtPlugin.CONFIGURATION_NAME));
+		assertNotNull(project.getConfigurations().findByName(GwtPlugin.GWT_CONFIGURATION));
 	}
 
 	@Test
