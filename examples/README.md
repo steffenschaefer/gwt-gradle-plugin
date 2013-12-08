@@ -1,6 +1,6 @@
 # Example project for the GWT Gradle Plugin
 
-This directory contans several example projects to demonstrate various aspects of the gwt-gradle-plugin.
+This directory contains several example projects to demonstrate various aspects of the gwt-gradle-plugin.
 
 To be able to build these projects, you need to run "gradle publish" in the root directory of this git repository. This will build the plugin to a local Maven repository (which is referenced by the example projects).
 
