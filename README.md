@@ -43,7 +43,7 @@ To configure your project to apply the plugin using the maven repository build b
             mavenCentral()
         }
         dependencies {
-            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.1'
+            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.2'
         }
     }
 
