@@ -113,11 +113,7 @@ public class GwtPlugin implements Plugin<Project> {
 			public void execute(WarPlugin warPlugin) {
 				War warTask = (War) project.getTasks().getByName(WarPlugin.WAR_TASK_NAME);
 				
-				warTask.from(new Callable<Object>() {
-					@Override
-					public Object call() throws Exception {
-						return compileTask.getWar();
-					}});
+				warTask.from(compileTask.getOutputs());
 								
 				final Copy warTemplateTask = project.getTasks().create(TASK_WAR_TEMPLATE, Copy.class);
 				warTemplateTask.with(warTask);
@@ -137,12 +133,8 @@ public class GwtPlugin implements Plugin<Project> {
 				
 				
 				final War draftWar = project.getTasks().create(TASK_DRAFT_WAR, War.class);
-				draftWar.from(new Callable<Object>() {
-					@Override
-					public Object call() throws Exception {
-						return draftCompileTask.getWar();
-					}});
-				draftWar.dependsOn(draftCompileTask);
+				draftWar.from(draftCompileTask.getOutputs());
+				
 				draftWar.setBaseName(warTask.getBaseName()+"-draft");
 				draftWar.setDescription("Creates a war using the output of the task "+TASK_DRAFT_COMPILE_GWT);
 				
@@ -150,9 +142,6 @@ public class GwtPlugin implements Plugin<Project> {
 					devModeTask.dependsOn(dependsTask);
 				}
 				devModeTask.dependsOn(warTemplateTask);
-				
-				
-				warTask.dependsOn(compileTask);
 				
 			}
 		});
