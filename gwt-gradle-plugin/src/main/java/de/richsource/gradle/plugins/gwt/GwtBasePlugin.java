@@ -32,10 +32,7 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
-import org.gradle.api.plugins.WarPlugin;
-import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.bundling.War;
 import org.gradle.api.tasks.testing.Test;
 
 public class GwtBasePlugin implements Plugin<Project> {
@@ -53,11 +50,8 @@ public class GwtBasePlugin implements Plugin<Project> {
 	
 	public static final String DEV_WAR = "war";
 	
-	public static final String TASK_WAR_TEMPLATE = "warTemplate";
 	public static final String TASK_COMPILE_GWT = "compileGwt";
 	public static final String TASK_DRAFT_COMPILE_GWT = "draftCompileGwt";
-	public static final String TASK_DRAFT_WAR = "draftWar";
-	public static final String TASK_GWT_DEV = "gwtDev";
 	public static final String TASK_GWT_SUPER_DEV = "gwtSuperDev";
 	
 	public static final String GWT_GROUP = "com.google.gwt";
@@ -101,45 +95,6 @@ public class GwtBasePlugin implements Plugin<Project> {
 		final GwtDraftCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtDraftCompile.class);
 		draftCompileTask.setWar(new File(gwtBuildDir, DRAFT_OUT_DIR));
 		draftCompileTask.setDescription("Runs the GWT compiler to produce draft quality output used for development");
-		
-		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
-
-			@Override
-			public void execute(WarPlugin warPlugin) {
-				War warTask = (War) project.getTasks().getByName(WarPlugin.WAR_TASK_NAME);
-				
-				warTask.from(compileTask.getOutputs());
-								
-				final Copy warTemplateTask = project.getTasks().create(TASK_WAR_TEMPLATE, Copy.class);
-				warTemplateTask.with(warTask);
-				warTemplateTask.conventionMapping("destinationDir", new Callable<File>(){
-					@Override
-					public File call() throws Exception {
-						return extension.getDevWar();
-					}});
-				warTemplateTask.setDescription("Creates a exploded webapplication template to be used by GWT dev mode and eclipse to ensure src/main/webapp stays clean");
-				
-				final GwtDev devModeTask = project.getTasks().create(TASK_GWT_DEV, GwtDev.class);
-				devModeTask.conventionMapping("war", new Callable<File>(){
-					@Override
-					public File call() throws Exception {
-						return extension.getDevWar();
-					}});
-				
-				
-				final War draftWar = project.getTasks().create(TASK_DRAFT_WAR, War.class);
-				draftWar.from(draftCompileTask.getOutputs());
-				
-				draftWar.setBaseName(warTask.getBaseName()+"-draft");
-				draftWar.setDescription("Creates a war using the output of the task "+TASK_DRAFT_COMPILE_GWT);
-				
-				for(Object dependsTask:warTask.getDependsOn()) {
-					devModeTask.dependsOn(dependsTask);
-				}
-				devModeTask.dependsOn(warTemplateTask);
-				
-			}
-		});
 		
 		project.afterEvaluate(new Action<Project>() {
 			@Override

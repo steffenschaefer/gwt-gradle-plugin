@@ -22,7 +22,6 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
-import org.gradle.api.plugins.WarPlugin;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 
@@ -48,14 +47,14 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 		eclipseModel.getProject().natures(ECLIPSE_NATURE);
 		eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_PROJECT_VALIDATOR);
 		
-		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
+		project.getPlugins().withType(GwtWarPlugin.class, new Action<GwtWarPlugin>(){
 			@Override
-			public void execute(WarPlugin warPlugin) {
+			public void execute(GwtWarPlugin warPlugin) {
 				logger.debug("Configuring eclipse model GWT web application settings");
 				eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_WEBAPP_VALIDATOR);
 				
-				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(GwtBasePlugin.TASK_WAR_TEMPLATE);
-				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(GwtBasePlugin.TASK_WAR_TEMPLATE));
+				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(GwtWarPlugin.TASK_WAR_TEMPLATE);
+				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(GwtWarPlugin.TASK_WAR_TEMPLATE));
 				
 				project.afterEvaluate(new Action<Project>() {
 					@Override
