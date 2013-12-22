@@ -82,8 +82,10 @@ public class GwtBasePlugin implements Plugin<Project> {
 		configureGwtDev();
 		configureGwtSuperDev();
 		
-		gwtConfiguration = project.getConfigurations().create(GWT_CONFIGURATION);
-		gwtSdkConfiguration = project.getConfigurations().create(GWT_SDK_CONFIGURATION);
+		gwtConfiguration = project.getConfigurations().create(GWT_CONFIGURATION)
+				.setDescription("Classpath for GWT client libraries that are not included in the war");
+		gwtSdkConfiguration = project.getConfigurations().create(GWT_SDK_CONFIGURATION)
+				.setDescription("Classpath for GWT SDK libraries (gwt-dev, gwt-user)");
 		final ConfigurableFileCollection allGwtConfigurations = project.files(gwtConfiguration, gwtSdkConfiguration);
 		
 		addToMainSourceSetClasspath(allGwtConfigurations);
