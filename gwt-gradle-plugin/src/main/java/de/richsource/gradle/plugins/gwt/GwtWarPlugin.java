@@ -20,10 +20,13 @@ import java.util.concurrent.Callable;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.WarPlugin;
-import org.gradle.api.tasks.Copy;
+import org.gradle.api.plugins.WarPluginConvention;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.War;
 
 public class GwtWarPlugin implements Plugin<Project> {
@@ -55,22 +58,36 @@ public class GwtWarPlugin implements Plugin<Project> {
 		logger.debug("Configuring war plugin with GWT settings");
 
 		warTask.from(compileTask.getOutputs());
+		
+		final WarPluginConvention warPluginConvention = (WarPluginConvention) project.getConvention().getPlugins().get("war");
 
-		final Copy warTemplateTask = project.getTasks().create(
-				TASK_WAR_TEMPLATE, Copy.class);
-		warTemplateTask.with(warTask);
-		warTemplateTask.conventionMapping("destinationDir",
-				new Callable<File>() {
-					@Override
-					public File call() throws Exception {
-						return extension.getDevWar();
-					}
-				});
+		final ExplodedWar warTemplateTask = project.getTasks().create(
+				TASK_WAR_TEMPLATE, ExplodedWar.class);
+		warTemplateTask.from(new Callable<File>(){
+			@Override
+			public File call() {
+				return warPluginConvention.getWebAppDir();
+			}});
+		warTemplateTask.dependsOn(new Callable<FileCollection>() {
+            public FileCollection call() throws Exception {
+                return project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets().getByName(
+                        SourceSet.MAIN_SOURCE_SET_NAME).getRuntimeClasspath();
+            }
+        });
+		warTemplateTask.classpath(new Object[] {new Callable<FileCollection>() {
+            public FileCollection call() throws Exception {
+                return warTask.getClasspath();
+            }
+        }});
+		warTemplateTask.conventionMapping("destinationDir", new Callable<File>() {
+				@Override
+				public File call() throws Exception {
+					return extension.getDevWar();
+				}
+			});
 		warTemplateTask
 				.setDescription("Creates an exploded web application template to be used by GWT dev mode and eclipse to ensure src/main/webapp stays clean");
 
-		warTemplateTask.getDependsOn().remove(compileTask);
-		
 		final GwtDev devModeTask = project.getTasks().create(TASK_GWT_DEV,
 				GwtDev.class);
 		devModeTask.conventionMapping("war", new Callable<File>() {
