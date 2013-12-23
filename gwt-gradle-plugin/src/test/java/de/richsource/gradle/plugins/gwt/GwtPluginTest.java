@@ -51,18 +51,18 @@ public class GwtPluginTest {
 
 	@Test
 	public void testExtensionAvailable() {
-		assertThat(extensions.getByName(GwtPlugin.EXTENSION_NAME), instanceOf(GwtPluginExtension.class));
+		assertThat(extensions.getByName(GwtBasePlugin.EXTENSION_NAME), instanceOf(GwtPluginExtension.class));
 	}
 	
 	@Test
 	public void testConfigurationAvailable() {
-		assertNotNull(project.getConfigurations().findByName(GwtPlugin.GWT_CONFIGURATION));
+		assertNotNull(project.getConfigurations().findByName(GwtBasePlugin.GWT_CONFIGURATION));
 	}
 
 	@Test
 	public void testBasicTasksAvailable() {
-		assertThat(tasks.getByName(GwtPlugin.TASK_COMPILE_GWT), instanceOf(GwtCompile.class));
-		assertThat(tasks.getByName(GwtPlugin.TASK_DRAFT_COMPILE_GWT), instanceOf(GwtDraftCompile.class));
+		assertThat(tasks.getByName(GwtBasePlugin.TASK_COMPILE_GWT), instanceOf(GwtCompile.class));
+		assertThat(tasks.getByName(GwtBasePlugin.TASK_DRAFT_COMPILE_GWT), instanceOf(GwtDraftCompile.class));
 	}
 	
 	@Test
@@ -70,7 +70,7 @@ public class GwtPluginTest {
 		getExtension().setCodeserver(true);
 		((AbstractProject)project).evaluate();
 		
-		assertThat(tasks.getByName(GwtPlugin.TASK_GWT_SUPER_DEV), instanceOf(GwtSuperDev.class));
+		assertThat(tasks.getByName(GwtBasePlugin.TASK_GWT_SUPER_DEV), instanceOf(GwtSuperDev.class));
 	}
 	
 	@Test
@@ -78,16 +78,16 @@ public class GwtPluginTest {
 		getExtension().setCodeserver(false);
 		((AbstractProject)project).evaluate();
 		
-		assertNull(tasks.findByName(GwtPlugin.TASK_GWT_SUPER_DEV));
+		assertNull(tasks.findByName(GwtBasePlugin.TASK_GWT_SUPER_DEV));
 	}
 	
 	@Test
 	public void testWarTasksAvailable() {
 		project.getPlugins().apply(WarPlugin.class);
 		
-		assertThat(tasks.getByName(GwtPlugin.TASK_WAR_TEMPLATE), instanceOf(Copy.class));
-		assertThat(tasks.getByName(GwtPlugin.TASK_GWT_DEV), instanceOf(GwtDev.class));
-		assertThat(tasks.getByName(GwtPlugin.TASK_DRAFT_WAR), instanceOf(War.class));
+		assertThat(tasks.getByName(GwtWarPlugin.TASK_WAR_TEMPLATE), instanceOf(Copy.class));
+		assertThat(tasks.getByName(GwtWarPlugin.TASK_GWT_DEV), instanceOf(GwtDev.class));
+		assertThat(tasks.getByName(GwtWarPlugin.TASK_DRAFT_WAR), instanceOf(War.class));
 	}
 	
 	@Test
@@ -95,12 +95,12 @@ public class GwtPluginTest {
 		project.getPlugins().apply(EclipsePlugin.class);
 		
 		final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
-		assertThat(eclipseModel.getProject().getNatures(), hasItem(GwtPlugin.ECLIPSE_NATURE));
-		assertThat(eclipseModel.getProject().getBuildCommands(), hasItem(new BuildCommand(GwtPlugin.ECLIPSE_BUILDER_PROJECT_VALIDATOR)));
-		assertThat(eclipseModel.getProject().getBuildCommands(), not(hasItem(new BuildCommand(GwtPlugin.ECLIPSE_BUILDER_WEBAPP_VALIDATOR))));
+		assertThat(eclipseModel.getProject().getNatures(), hasItem(GwtEclipsePlugin.ECLIPSE_NATURE));
+		assertThat(eclipseModel.getProject().getBuildCommands(), hasItem(new BuildCommand(GwtEclipsePlugin.ECLIPSE_BUILDER_PROJECT_VALIDATOR)));
+		assertThat(eclipseModel.getProject().getBuildCommands(), not(hasItem(new BuildCommand(GwtEclipsePlugin.ECLIPSE_BUILDER_WEBAPP_VALIDATOR))));
 		
 		project.getPlugins().apply(WarPlugin.class);
-		assertThat(eclipseModel.getProject().getBuildCommands(), hasItem(new BuildCommand(GwtPlugin.ECLIPSE_BUILDER_WEBAPP_VALIDATOR)));
+		assertThat(eclipseModel.getProject().getBuildCommands(), hasItem(new BuildCommand(GwtEclipsePlugin.ECLIPSE_BUILDER_WEBAPP_VALIDATOR)));
 	}
 	
 	private GwtPluginExtension getExtension() {
