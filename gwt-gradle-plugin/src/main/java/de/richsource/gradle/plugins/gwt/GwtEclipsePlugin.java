@@ -16,15 +16,23 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.internal.ConventionMapping;
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.ExtensionAware;
+import org.gradle.api.plugins.WarPluginConvention;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 import org.gradle.plugins.ide.eclipse.model.EclipseModel;
+
+import de.richsource.gradle.plugins.gwt.eclipse.GdtOptions;
+import de.richsource.gradle.plugins.gwt.eclipse.GenerateGdt;
+import de.richsource.gradle.plugins.gwt.eclipse.internal.GdtOptionsImpl;
 
 public class GwtEclipsePlugin implements Plugin<Project> {
 
@@ -32,11 +40,14 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 	public static final String ECLIPSE_BUILDER_PROJECT_VALIDATOR = "com.google.gwt.eclipse.core.gwtProjectValidator";
 	public static final String ECLIPSE_BUILDER_WEBAPP_VALIDATOR = "com.google.gdt.eclipse.core.webAppProjectValidator";
 	public static final String ECLIPSE_GWT_CONTAINER = "com.google.gwt.eclipse.core.GWT_CONTAINER";
+	public static final String GENERATE_GDT_TASK = "generateGdt";
 	
 	private static final Logger logger = Logging.getLogger(GwtEclipsePlugin.class);
+	private Project project;
 
 	@Override
 	public void apply(final Project project) {
+		this.project = project;
 		project.getPlugins().apply(EclipsePlugin.class);
 		final GwtBasePlugin gwtBasePlugin = project.getPlugins().apply(GwtBasePlugin.class);
 		
@@ -57,6 +68,15 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 				
 				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(GwtWarPlugin.TASK_WAR_TEMPLATE);
 				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(GwtWarPlugin.TASK_WAR_TEMPLATE));
+				
+				final GdtOptions gdtExtension = ((ExtensionAware)eclipseExtension).getExtensions().create("gdt", GdtOptionsImpl.class);
+				configureGdtExtension(extension, gdtExtension);
+				
+				configureGenerateGdt(gdtExtension);
+				
+				GenerateGdt generateGdt = project.getTasks().create(GENERATE_GDT_TASK, GenerateGdt.class);
+				generateGdt.setSettingsFile(project.file(".settings/com.google.gdt.eclipse.core.prefs"));
+				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(generateGdt);
 				
 				project.afterEvaluate(new Action<Project>() {
 					@Override
@@ -83,6 +103,53 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 					logger.debug("Not using GWT_CONTAINER for eclipse");
 					eclipseModel.getClasspath().getPlusConfigurations().add(gwtBasePlugin.getGwtSdkConfiguration());
 				}
+			}
+		});
+	}
+
+	private void configureGdtExtension(final GwtPluginExtension extension,
+			final GdtOptions gdtExtension) {
+		final WarPluginConvention warPluginConvention = (WarPluginConvention) project.getConvention().getPlugins().get("war");
+		ConventionMapping conventionMapping = ((IConventionAware)gdtExtension).getConventionMapping();
+		conventionMapping.map("warSrcDir", new Callable<File>() {
+			@Override
+			public File call() throws Exception {
+				return warPluginConvention.getWebAppDir();
+			}
+		});
+		conventionMapping.map("lastWarOutDir", new Callable<File>() {
+			@Override
+			public File call() throws Exception {
+				return extension.getDevWar();
+			}
+		});
+		gdtExtension.setWarSrcDirIsOutput(false);
+	}
+	
+	private void configureGenerateGdt(final GdtOptions gdtExtension) {
+		project.getTasks().withType(GenerateGdt.class, new Action<GenerateGdt>() {
+
+			@Override
+			public void execute(GenerateGdt task) {
+				ConventionMapping conventionMapping = ((IConventionAware)task).getConventionMapping();
+				conventionMapping.map("warSrcDir", new Callable<File>() {
+					@Override
+					public File call() throws Exception {
+						return gdtExtension.getWarSrcDir();
+					}
+				});
+				conventionMapping.map("warSrcDirIsOutput", new Callable<Boolean>() {
+					@Override
+					public Boolean call() throws Exception {
+						return gdtExtension.getWarSrcDirIsOutput();
+					}
+				});
+				conventionMapping.map("lastWarOutDir", new Callable<File>() {
+					@Override
+					public File call() throws Exception {
+						return gdtExtension.getLastWarOutDir();
+					}
+				});
 			}
 		});
 	}
