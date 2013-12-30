@@ -22,6 +22,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 
@@ -40,7 +41,7 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 		final GwtBasePlugin gwtBasePlugin = project.getPlugins().apply(GwtBasePlugin.class);
 		
 		final GwtPluginExtension extension = gwtBasePlugin.getExtension();
-		
+		final GwtEclipseOptions eclipseExtension = ((ExtensionAware)extension).getExtensions().create("eclipse", GwtEclipseOptions.class);
 		
 		final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
 		logger.debug("Configuring eclipse model with basic GWT settings");
@@ -51,6 +52,7 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 			@Override
 			public void execute(GwtWarPlugin warPlugin) {
 				logger.debug("Configuring eclipse model GWT web application settings");
+
 				eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_WEBAPP_VALIDATOR);
 				
 				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(GwtWarPlugin.TASK_WAR_TEMPLATE);
@@ -73,7 +75,7 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 				final EclipseModel eclipseModel = project.getExtensions().getByType(EclipseModel.class);
 				eclipseModel.getClasspath().getPlusConfigurations().add(gwtBasePlugin.getGwtConfiguration());
 				
-				if(extension.getEclipse().isAddGwtContainer()) {
+				if(eclipseExtension.isAddGwtContainer()) {
 					logger.debug("Using GWT_CONTAINER for eclipse");
 					eclipseModel.getClasspath().getContainers().add(ECLIPSE_GWT_CONTAINER);
 					eclipseModel.getClasspath().getMinusConfigurations().add(gwtBasePlugin.getGwtSdkConfiguration());
