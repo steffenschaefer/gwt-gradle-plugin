@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import org.gradle.api.internal.ConventionTask;
+import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputFile;
@@ -17,7 +17,7 @@ import org.gradle.api.tasks.TaskAction;
 import de.richsource.gradle.plugins.gwt.eclipse.internal.GdtOptionsImpl;
 
 // TODO It's currently not possible to use PropertiesGeneratorTask as it forces imports of internal stuff. Evaluate this again later.
-public class GenerateGdt extends ConventionTask implements GdtOptions {
+public class GenerateGdt extends DefaultTask implements GdtOptions {
 	
 	private final GdtOptions options = new GdtOptionsImpl();
 	
