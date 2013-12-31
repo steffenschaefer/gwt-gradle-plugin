@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'gwt'
+apply plugin: 'gwt-base'
 apply plugin: 'eclipse'
 
 repositories { mavenCentral() }
