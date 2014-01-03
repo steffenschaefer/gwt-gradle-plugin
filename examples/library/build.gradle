@@ -5,5 +5,13 @@ apply plugin: 'eclipse'
 repositories { mavenCentral() }
 
 gwt {
-	gwtVersion='2.5.1'
+  modules 'de.richsource.gradle.plugins.gwt.example.library.Library'
+  gwtVersion = '2.5.1'
+}
+
+jar {
+  dependsOn compileGwt
+  from(compileGwt.outputs) {
+    exclude '**/WEB-INF/**'
+  }
 }

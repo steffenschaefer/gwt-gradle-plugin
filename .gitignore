@@ -7,3 +7,6 @@ build/
 /repo/
 war/
 gwt-unitCache/
+.idea
+*.iml
+out/
