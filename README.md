@@ -191,7 +191,7 @@ Simply run that task and navigate your browser to “http://localhost:8080/”.
 
 ### Cargo plugin
 
-The cargo plugin is not a standard plugin shipped with gradle itself. you can find the plugin on “https://github.com/bmuschko/gradle-cargo-plugin”.
+The cargo plugin is not a standard plugin shipped with gradle itself. You can find the plugin on https://github.com/bmuschko/gradle-cargo-plugin.
 Assumed that you configured the servlet container of your choice using the documentation of the cargo plugin, you can add the draft war to it by adding the following configuration:
 
     cargo {
