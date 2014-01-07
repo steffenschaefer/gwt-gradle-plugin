@@ -22,26 +22,21 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.testing.Test;
 
 public class GwtBasePlugin implements Plugin<Project> {
 	public static final String GWT_CONFIGURATION = "gwt";
 	public static final String GWT_SDK_CONFIGURATION = "gwtSdk";
 	public static final String EXTENSION_NAME = "gwt";
 	public static final String BUILD_DIR = "gwt";
-	public static final String OUT_DIR = "out";
-	public static final String DRAFT_OUT_DIR = "draftOut";
 	public static final String EXTRA_DIR = "extra";
 	public static final String WORK_DIR = "work";
 	public static final String GEN_DIR = "gen";
@@ -50,8 +45,6 @@ public class GwtBasePlugin implements Plugin<Project> {
 	
 	public static final String DEV_WAR = "war";
 	
-	public static final String TASK_COMPILE_GWT = "compileGwt";
-	public static final String TASK_DRAFT_COMPILE_GWT = "draftCompileGwt";
 	public static final String TASK_GWT_SUPER_DEV = "gwtSuperDev";
 	
 	public static final String GWT_GROUP = "com.google.gwt";
@@ -66,6 +59,7 @@ public class GwtBasePlugin implements Plugin<Project> {
 	private GwtPluginExtension extension;
 	private Configuration gwtConfiguration;
 	private Configuration gwtSdkConfiguration;
+	private ConfigurableFileCollection allGwtConfigurations;
 
 	@Override
 	public void apply(final Project project) {
@@ -86,17 +80,9 @@ public class GwtBasePlugin implements Plugin<Project> {
 				.setDescription("Classpath for GWT client libraries that are not included in the war");
 		gwtSdkConfiguration = project.getConfigurations().create(GWT_SDK_CONFIGURATION)
 				.setDescription("Classpath for GWT SDK libraries (gwt-dev, gwt-user)");
-		final ConfigurableFileCollection allGwtConfigurations = project.files(gwtConfiguration, gwtSdkConfiguration);
+		allGwtConfigurations = project.files(gwtConfiguration, gwtSdkConfiguration);
 		
 		addToMainSourceSetClasspath(allGwtConfigurations);
-		
-		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
-		compileTask.setWar(new File(gwtBuildDir, OUT_DIR));
-		compileTask.setDescription("Runs the GWT compiler to translate Java sources to JavaScript for production ready output");
-		
-		final GwtDraftCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtDraftCompile.class);
-		draftCompileTask.setWar(new File(gwtBuildDir, DRAFT_OUT_DIR));
-		draftCompileTask.setDescription("Runs the GWT compiler to produce draft quality output used for development");
 		
 		project.afterEvaluate(new Action<Project>() {
 			@Override
@@ -145,41 +131,6 @@ public class GwtBasePlugin implements Plugin<Project> {
 				}
 				
 			}});
-		
-		final SourceSet testSourceSet = getTestSourceSet();
-		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(allGwtConfigurations));
-		testSourceSet.setRuntimeClasspath(
-				project.files(
-						getMainSourceSet().getAllJava().getSrcDirs().toArray())
-						.plus(project.files(testSourceSet.getAllJava()
-								.getSrcDirs().toArray()))
-				.plus(allGwtConfigurations).plus(testSourceSet
-				.getRuntimeClasspath()));
-		
-		project.getTasks().withType(Test.class, new Action<Test>() {
-			@Override
-			public void execute(final Test testTask) {
-				testTask.getTestLogging().setShowStandardStreams(true);
-				
-				final GwtTestExtension testExtension = testTask.getExtensions().create("gwt", GwtTestExtension.class);
-				testExtension.configure(extension, (IConventionAware) testExtension);
-
-				testTask.doFirst(new Action<Task>() {
-					@Override
-					public void execute(Task arg0) {
-						String gwtArgs = testExtension.getParameterString();
-						testTask.systemProperty("gwt.args", gwtArgs);
-						logger.info("Using gwt.args for test: "+ gwtArgs);
-
-						if (testExtension.getCacheDir() != null) {
-							testTask.systemProperty("gwt.persistentunitcachedir", testExtension.getCacheDir());
-							testExtension.getCacheDir().mkdirs();
-							logger.info("Using gwt.persistentunitcachedir for test: {0}", testExtension.getCacheDir());
-						}
-					}
-				});
-			}
-		});
 	}
 
 	private GwtPluginExtension configureGwtExtension(final File buildDir) {
@@ -332,10 +283,6 @@ public class GwtBasePlugin implements Plugin<Project> {
 	private SourceSet getMainSourceSet() {
 		return getJavaConvention().getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 	}
-	
-	private SourceSet getTestSourceSet() {
-		return getJavaConvention().getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
-	}
 
 	private JavaPluginConvention getJavaConvention() {
 		return project.getConvention().getPlugin(JavaPluginConvention.class);
@@ -346,15 +293,19 @@ public class GwtBasePlugin implements Plugin<Project> {
 		mainSourceSet.setCompileClasspath(getMainSourceSet().getCompileClasspath().plus(fileCollection));
 	}
 	
-	public GwtPluginExtension getExtension() {
+	GwtPluginExtension getExtension() {
 		return extension;
 	}
 	
-	public Configuration getGwtConfiguration() {
+	Configuration getGwtConfiguration() {
 		return gwtConfiguration;
 	}
 	
-	public Configuration getGwtSdkConfiguration() {
+	Configuration getGwtSdkConfiguration() {
 		return gwtSdkConfiguration;
+	}
+	
+	ConfigurableFileCollection getAllGwtConfigurations() {
+		return allGwtConfigurations;
 	}
 }

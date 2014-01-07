@@ -61,8 +61,8 @@ public class GwtPluginTest {
 
 	@Test
 	public void testBasicTasksAvailable() {
-		assertThat(tasks.getByName(GwtBasePlugin.TASK_COMPILE_GWT), instanceOf(GwtCompile.class));
-		assertThat(tasks.getByName(GwtBasePlugin.TASK_DRAFT_COMPILE_GWT), instanceOf(GwtDraftCompile.class));
+		assertThat(tasks.getByName(GwtCompilerPlugin.TASK_COMPILE_GWT), instanceOf(GwtCompile.class));
+		assertThat(tasks.getByName(GwtCompilerPlugin.TASK_DRAFT_COMPILE_GWT), instanceOf(GwtDraftCompile.class));
 	}
 	
 	@Test

@@ -47,10 +47,10 @@ public class GwtWarPlugin implements Plugin<Project> {
 		final GwtPluginExtension extension = gwtBasePlugin.getExtension();
 
 		final GwtCompile compileTask = (GwtCompile) project.getTasks()
-				.getByName(GwtBasePlugin.TASK_COMPILE_GWT);
+				.getByName(GwtCompilerPlugin.TASK_COMPILE_GWT);
 
 		final GwtDraftCompile draftCompileTask = (GwtDraftCompile) project
-				.getTasks().getByName(GwtBasePlugin.TASK_DRAFT_COMPILE_GWT);
+				.getTasks().getByName(GwtCompilerPlugin.TASK_DRAFT_COMPILE_GWT);
 
 		final War warTask = (War) project.getTasks().getByName(
 				WarPlugin.WAR_TASK_NAME);
@@ -103,7 +103,7 @@ public class GwtWarPlugin implements Plugin<Project> {
 
 		draftWar.setBaseName(warTask.getBaseName() + "-draft");
 		draftWar.setDescription("Creates a war using the output of the task "
-				+ GwtBasePlugin.TASK_DRAFT_COMPILE_GWT);
+				+ GwtCompilerPlugin.TASK_DRAFT_COMPILE_GWT);
 
 		for (Object dependsTask : warTask.getDependsOn()) {
 			devModeTask.dependsOn(dependsTask);

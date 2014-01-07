@@ -25,7 +25,8 @@ public class GwtPlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(final Project project) {
-		project.getPlugins().apply(GwtBasePlugin.class);
+		project.getPlugins().apply(GwtCompilerPlugin.class);
+		project.getPlugins().apply(GwtTestPlugin.class);
 
 		project.getPlugins().withType(EclipsePlugin.class,
 				new Action<EclipsePlugin>() {
