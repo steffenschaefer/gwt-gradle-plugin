@@ -206,7 +206,7 @@ cargo {
 }
 {% endhighlight %}
 
-If you want the cargo plugin to automatically build the draft war when executed, add the following to the end of your “gradle.build”:
+If you want the cargo plugin to automatically build the draft war when executed, add the following to the end of your “build.gradle”:
 
 {% highlight groovy linenos=table %}
 afterEvaluate {
