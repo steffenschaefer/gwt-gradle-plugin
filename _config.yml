@@ -1,0 +1,9 @@
+name: GWT Gradle plugin
+markdown: redcarpet
+safe: true
+lsi: false
+pygments: true
+source: ./
+baseurl: /gwt-gradle-plugin
+layouts: ./_layouts
+encoding: utf-8
