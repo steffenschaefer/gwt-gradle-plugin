@@ -32,3 +32,14 @@ a:hover {
 a:visited {
 	color: #a0a;
 }
+
+.highlight {
+	background-color: #EEE;
+	border: 1px solid #AAA;
+	border-radius: 4px;
+}
+
+.highlight>pre {
+	margin: 0.5em 0.25em;
+	overflow-x: auto;
+}
