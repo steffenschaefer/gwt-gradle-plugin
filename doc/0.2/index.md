@@ -27,7 +27,7 @@ To build a version on your own, simply run "gradle publish" in the root director
 
 To configure your project to apply the plugin using the maven repository hosted at GitHub, you need the following:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 buildscript {
     repositories {
         maven {
@@ -45,14 +45,14 @@ buildscript {
 
 Supposed you already applied the gradle "war" plugin to your project, you have to also apply the "gwt" plugin:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 apply plugin: 'war'
 apply plugin: 'gwt'
 {% endhighlight %}
 
 Now you have to configure the GWT modules to compile into your web application:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 gwt {
     modules '<YOUR-GWT-MODULE>'
 }
@@ -60,7 +60,7 @@ gwt {
     
 If you want to use automatically configured GWT dependencies (gwt-dev, gwt-user, ...) you have to extend the configuration to set the desired GWT version:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 gwt {
     gwtVersion='2.5.1'
     modules '<YOUR-GWT-MODULE>'
@@ -162,7 +162,7 @@ The plugin can automatically add the needed GWT dependencies for you. Everything
 
 The plugin applies the default optimization settings but that can be adjusted. The following example shows how to adjust some of the flags (please refer to the official documentation on what these flags do):
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 gwt {
     compiler {
         enableClosureCompiler = true; // activates -XenableClosureCompiler
@@ -182,7 +182,7 @@ But it’s also possible to do that using Gradle. The following chapters will sh
 
 Assumed that you added this plugin with “apply plugin: 'jetty'”, you can define a task “jettyDraftWar” with the following configuration:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 task jettyDraftWar(type: JettyRunWar) {
     dependsOn draftWar
     dependsOn.remove('war')
@@ -197,7 +197,7 @@ Simply run that task and navigate your browser to [http://localhost:8080/].
 The cargo plugin is not a standard plugin shipped with gradle itself. You can read more about it on (GitHub)[https://github.com/bmuschko/gradle-cargo-plugin].
 Assumed that you configured the servlet container of your choice using the documentation of the cargo plugin, you can add the draft war to it by adding the following configuration:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 cargo {
     deployable {
         file = tasks.draftWar.archivePath
@@ -208,7 +208,7 @@ cargo {
 
 If you want the cargo plugin to automatically build the draft war when executed, add the following to the end of your “gradle.build”:
 
-{% highlight groovy %}
+{% highlight groovy linenos=table %}
 afterEvaluate {
     tasks.cargoStartLocal.dependsOn(tasks.draftWar)
     tasks.cargoRunLocal.dependsOn(tasks.draftWar)

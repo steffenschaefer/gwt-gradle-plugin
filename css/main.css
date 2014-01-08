@@ -33,10 +33,13 @@ a:visited {
 	color: #a0a;
 }
 
-.highlight {
-	background-color: #EEE;
+.highlighttable {
 	border: 1px solid #AAA;
 	border-radius: 4px;
+}
+
+.highlighttable, .highlight {
+	background-color: #EEE;
 }
 
 .highlight>pre {
