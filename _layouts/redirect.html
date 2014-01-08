@@ -15,7 +15,9 @@
         <meta http-equiv="refresh" content="0; URL={{ page.redirect }}">
     </head>
     <body>
-    	<h1>{{ site.name }}</h1>
-		<p>You should be redirected to another page. If the automatic redirect doesn't work, please click <a href="{{ page.redirect }}">here</a>.</p>
+        {% include header.html %}
+        <section>
+            <p>You should be redirected to another page. If the automatic redirect doesn't work, please click <a href="{{ page.redirect }}">here</a>.</p>
+        </section>
     </body>
 </html>
