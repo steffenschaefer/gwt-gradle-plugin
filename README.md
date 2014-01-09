@@ -37,7 +37,7 @@ As this is not a core Gradle plugin, you have to ensure, that Gradle knows how t
             mavenCentral()
         }
         dependencies {
-            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.2'
+            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.3'
         }
     }
 
