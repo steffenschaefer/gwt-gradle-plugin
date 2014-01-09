@@ -6,7 +6,7 @@ title :  "GWT Gradle Plugin"
 ## Compatibility
 
 The plugin supports GWT 2.x only (GWT 1.x isn’t supported at all). Main testing was done with GWT 2.5 but it should work with older versions too.
-The plugin is developed with Gradle 1.7 but should also work with Gradle 1.6. Due to used APIs it definitely won’t work with Gradle versions before 1.6.
+The plugin is developed with Gradle 1.10 but also works with Gradle 1.8+. Due to used APIs it definitely won’t work with older Gradle versions.
 
 ## Plugin Design
 
@@ -36,7 +36,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.2'
+        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.3'
     }
 }
 {% endhighlight %}

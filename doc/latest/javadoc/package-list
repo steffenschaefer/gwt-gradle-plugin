@@ -1,2 +1,4 @@
 de.richsource.gradle.plugins.gwt
+de.richsource.gradle.plugins.gwt.eclipse
+de.richsource.gradle.plugins.gwt.eclipse.internal
 de.richsource.gradle.plugins.gwt.internal
