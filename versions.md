@@ -5,6 +5,17 @@ title :  "Documentation overview"
 
 ## Version history
 
+### 0.3 (2014-01-09)
+
+* Compatibility
+    * Gradle 1.8+ (tested 1.8-1.10)
+    * GWT 2.x (tested 2.5.1)
+* Resources
+    * [Documentation](doc/0.3/)
+    * [JavaDocs](doc/0.3/javadoc/)
+* Changes/fixes
+    * The plugin was split into several smaller plugins (gwt, gwt-base, gwt-compiler) to better work with GWT libraries and non-webapp projects.
+
 ### 0.2 (2013-12-08)
 
 * Compatibility
