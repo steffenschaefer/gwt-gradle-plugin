@@ -7,3 +7,4 @@ build/
 /repo/
 war/
 gwt-unitCache/
+*.md.html
