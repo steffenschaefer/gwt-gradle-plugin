@@ -25,6 +25,8 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
+import org.gradle.api.internal.ConventionMapping;
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -160,27 +162,28 @@ public class GwtBasePlugin implements Plugin<Project> {
 		project.getTasks().withType(AbstractGwtTask.class, new Action<AbstractGwtTask>() {
 			@Override
 			public void execute(final AbstractGwtTask task) {
-				task.conventionMapping("extra", new Callable<File>(){
+				ConventionMapping conventionMapping = ((IConventionAware)task).getConventionMapping();
+				conventionMapping.map("extra", new Callable<File>(){
 					@Override
 					public File call() throws Exception {
 						return extension.getExtraDir();
 					}});
-				task.conventionMapping("workDir", new Callable<File>(){
+				conventionMapping.map("workDir", new Callable<File>(){
 					@Override
 					public File call() throws Exception {
 						return extension.getWorkDir();
 					}});
-				task.conventionMapping("gen", new Callable<File>(){
+				conventionMapping.map("gen", new Callable<File>(){
 					@Override
 					public File call() throws Exception {
 						return extension.getGenDir();
 					}});
-				task.conventionMapping("cacheDir", new Callable<File>(){
+				conventionMapping.map("cacheDir", new Callable<File>(){
 					@Override
 					public File call() throws Exception {
 						return extension.getCacheDir();
 					}});
-				task.conventionMapping("logLevel", new Callable<LogLevel>(){
+				conventionMapping.map("logLevel", new Callable<LogLevel>(){
 					@Override
 					public LogLevel call() throws Exception {
 						return extension.getLogLevel();
@@ -194,7 +197,8 @@ public class GwtBasePlugin implements Plugin<Project> {
 		project.getTasks().withType(AbstractGwtActionTask.class, new Action<AbstractGwtActionTask>() {
 			@Override
 			public void execute(final AbstractGwtActionTask task) {
-				task.conventionMapping("modules", new Callable<List<String>>() {
+				ConventionMapping conventionMapping = ((IConventionAware)task).getConventionMapping();
+				conventionMapping.map("modules", new Callable<List<String>>() {
 					@Override
 					public List<String> call() throws Exception {
 						final List<String> devModules = extension.getDevModules();
@@ -204,25 +208,25 @@ public class GwtBasePlugin implements Plugin<Project> {
 						return extension.getModules();
 					}
 				});
-				task.conventionMapping("src", new Callable<FileCollection>() {
+				conventionMapping.map("src", new Callable<FileCollection>() {
 					@Override
 					public FileCollection call() throws Exception {
 						return extension.getSrc();
 					}
 				});
-				task.conventionMapping("classpath", new Callable<FileCollection>() {
+				conventionMapping.map("classpath", new Callable<FileCollection>() {
 					@Override
 					public FileCollection call() throws Exception {
 						return mainSourceSet.getCompileClasspath().plus(project.files(mainSourceSet.getOutput().getClassesDir()));
 					}
 				});
-				task.conventionMapping("minHeapSize", new Callable<String>() {
+				conventionMapping.map("minHeapSize", new Callable<String>() {
 					@Override
 					public String call() throws Exception {
 						return extension.getMinHeapSize();
 					}
 				});
-				task.conventionMapping("maxHeapSize", new Callable<String>() {
+				conventionMapping.map("maxHeapSize", new Callable<String>() {
 					@Override
 					public String call() throws Exception {
 						return extension.getMaxHeapSize();
@@ -256,7 +260,8 @@ public class GwtBasePlugin implements Plugin<Project> {
 			@Override
 			public void execute(final GwtSuperDev task) {
 				task.configure(extension.getSuperDev());
-				task.conventionMapping("workDir", new Callable<File>() {
+				ConventionMapping conventionMapping = ((IConventionAware)task).getConventionMapping();
+				conventionMapping.map("workDir", new Callable<File>() {
 
 					@Override
 					public File call() throws Exception {

@@ -16,47 +16,82 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.gradle.api.Action;
+import org.gradle.api.DefaultTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
-import org.gradle.api.tasks.JavaExec;
+import org.gradle.api.tasks.TaskAction;
+import org.gradle.process.ExecResult;
+import org.gradle.process.JavaExecSpec;
 
-public abstract class AbstractGwtActionTask extends JavaExec {
+import de.richsource.gradle.plugins.gwt.internal.ActionClosure;
+
+public abstract class AbstractGwtActionTask extends DefaultTask {
 
 	private List<String> modules;
 
 	private FileCollection src;
 	
-	@Override
+	private FileCollection classpath;
+	
+	private String minHeapSize;
+	
+	private String maxHeapSize;
+	
+	private final String main;
+	
+	private List<Object> args = new ArrayList<Object>();
+	
+	private List<Object> jvmArgs = new ArrayList<Object>();
+	
+	private boolean debug;
+	
+	public AbstractGwtActionTask(String main) {
+		this.main = main;
+	}
+	
+	@TaskAction
 	public void exec() {
-		if (getSrc() == null) {
-			throw new InvalidUserDataException("No Source is set");
-		}
-		if (getClasspath() == null) {
-			throw new InvalidUserDataException("Classpath is not set");
-		}
-		if (getModules() == null || getModules().isEmpty()) {
-			throw new InvalidUserDataException("No module[s] given");
-		}
-		
-		// "Fixes" convention mapping
-		setMinHeapSize(getMinHeapSize());
-		setMaxHeapSize(getMaxHeapSize());
-
-		FileCollection classpath = getClasspath();
-		if (prependSrcToClasspath()) {
-			classpath = getSrc().plus(classpath);
-		}
-		setClasspath(classpath);
-
-		addArgs();
-		// the module names are expected to be the last parameters
-		args(getModules());
-
-		super.exec();
+		 final ExecResult execResult = getProject().javaexec(new ActionClosure<JavaExecSpec>(this, new Action<JavaExecSpec>() {
+			@Override
+			public void execute(JavaExecSpec javaExecSpec) {
+				if (getSrc() == null) {
+					throw new InvalidUserDataException("No Source is set");
+				}
+				if (getClasspath() == null) {
+					throw new InvalidUserDataException("Classpath is not set");
+				}
+				if (getModules() == null || getModules().isEmpty()) {
+					throw new InvalidUserDataException("No module[s] given");
+				}
+				
+				javaExecSpec.setMain(main);
+				javaExecSpec.setDebug(isDebug());
+				
+				// "Fixes" convention mapping
+				javaExecSpec.setMinHeapSize(getMinHeapSize());
+				javaExecSpec.setMaxHeapSize(getMaxHeapSize());
+				
+				FileCollection classpath = getClasspath();
+				if (prependSrcToClasspath()) {
+					classpath = getSrc().plus(classpath);
+				}
+				javaExecSpec.setClasspath(classpath);
+				
+				addArgs();
+				javaExecSpec.jvmArgs(jvmArgs);
+				javaExecSpec.args(args);
+				// the module names are expected to be the last parameters
+				javaExecSpec.args(getModules());
+			}
+		}));
+		execResult.assertNormalExitValue().rethrowFailure();
 	}
 
 	protected boolean prependSrcToClasspath() {
@@ -76,6 +111,14 @@ public abstract class AbstractGwtActionTask extends JavaExec {
 	 */
 	public void setModules(List<String> modules) {
 		this.modules = modules;
+	}
+	
+	protected void args(Object... args) {
+		this.args.addAll(Arrays.asList(args));
+	}
+	
+	protected void jvmArgs(Object... args) {
+		this.jvmArgs.addAll(Arrays.asList(args));
 	}
 
 	protected void argIfEnabled(Boolean condition, String arg) {
@@ -121,5 +164,38 @@ public abstract class AbstractGwtActionTask extends JavaExec {
 	 */
 	public void setSrc(FileCollection src) {
 		this.src = src;
+	}
+
+	@Input
+	public FileCollection getClasspath() {
+		return classpath;
+	}
+
+	public void setClasspath(FileCollection classpath) {
+		this.classpath = classpath;
+	}
+
+	public String getMinHeapSize() {
+		return minHeapSize;
+	}
+
+	public void setMinHeapSize(String minHeapSize) {
+		this.minHeapSize = minHeapSize;
+	}
+
+	public String getMaxHeapSize() {
+		return maxHeapSize;
+	}
+
+	public void setMaxHeapSize(String maxHeapSize) {
+		this.maxHeapSize = maxHeapSize;
+	}
+
+	public boolean isDebug() {
+		return debug;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 }

@@ -21,6 +21,7 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPluginConvention;
@@ -90,7 +91,7 @@ public class GwtWarPlugin implements Plugin<Project> {
 
 		final GwtDev devModeTask = project.getTasks().create(TASK_GWT_DEV,
 				GwtDev.class);
-		devModeTask.conventionMapping("war", new Callable<File>() {
+		((IConventionAware)devModeTask).getConventionMapping().map("war", new Callable<File>() {
 			@Override
 			public File call() throws Exception {
 				return extension.getDevWar();

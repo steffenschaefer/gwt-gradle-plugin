@@ -17,6 +17,9 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.util.concurrent.Callable;
 
+import org.gradle.api.internal.ConventionMapping;
+import org.gradle.api.internal.IConventionAware;
+
 
 public class GwtCompile extends AbstractGwtCompile {
 	
@@ -29,103 +32,104 @@ public class GwtCompile extends AbstractGwtCompile {
 	protected void configure(final GwtCompileOptions options) {
 		super.configure(options);
 		
-		conventionMapping("draftCompile", new Callable<Boolean>() {
+		ConventionMapping conventionMapping =((IConventionAware)this).getConventionMapping();
+		conventionMapping.map("draftCompile", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDraftCompile();
 			}
 		});
-		conventionMapping("compileReport", new Callable<Boolean>() {
+		conventionMapping.map("compileReport", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getCompileReport();
 			}
 		});
-		conventionMapping("compilerMetrics", new Callable<Boolean>() {
+		conventionMapping.map("compilerMetrics", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getCompilerMetrics();
 			}
 		});
-		conventionMapping("validateOnly", new Callable<Boolean>() {
+		conventionMapping.map("validateOnly", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getValidateOnly();
 			}
 		});
-		conventionMapping("disableGeneratingOnShards", new Callable<Boolean>() {
+		conventionMapping.map("disableGeneratingOnShards", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDisableGeneratingOnShards();
 			}
 		});
-		conventionMapping("optimize", new Callable<Integer>() {
+		conventionMapping.map("optimize", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return options.getOptimize();
 			}
 		});
-		conventionMapping("disableAggressiveOptimization", new Callable<Boolean>() {
+		conventionMapping.map("disableAggressiveOptimization", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDisableAggressiveOptimization();
 			}
 		});
-		conventionMapping("disableClassMetadata", new Callable<Boolean>() {
+		conventionMapping.map("disableClassMetadata", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDisableClassMetadata();
 			}
 		});
-		conventionMapping("disableCastChecking", new Callable<Boolean>() {
+		conventionMapping.map("disableCastChecking", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDisableCastChecking();
 			}
 		});
-		conventionMapping("ea", new Callable<Boolean>() {
+		conventionMapping.map("ea", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getEa();
 			}
 		});
-		conventionMapping("disableRunAsync", new Callable<Boolean>() {
+		conventionMapping.map("disableRunAsync", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDisableRunAsync();
 			}
 		});
-		conventionMapping("style", new Callable<Style>() {
+		conventionMapping.map("style", new Callable<Style>() {
 			@Override
 			public Style call() throws Exception {
 				return options.getStyle();
 			}
 		});
-		conventionMapping("soycDetailed", new Callable<Boolean>() {
+		conventionMapping.map("soycDetailed", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getSoycDetailed();
 			}
 		});
-		conventionMapping("strict", new Callable<Boolean>() {
+		conventionMapping.map("strict", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getStrict();
 			}
 		});
-		conventionMapping("disableSoycHtml", new Callable<Boolean>() {
+		conventionMapping.map("disableSoycHtml", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getDisableSoycHtml();
 			}
 		});
-		conventionMapping("enableClosureCompiler", new Callable<Boolean>() {
+		conventionMapping.map("enableClosureCompiler", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getEnableClosureCompiler();
 			}
 		});
-		conventionMapping("fragmentCount", new Callable<Integer>() {
+		conventionMapping.map("fragmentCount", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return options.getFragmentCount();

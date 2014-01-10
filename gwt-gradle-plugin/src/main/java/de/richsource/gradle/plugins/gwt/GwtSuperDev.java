@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Task;
+import org.gradle.api.internal.ConventionMapping;
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.specs.Spec;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtSuperDevOptionsImpl;
@@ -38,7 +40,7 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 	private final GwtSuperDevOptions options = new GwtSuperDevOptionsImpl();
 	
 	public GwtSuperDev() {
-		setMain("com.google.gwt.dev.codeserver.CodeServer");
+		super("com.google.gwt.dev.codeserver.CodeServer");
 		
 		getOutputs().upToDateWhen(new Spec<Task>(){
 			@Override
@@ -62,19 +64,20 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 	}
 	
 	protected void configure(final GwtSuperDevOptions options) {
-		conventionMapping("bindAddress", new Callable<String>() {
+		ConventionMapping conventionMapping =((IConventionAware)this).getConventionMapping();
+		conventionMapping.map("bindAddress", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return options.getBindAddress();
 			}
 		});
-		conventionMapping("port", new Callable<Integer>() {
+		conventionMapping.map("port", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return options.getPort();
 			}
 		});
-		conventionMapping("noPrecompile", new Callable<Boolean>() {
+		conventionMapping.map("noPrecompile", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getNoPrecompile();

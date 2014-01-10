@@ -18,6 +18,7 @@ package de.richsource.gradle.plugins.gwt;
 import java.io.File;
 import java.util.concurrent.Callable;
 
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
@@ -45,7 +46,7 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 	private final GwtCompileOptions options = new GwtCompileOptionsImpl();
 
 	public AbstractGwtCompile() {
-		setMain("com.google.gwt.dev.Compiler");
+		super("com.google.gwt.dev.Compiler");
 	}
 	
 	@Override
@@ -75,7 +76,7 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 	}
 	
 	protected void configure(final GwtCompileOptions options) {
-		conventionMapping("localWorkers", new Callable<Integer>() {
+		((IConventionAware)this).getConventionMapping().map("localWorkers", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return options.getLocalWorkers();

@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Task;
+import org.gradle.api.internal.ConventionMapping;
+import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.specs.Spec;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtDevOptionsImpl;
@@ -43,7 +45,7 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	private final GwtDevOptions options = new GwtDevOptionsImpl();
 	
 	public GwtDev() {
-		setMain("com.google.gwt.dev.DevMode");
+		super("com.google.gwt.dev.DevMode");
 		
 		getOutputs().upToDateWhen(new Spec<Task>(){
 			@Override
@@ -68,67 +70,68 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	}
 	
 	protected void configure(final GwtDevOptions options) {
-		conventionMapping("noserver", new Callable<Boolean>() {
+		ConventionMapping conventionMapping =((IConventionAware)this).getConventionMapping();
+		conventionMapping.map("noserver", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getNoserver();
 			}
 		});
-		conventionMapping("port", new Callable<Integer>() {
+		conventionMapping.map("port", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return options.getPort();
 			}
 		});
-		conventionMapping("autoPort", new Callable<Boolean>() {
+		conventionMapping.map("autoPort", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getAutoPort();
 			}
 		});
-		conventionMapping("whitelist", new Callable<String>() {
+		conventionMapping.map("whitelist", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return options.getWhitelist();
 			}
 		});
-		conventionMapping("blacklist", new Callable<String>() {
+		conventionMapping.map("blacklist", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return options.getBlacklist();
 			}
 		});
-		conventionMapping("logDir", new Callable<File>() {
+		conventionMapping.map("logDir", new Callable<File>() {
 			@Override
 			public File call() throws Exception {
 				return options.getLogDir();
 			}
 		});
-		conventionMapping("bindAddress", new Callable<String>() {
+		conventionMapping.map("bindAddress", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return options.getBindAddress();
 			}
 		});
-		conventionMapping("codeServerPort", new Callable<Integer>() {
+		conventionMapping.map("codeServerPort", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return options.getCodeServerPort();
 			}
 		});
-		conventionMapping("autoCodeServerPort", new Callable<Boolean>() {
+		conventionMapping.map("autoCodeServerPort", new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getAutoCodeServerPort();
 			}
 		});
-		conventionMapping("server", new Callable<String>() {
+		conventionMapping.map("server", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return options.getServer();
 			}
 		});
-		conventionMapping("startupUrl", new Callable<String>() {
+		conventionMapping.map("startupUrl", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return options.getStartupUrl();

@@ -18,6 +18,10 @@ package de.richsource.gradle.plugins.gwt;
 import java.io.File;
 
 public abstract class AbstractGwtTask extends AbstractGwtActionTask {
+	public AbstractGwtTask(String main) {
+		super(main);
+	}
+
 	private File war;
 	private File deploy;
 	private File extra;
