@@ -24,6 +24,8 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.gradle.api.plugins.JavaBasePlugin;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.WarPlugin;
 import org.gradle.api.plugins.WarPluginConvention;
@@ -106,9 +108,7 @@ public class GwtWarPlugin implements Plugin<Project> {
 		draftWar.setDescription("Creates a war using the output of the task "
 				+ GwtCompilerPlugin.TASK_DRAFT_COMPILE_GWT);
 
-		for (Object dependsTask : warTask.getDependsOn()) {
-			devModeTask.dependsOn(dependsTask);
-		}
+		devModeTask.dependsOn(JavaPlugin.CLASSES_TASK_NAME);
 		devModeTask.dependsOn(warTemplateTask);
 
 	}
