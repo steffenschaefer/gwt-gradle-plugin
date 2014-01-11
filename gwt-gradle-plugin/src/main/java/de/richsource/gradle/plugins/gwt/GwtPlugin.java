@@ -19,7 +19,6 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.WarPlugin;
-import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 
 public class GwtPlugin implements Plugin<Project> {
 
@@ -27,14 +26,6 @@ public class GwtPlugin implements Plugin<Project> {
 	public void apply(final Project project) {
 		project.getPlugins().apply(GwtCompilerPlugin.class);
 		project.getPlugins().apply(GwtTestPlugin.class);
-
-		project.getPlugins().withType(EclipsePlugin.class,
-				new Action<EclipsePlugin>() {
-					@Override
-					public void execute(EclipsePlugin eclipsePlugin) {
-						project.getPlugins().apply(GwtEclipsePlugin.class);
-					}
-				});
 
 		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
 

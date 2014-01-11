@@ -32,6 +32,7 @@ import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 
 public class GwtBasePlugin implements Plugin<Project> {
 	public static final String GWT_CONFIGURATION = "gwt";
@@ -132,6 +133,14 @@ public class GwtBasePlugin implements Plugin<Project> {
 				}
 				
 			}});
+
+		project.getPlugins().withType(EclipsePlugin.class,
+				new Action<EclipsePlugin>() {
+					@Override
+					public void execute(EclipsePlugin eclipsePlugin) {
+						project.getPlugins().apply(GwtEclipsePlugin.class);
+					}
+				});
 	}
 	
 	private String gwtDependency(final String artifactId, final String gwtVersion) {
