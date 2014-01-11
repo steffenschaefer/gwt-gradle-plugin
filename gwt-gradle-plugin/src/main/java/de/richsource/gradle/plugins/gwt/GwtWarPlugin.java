@@ -103,7 +103,7 @@ public class GwtWarPlugin implements Plugin<Project> {
 				War.class);
 		draftWar.from(draftCompileTask.getOutputs());
 
-		draftWar.setBaseName(warTask.getBaseName() + "-draft");
+		draftWar.setAppendix("draft");
 		draftWar.setDescription("Creates a war using the output of the task "
 				+ GwtCompilerPlugin.TASK_DRAFT_COMPILE_GWT);
 
