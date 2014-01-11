@@ -27,7 +27,6 @@ import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
@@ -116,16 +115,16 @@ public class GwtBasePlugin implements Plugin<Project> {
 				}
 				
 				if(versionSet) {
-					project.getDependencies().add(GWT_SDK_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_DEV, gwtVersion));
-					project.getDependencies().add(GWT_SDK_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_USER, gwtVersion));
-					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, new DefaultExternalModuleDependency(GWT_GROUP, GWT_SERVLET, gwtVersion));
+					project.getDependencies().add(GWT_SDK_CONFIGURATION, gwtDependency(GWT_DEV, gwtVersion));
+					project.getDependencies().add(GWT_SDK_CONFIGURATION, gwtDependency(GWT_USER, gwtVersion));
+					project.getDependencies().add(JavaPlugin.RUNTIME_CONFIGURATION_NAME, gwtDependency(GWT_SERVLET, gwtVersion));
 					
 					if ((major == 2 && minor >= 5) || major > 2) {
 						if(extension.isCodeserver()) {
-							project.getDependencies().add(GWT_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_CODESERVER, gwtVersion));
+							project.getDependencies().add(GWT_CONFIGURATION, gwtDependency(GWT_CODESERVER, gwtVersion));
 						}
 						if(extension.isElemental()) {
-							project.getDependencies().add(GWT_CONFIGURATION, new DefaultExternalModuleDependency(GWT_GROUP, GWT_ELEMENTAL, gwtVersion));
+							project.getDependencies().add(GWT_CONFIGURATION, gwtDependency(GWT_ELEMENTAL, gwtVersion));
 						}
 					} else {
 						logger.warn("GWT version is <2.5 -> additional dependencies are not added.");
@@ -133,6 +132,10 @@ public class GwtBasePlugin implements Plugin<Project> {
 				}
 				
 			}});
+	}
+	
+	private String gwtDependency(final String artifactId, final String gwtVersion) {
+		return GWT_GROUP+":"+artifactId+":"+gwtVersion;
 	}
 
 	private GwtPluginExtension configureGwtExtension(final File buildDir) {
