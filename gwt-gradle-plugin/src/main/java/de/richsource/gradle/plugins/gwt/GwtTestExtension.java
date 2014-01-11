@@ -20,7 +20,10 @@ import java.util.concurrent.Callable;
 
 import org.gradle.api.internal.IConventionAware;
 
-public class GwtTestExtension extends GwtTestOptions {
+/**
+ * GWT specific extension for the Test task.
+ */
+public class GwtTestExtension extends GwtTestOptionsBase {
 
 	private File war;
 	private File deploy;

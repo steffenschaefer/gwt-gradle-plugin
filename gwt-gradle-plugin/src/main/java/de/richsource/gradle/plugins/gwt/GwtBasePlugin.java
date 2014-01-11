@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
@@ -32,6 +33,7 @@ import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.testing.Test;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 
 public class GwtBasePlugin implements Plugin<Project> {
@@ -86,9 +88,24 @@ public class GwtBasePlugin implements Plugin<Project> {
 		
 		addToMainSourceSetClasspath(allGwtConfigurations);
 		
+		final SourceSet testSourceSet = getTestSourceSet();
+		testSourceSet.setCompileClasspath(testSourceSet.getCompileClasspath().plus(allGwtConfigurations));
+		
 		project.afterEvaluate(new Action<Project>() {
 			@Override
 			public void execute(final Project project) {
+				FileCollection runtimeClasspath = allGwtConfigurations.plus(testSourceSet
+										.getRuntimeClasspath());
+				if(extension.getTest().isHasGwtTests()) {
+					runtimeClasspath = project.files(
+						getMainSourceSet().getAllJava().getSrcDirs().toArray())
+						.plus(project.files(testSourceSet.getAllJava()
+								.getSrcDirs().toArray())).plus(runtimeClasspath);
+					
+					configureTestTasks(extension);
+				}
+				testSourceSet.setRuntimeClasspath(runtimeClasspath);
+				
 				boolean versionSet = false;
 				int major = 2;
 				int minor = 5;
@@ -283,6 +300,39 @@ public class GwtBasePlugin implements Plugin<Project> {
 		});
 	}
 	
+	private void configureTestTasks(final GwtPluginExtension gwtPluginExtension) {
+		project.getTasks().withType(Test.class, new Action<Test>() {
+			@Override
+			public void execute(final Test testTask) {
+				testTask.getTestLogging().setShowStandardStreams(true);
+				
+				final GwtTestExtension testExtension = testTask.getExtensions().create("gwt", GwtTestExtension.class);
+				testExtension.configure(gwtPluginExtension, (IConventionAware) testExtension);
+				
+				testTask.doFirst(new Action<Task>() {
+					@Override
+					public void execute(Task arg0) {
+						String gwtArgs = testExtension.getParameterString();
+						testTask.systemProperty("gwt.args", gwtArgs);
+						logger.info("Using gwt.args for test: "+ gwtArgs);
+						
+						if (testExtension.getCacheDir() != null) {
+							testTask.systemProperty("gwt.persistentunitcachedir", testExtension.getCacheDir());
+							testExtension.getCacheDir().mkdirs();
+							logger.info("Using gwt.persistentunitcachedir for test: {0}", testExtension.getCacheDir());
+						}
+					}
+				});
+				
+				project.getPlugins().withType(GwtWarPlugin.class, new Action<GwtWarPlugin>() {
+					@Override
+					public void execute(GwtWarPlugin t) {
+						testTask.dependsOn(GwtWarPlugin.TASK_WAR_TEMPLATE);
+					}});
+			}
+		});
+	}
+	
 	private LogLevel getLogLevel() {
 		if(logger.isTraceEnabled()) {
 			return LogLevel.TRACE;
@@ -299,6 +349,10 @@ public class GwtBasePlugin implements Plugin<Project> {
 	
 	private SourceSet getMainSourceSet() {
 		return getJavaConvention().getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
+	}
+	
+	private SourceSet getTestSourceSet() {
+		return getJavaConvention().getSourceSets().getByName(SourceSet.TEST_SOURCE_SET_NAME);
 	}
 
 	private JavaPluginConvention getJavaConvention() {
