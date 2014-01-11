@@ -32,6 +32,9 @@ import org.gradle.process.JavaExecSpec;
 
 import de.richsource.gradle.plugins.gwt.internal.ActionClosure;
 
+/**
+ * Base class for all GWT related tasks.
+ */
 public abstract class AbstractGwtActionTask extends DefaultTask {
 
 	private List<String> modules;
@@ -94,6 +97,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 		execResult.assertNormalExitValue().rethrowFailure();
 	}
 
+	/**
+	 * If true this causes that the src is prepended to the classpath. This is set to false for Super Dev Mode as the source is given to it as extra parameter.
+	 * 
+	 * @return true if src should be prepended to the classpath, false otherwise.
+	 */
 	protected boolean prependSrcToClasspath() {
 		return true;
 	}
@@ -146,6 +154,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	 */
 	protected abstract void addArgs();
 
+	/**
+	 * If true the task instance is treated as being a development related task. Development related tasks will have the devModules set by default.
+	 * 
+	 * @return true if the task is development related, false otherwise.
+	 */
 	protected boolean isDevTask() {
 		return true;
 	}
@@ -171,6 +184,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 		return classpath;
 	}
 
+	/**
+	 * Sets the classpath for the spawned java process.
+	 * 
+	 * @param classpath the classpath to set
+	 */
 	public void setClasspath(FileCollection classpath) {
 		this.classpath = classpath;
 	}
@@ -179,6 +197,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 		return minHeapSize;
 	}
 
+	/**
+	 * Sets the minimum heap size for the spawned java process.
+	 * 
+	 * @param minHeapSize the minimum heap size to set
+	 */
 	public void setMinHeapSize(String minHeapSize) {
 		this.minHeapSize = minHeapSize;
 	}
@@ -187,6 +210,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 		return maxHeapSize;
 	}
 
+	/**
+	 * Sets the maximum heap size for the spawned java process.
+	 * 
+	 * @param maxHeapSize the maximum heap size to set
+	 */
 	public void setMaxHeapSize(String maxHeapSize) {
 		this.maxHeapSize = maxHeapSize;
 	}
@@ -195,6 +223,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 		return debug;
 	}
 
+	/**
+	 * If set to true this enables debugging for the spawned java process.
+	 * 
+	 * @param debug true to enable debugging, false otherwise.
+	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}

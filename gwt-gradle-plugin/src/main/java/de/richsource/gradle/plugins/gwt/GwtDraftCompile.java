@@ -15,7 +15,9 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
-
+/**
+ * Task to run the GWT compiler for development quality output.
+ */
 public class GwtDraftCompile extends AbstractGwtCompile {
 	public GwtDraftCompile() {
 		setDraftCompile(true);

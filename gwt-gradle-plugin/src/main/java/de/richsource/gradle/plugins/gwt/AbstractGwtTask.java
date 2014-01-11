@@ -17,6 +17,9 @@ package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
 
+/**
+ * Base class for several GWT related tasks that share specific parameters.
+ */
 public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 	public AbstractGwtTask(String main) {
 		super(main);
@@ -130,6 +133,11 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		return logLevel;
 	}
 
+	/**
+	 * Sets the {@link LogLevel} for this task.
+	 * 
+	 * @param logLevel the log level to set
+	 */
 	public void setLogLevel(LogLevel logLevel) {
 		this.logLevel = logLevel;
 	}

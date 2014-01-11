@@ -25,16 +25,9 @@ import org.gradle.api.specs.Spec;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtSuperDevOptionsImpl;
 
-//CodeServer [-bindAddress address] [-port port] [-workDir dir] [-src
-// dir] [module]
-//
-// where
-// -bindAddress The ip address of the code server. Defaults to 127.0.0.1.
-// -port The port where the code server will run.
-// -workDir The root of the directory tree where the code server will write compiler output. If not supplied, a temporary directory will be used.
-// -src A directory containing GWT source to be prepended to the classpath for compiling.
-// and
-// module The GWT modules that the code server should compile. (Example: com.example.MyApp)
+/**
+ * Task to run the GWT Super Dev Mode.
+ */
 public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOptions {
 	
 	private final GwtSuperDevOptions options = new GwtSuperDevOptionsImpl();
@@ -85,6 +78,7 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 		});
 	}
 	
+	@Override
 	protected boolean prependSrcToClasspath() {
 		return false;
 	}

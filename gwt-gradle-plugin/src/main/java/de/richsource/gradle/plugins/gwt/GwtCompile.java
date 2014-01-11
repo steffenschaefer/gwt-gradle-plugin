@@ -20,7 +20,9 @@ import java.util.concurrent.Callable;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
 
-
+/**
+ * Task to run the GWT compiler for production quality output.
+ */
 public class GwtCompile extends AbstractGwtCompile {
 	
 	/** {@inheritDoc} */

@@ -15,6 +15,9 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
+/**
+ * Eclipse related options used by the {@link GwtEclipsePlugin}.
+ */
 public class GwtEclipseOptions {
 	
 	private boolean addGwtContainer = true;
@@ -23,6 +26,11 @@ public class GwtEclipseOptions {
 		return addGwtContainer;
 	}
 
+	/**
+	 * Sets if the {@code com.google.gwt.eclipse.core.GWT_CONTAINER} should be added to the eclipse classpath instead of using the Gradle dependencies.
+	 * 
+	 * @param addGwtContainer true to use the GWT_CONTAINER, false to use the dependencies defined by Gradle
+	 */
 	public void setAddGwtContainer(boolean addGwtContainer) {
 		this.addGwtContainer = addGwtContainer;
 	}

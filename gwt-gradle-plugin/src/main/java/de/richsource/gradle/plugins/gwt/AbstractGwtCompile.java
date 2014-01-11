@@ -25,22 +25,9 @@ import org.gradle.api.tasks.OutputDirectory;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtCompileOptionsImpl;
 
-//-logLevel               The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
-//-workDir                The compiler's working directory for internal use (must be writeable; defaults to a system temp dir)
-//-gen                    Debugging: causes normally-transient generated types to be saved in the specified directory
-//-style                  Script output style: OBF[USCATED], PRETTY, or DETAILED (defaults to OBF)
-//-ea                     Debugging: causes the compiled output to check assert statements
-//-XdisableClassMetadata  EXPERIMENTAL: Disables some java.lang.Class methods (e.g. getName())
-//-XdisableCastChecking   EXPERIMENTAL: Disables run-time checking of cast operations
-//-validateOnly           Validate all source code, but do not compile
-//-draftCompile           Enable faster, but less-optimized, compilations
-//-optimize               Sets the optimization level used by the compiler.  0=none 9=maximum.
-//-compileReport          Create a compile report that tells the Story of Your Compile
-//-strict                 Only succeed if no input files have errors
-//-localWorkers           The number of local workers to use when compiling permutations
-//-war                    The directory into which deployable output files will be written (defaults to 'war')
-//-deploy                 The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the -war directory/jar, and may be the same as the -extra directory/jar)
-//-extra                  The directory into which extra files, not intended for deployment, will be written
+/**
+ * Common implementation of tasks used for GWT compilation.
+ */
 public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOptions {
 	
 	private final GwtCompileOptions options = new GwtCompileOptionsImpl();

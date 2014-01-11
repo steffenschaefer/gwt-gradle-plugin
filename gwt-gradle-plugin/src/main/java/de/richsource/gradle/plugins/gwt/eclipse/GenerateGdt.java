@@ -31,6 +31,9 @@ import org.gradle.api.tasks.TaskAction;
 
 import de.richsource.gradle.plugins.gwt.eclipse.internal.GdtOptionsImpl;
 
+/**
+ * Task to generate the Eclipse GDT settings file.
+ */
 // TODO It's currently not possible to use PropertiesGeneratorTask as it forces imports of internal stuff. Evaluate this again later.
 public class GenerateGdt extends DefaultTask implements GdtOptions {
 	
