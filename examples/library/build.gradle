@@ -5,5 +5,5 @@ apply plugin: 'eclipse'
 repositories { mavenCentral() }
 
 gwt {
-	gwtVersion='2.5.1'
+	gwtVersion='2.6.0'
 }
