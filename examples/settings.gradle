@@ -3,6 +3,8 @@ include 'library'
 include 'war-using-library'
 include 'super-dev-mode'
 include 'testing'
+include 'compile-only'
+include 'war-using-compile-only'
 
 rootProject.children.each {project ->
 	project.name = "example-${project.name}"

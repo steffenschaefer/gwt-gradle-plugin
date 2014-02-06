@@ -1,0 +1,17 @@
+apply plugin: 'gwt-compiler'
+apply plugin: 'eclipse'
+
+repositories { mavenCentral() }
+
+gwt {
+	gwtVersion='2.5.1'
+
+	modules 'de.richsource.gradle.plugins.gwt.example.Example'
+
+	compiler {
+		strict = true;
+		enableClosureCompiler = true;
+		disableClassMetadata = true;
+		disableCastChecking = true;
+	}
+}

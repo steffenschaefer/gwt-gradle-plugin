@@ -1,0 +1,9 @@
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'jetty'
+
+repositories { mavenCentral() }
+
+war {
+	from project(':example-compile-only').tasks.compileGwt.outputs
+}
