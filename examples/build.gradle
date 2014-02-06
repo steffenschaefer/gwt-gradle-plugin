@@ -11,6 +11,8 @@ buildscript {
 }
 
 subprojects {
+	apply plugin: 'java'
+	
 	buildscript {
 		repositories {
 			maven {
@@ -25,8 +27,8 @@ subprojects {
 	
 	apply plugin: 'license'
 	
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
+	sourceCompatibility = 1.7
+	targetCompatibility = 1.7
 	
 	license {
 		ext.year = Calendar.getInstance().get(Calendar.YEAR)
