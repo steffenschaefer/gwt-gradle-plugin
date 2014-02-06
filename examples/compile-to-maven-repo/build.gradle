@@ -1,0 +1,32 @@
+apply plugin: 'gwt-compiler'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+repositories { mavenCentral() }
+
+gwt {
+	gwtVersion='2.6.0'
+	modules 'de.richsource.gradle.plugins.gwt.example.Example'
+}
+
+task gwtZip(type: Zip) {
+	from tasks.compileGwt.outputs
+}
+
+group='de.richsource.example'
+version='1.3.37'
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact gwtZip {
+				extension = 'zip'
+				classifier = 'gwt'
+			}
+		}
+	}
+	repositories {
+		maven {
+			url project.file('repo').toURI()
+		}
+	}
+}
