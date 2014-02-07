@@ -21,66 +21,109 @@ import java.io.File;
 import java.util.Collections;
 import java.util.concurrent.Callable;
 
+import org.gradle.api.Action;
+import org.gradle.api.DefaultTask;
 import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.internal.file.copy.DefaultCopySpec;
 import org.gradle.api.specs.Spec;
-import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Optional;
-import org.gradle.util.ConfigureUtil;
+import org.gradle.api.tasks.TaskAction;
 
-public class ExplodedWar extends Copy {
+import de.richsource.gradle.plugins.gwt.internal.ActionClosure;
+
+public class ExplodedWar extends DefaultTask {
 	
+	private final CopySpec root;
+	
+	private File destinationDir;
 	private File webXml;
 
     private FileCollection classpath;
-    private final DefaultCopySpec webInf;
+    private final CopySpec webInf;
 	
 	public ExplodedWar() {
-		webInf = getRootSpec().addFirst().into("WEB-INF");
-        webInf.addChild().into("classes").from(new Callable<Iterable<File>>() {
-
+		root = getProject().copySpec(new ActionClosure<CopySpec>(this, new Action<CopySpec>() {
 			@Override
-			public Iterable<File> call() throws Exception {
-				final FileCollection classpath = getClasspath();
-					return	classpath == null ? Collections.<File>emptyList() : classpath.filter(new Spec<File>() {
-						@Override
-						public boolean isSatisfiedBy(File file) {
-							return file.isDirectory();
-						}
-					});
+			public void execute(CopySpec spec) {
 			}
-        });
-        webInf.addChild().into("lib").from(new Callable<Iterable<File>>() {
-        	
+		}));
+		
+		webInf = root.into("WEB-INF", new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
+			@Override
+			public void execute(CopySpec spec) {
+			}}));
+		
+		 webInf.into("", (new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
+				@Override
+				public void execute(CopySpec spec) {
+					spec.from(new Callable<File>() {
+						
+						@Override
+						public File call() throws Exception {
+							return getWebXml();
+						}
+					}).rename(".*", "web.xml");
+				}})));
+		
+        webInf.into("classes", new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
+			@Override
+			public void execute(CopySpec spec) {
+				spec.from(new Callable<Iterable<File>>() {
+					
+					@Override
+					public Iterable<File> call() throws Exception {
+						final FileCollection classpath = getClasspath();
+						return	classpath == null ? Collections.<File>emptyList() : classpath.filter(new Spec<File>() {
+							@Override
+							public boolean isSatisfiedBy(File file) {
+								return file.isDirectory();
+							}
+						});
+					}
+				});
+			}}));
+        
+        webInf.into("lib", new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
         	@Override
-        	public Iterable<File> call() throws Exception {
-        		final FileCollection classpath = getClasspath();
-        		return	classpath == null ? Collections.<File>emptyList() : classpath.filter(new Spec<File>() {
+        	public void execute(CopySpec spec) {
+        		spec.from(new Callable<Iterable<File>>() {
+        			
         			@Override
-        			public boolean isSatisfiedBy(File file) {
-        				return file.isFile();
+        			public Iterable<File> call() throws Exception {
+        				final FileCollection classpath = getClasspath();
+        				return	classpath == null ? Collections.<File>emptyList() : classpath.filter(new Spec<File>() {
+        					@Override
+        					public boolean isSatisfiedBy(File file) {
+        						return file.isFile();
+        					}
+        				});
         			}
         		});
-        	}
-        });
-        webInf.addChild().into("").from(new Callable<File>() {
-        	
-        	@Override
-        	public File call() throws Exception {
-        		return getWebXml();
-        	}
-        }).rename(".*", "web.xml");
+        	}}));
+	}
+	
+	@TaskAction
+	private void buildWarTemplate() {
+		getProject().copy(new ActionClosure<CopySpec>(this, new Action<CopySpec>() {
+
+			@Override
+			public void execute(CopySpec spec) {
+				spec.into(getDestinationDir());
+				spec.with(root);
+			}}));
 	}
 	
 	public CopySpec getWebInf() {
-        return webInf.addChild();
+        return webInf.into("", new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
+			@Override
+			public void execute(CopySpec arg0) {
+			}}));
     }
 	
 	public CopySpec webInf(Closure<CopySpec> configureClosure) {
-        return ConfigureUtil.configure(configureClosure, getWebInf());
+        return webInf.into("", configureClosure);
     }
 
 	@InputFiles
@@ -106,5 +149,17 @@ public class ExplodedWar extends Copy {
 
 	public void setWebXml(File webXml) {
 		this.webXml = webXml;
+	}
+
+	public File getDestinationDir() {
+		return destinationDir;
+	}
+
+	public void setDestinationDir(File destinationDir) {
+		this.destinationDir = destinationDir;
+	}
+	
+	public CopySpec from(Object... input) {
+		return root.from(input);
 	}
 }

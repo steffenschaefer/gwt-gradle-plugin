@@ -81,7 +81,7 @@ public class GwtWarPlugin implements Plugin<Project> {
                 return warTask.getClasspath();
             }
         }});
-		warTemplateTask.conventionMapping("destinationDir", new Callable<File>() {
+		((IConventionAware)warTemplateTask).getConventionMapping().map("destinationDir", new Callable<File>() {
 				@Override
 				public File call() throws Exception {
 					return extension.getDevWar();
