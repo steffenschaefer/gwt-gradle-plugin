@@ -65,6 +65,7 @@ public class GwtWarPlugin implements Plugin<Project> {
 
 		final ExplodedWar warTemplateTask = project.getTasks().create(
 				TASK_WAR_TEMPLATE, ExplodedWar.class);
+		warTemplateTask.setGroup(GwtBasePlugin.GWT_TASK_GROUP);
 		warTemplateTask.from(new Callable<File>(){
 			@Override
 			public File call() {
@@ -92,6 +93,7 @@ public class GwtWarPlugin implements Plugin<Project> {
 
 		final GwtDev devModeTask = project.getTasks().create(TASK_GWT_DEV,
 				GwtDev.class);
+		devModeTask.setDescription("Runs the GWT development mode");
 		((IConventionAware)devModeTask).getConventionMapping().map("war", new Callable<File>() {
 			@Override
 			public File call() throws Exception {

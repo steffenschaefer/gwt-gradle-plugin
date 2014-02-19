@@ -37,6 +37,8 @@ import org.gradle.api.tasks.testing.Test;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 
 public class GwtBasePlugin implements Plugin<Project> {
+	public static final String GWT_TASK_GROUP = "GWT";
+	
 	public static final String GWT_CONFIGURATION = "gwt";
 	public static final String GWT_SDK_CONFIGURATION = "gwtSdk";
 	public static final String EXTENSION_NAME = "gwt";
@@ -226,6 +228,8 @@ public class GwtBasePlugin implements Plugin<Project> {
 		project.getTasks().withType(AbstractGwtActionTask.class, new Action<AbstractGwtActionTask>() {
 			@Override
 			public void execute(final AbstractGwtActionTask task) {
+				task.setGroup(GwtBasePlugin.GWT_TASK_GROUP);
+				
 				ConventionMapping conventionMapping = ((IConventionAware)task).getConventionMapping();
 				conventionMapping.map("modules", new Callable<List<String>>() {
 					@Override
