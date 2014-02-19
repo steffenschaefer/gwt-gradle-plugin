@@ -105,7 +105,7 @@ public class ExplodedWar extends DefaultTask {
 	}
 	
 	@TaskAction
-	private void buildWarTemplate() {
+	protected void buildWarTemplate() {
 		getProject().copy(new ActionClosure<CopySpec>(this, new Action<CopySpec>() {
 
 			@Override
