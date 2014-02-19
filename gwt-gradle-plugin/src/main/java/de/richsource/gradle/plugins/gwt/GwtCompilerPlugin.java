@@ -19,6 +19,7 @@ import java.io.File;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaPlugin;
 
 public class GwtCompilerPlugin implements Plugin<Project> {
 	public static final String OUT_DIR = "out";
@@ -36,10 +37,11 @@ public class GwtCompilerPlugin implements Plugin<Project> {
 		final GwtCompile compileTask = project.getTasks().create(TASK_COMPILE_GWT, GwtCompile.class);
 		compileTask.setWar(new File(gwtBuildDir, OUT_DIR));
 		compileTask.setDescription("Runs the GWT compiler to translate Java sources to JavaScript for production ready output");
+		compileTask.dependsOn(JavaPlugin.COMPILE_JAVA_TASK_NAME, JavaPlugin.PROCESS_RESOURCES_TASK_NAME);
 		
 		final GwtDraftCompile draftCompileTask = project.getTasks().create(TASK_DRAFT_COMPILE_GWT, GwtDraftCompile.class);
 		draftCompileTask.setWar(new File(gwtBuildDir, DRAFT_OUT_DIR));
 		draftCompileTask.setDescription("Runs the GWT compiler to produce draft quality output used for development");
-		
+		draftCompileTask.dependsOn(JavaPlugin.COMPILE_JAVA_TASK_NAME, JavaPlugin.PROCESS_RESOURCES_TASK_NAME);
 	}
 }
