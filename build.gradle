@@ -24,6 +24,7 @@ allprojects {
 	tasks.eclipse << {
 		File prefs = project.file('.settings/org.eclipse.core.resources.prefs');
 		if(!prefs.exists()) {
+			prefs.parentFile.mkdirs()
 			project.file('.settings/org.eclipse.core.resources.prefs')<< "eclipse.preferences.version=1\nencoding/<project>=$encoding\n";
 		}
 	}
