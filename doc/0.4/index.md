@@ -14,6 +14,7 @@ title :  "Documentation overview"
 
 * [The draft war](draft_war)
 * [Using Super Dev Mode](super_dev_mode)
+* [GWT Dependencies](dependencies)
 
 ### Technical details
 

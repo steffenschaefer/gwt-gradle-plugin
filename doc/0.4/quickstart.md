@@ -53,7 +53,27 @@ gwt {
 }
 {% endhighlight %}
 
+### Activating compiler optimizations
+
+The plugin applies the default optimization settings but that can be adjusted. The following example shows how to adjust some of the flags (please refer to the official documentation on what these flags do):
+
+{% highlight groovy linenos=table %}
+gwt {
+    compiler {
+        enableClosureCompiler = true; // activates -XenableClosureCompiler
+        disableClassMetadata = true; // activates -XdisableClassMetadata
+        disableCastChecking = true; // activates -XdisableCastChecking
+    }
+}
+{% endhighlight %}
+
+
 ## Gradle tasks
 
 To build the *.war file including your compiled GWT modules, simply call "gradle build".
 If you want to start the GWT development mode simply call "gradle gwtDev".
+
+## How to debug Development Mode?
+
+When running the task “gwtDev” you can specify a system property “-DgwtDev.debug=true” to enable debugging. This causes the build to stop when starting development mode and waiting for a debuger to attach to port 5005.
+Now you can configure your IDE to connect to that debug port.
