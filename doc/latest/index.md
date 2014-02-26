@@ -172,6 +172,23 @@ gwt {
 }
 {% endhighlight %}
 
+### Adjusting memory settings
+The memory settings can be changed for all GWT related tasks (compileGwt, gwtDev, ...) with these properties:
+{% highlight groovy linenos=table %}
+gwt {
+    minHeapSize = "512M"
+    maxHeapSize = "1024M"
+}
+{% endhighlight %}
+
+As all those tasks are JavaExec tasks so you can also do this on a task level:
+{% highlight groovy linenos=table %}
+compileGwt {
+    minHeapSize = "512M"
+    maxHeapSize = "1024M"
+}
+{% endhighlight %}
+
 ## Running the draft war
 
 As described before, the plugn adds a task “draftWar” to create a war file with a draft-compiled version of your GWT modules.
