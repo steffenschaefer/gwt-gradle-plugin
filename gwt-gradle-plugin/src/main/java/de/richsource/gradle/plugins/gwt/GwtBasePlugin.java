@@ -157,7 +157,7 @@ public class GwtBasePlugin implements Plugin<Project> {
 				new Action<EclipsePlugin>() {
 					@Override
 					public void execute(EclipsePlugin eclipsePlugin) {
-						project.getPlugins().apply(GwtEclipsePlugin.class);
+						new GwtEclipsePlugin().apply(project, GwtBasePlugin.this);
 					}
 				});
 	}

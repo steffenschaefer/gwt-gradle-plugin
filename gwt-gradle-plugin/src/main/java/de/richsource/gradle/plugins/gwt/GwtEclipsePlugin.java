@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.Action;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.internal.IConventionAware;
@@ -34,7 +33,8 @@ import de.richsource.gradle.plugins.gwt.eclipse.GdtOptions;
 import de.richsource.gradle.plugins.gwt.eclipse.GenerateGdt;
 import de.richsource.gradle.plugins.gwt.eclipse.internal.GdtOptionsImpl;
 
-public class GwtEclipsePlugin implements Plugin<Project> {
+// TODO choose different name as this is no real plugin
+public class GwtEclipsePlugin {
 
 	public static final String ECLIPSE_NATURE = "com.google.gwt.eclipse.core.gwtNature";
 	public static final String ECLIPSE_BUILDER_PROJECT_VALIDATOR = "com.google.gwt.eclipse.core.gwtProjectValidator";
@@ -45,11 +45,9 @@ public class GwtEclipsePlugin implements Plugin<Project> {
 	private static final Logger logger = Logging.getLogger(GwtEclipsePlugin.class);
 	private Project project;
 
-	@Override
-	public void apply(final Project project) {
+	public void apply(final Project project, final GwtBasePlugin gwtBasePlugin) {
 		this.project = project;
 		project.getPlugins().apply(EclipsePlugin.class);
-		final GwtBasePlugin gwtBasePlugin = project.getPlugins().apply(GwtBasePlugin.class);
 		
 		final GwtPluginExtension extension = gwtBasePlugin.getExtension();
 		final GwtEclipseOptions eclipseExtension = ((ExtensionAware)extension).getExtensions().create("eclipse", GwtEclipseOptions.class);
