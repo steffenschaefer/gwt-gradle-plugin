@@ -72,7 +72,7 @@ gwt {
 
 ### Memory settings
 
-To change the memory settings for all GWT related tasks, you can use the following:
+You can change the memory settings for all GWT related tasks (compileGwt, gwtDev, ...) with these properties:
 
 {% highlight groovy linenos=table %}
 gwt {
@@ -81,7 +81,7 @@ gwt {
 }
 {% endhighlight %}
 
-To change those settings for only one task you can also specify these settings on a task level:
+To change those settings for only one specific task you can also set these settings for this task only:
 
 {% highlight groovy linenos=table %}
 compileGwt {
@@ -89,6 +89,8 @@ compileGwt {
 	maxHeapSize = "1024M";
 }
 {% endhighlight %}
+
+The default value for both, minHeapSize and maxHeapSize is "256M".
 
 ### Log level
 
