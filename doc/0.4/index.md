@@ -16,7 +16,7 @@ title :  "Documentation overview"
 
 * [The draft war](draft_war)
 * [Using Super Dev Mode](super_dev_mode)
-* [Working with Eclipse](working_with_eclipse)
+* [Working with Eclipse](eclipse)
 
 ### Technical details
 
