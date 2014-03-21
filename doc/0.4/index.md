@@ -9,12 +9,14 @@ title :  "Documentation overview"
 
 * [Quickstart](quickstart)
 * [Project types](project_types)
+* [GWT Dependencies](dependencies)
+* [Configuration reference](configuration)
 
 ### Use-cases
 
 * [The draft war](draft_war)
 * [Using Super Dev Mode](super_dev_mode)
-* [GWT Dependencies](dependencies)
+* [Working with Eclipse](working_with_eclipse)
 
 ### Technical details
 
