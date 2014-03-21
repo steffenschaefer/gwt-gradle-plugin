@@ -167,7 +167,6 @@ public class GwtBasePlugin implements Plugin<Project> {
 	}
 
 	private GwtPluginExtension configureGwtExtension(final File buildDir) {
-		final SourceSet mainSourceSet = getMainSourceSet();
 		
 		final GwtPluginExtension extension = project.getExtensions().create(EXTENSION_NAME, GwtPluginExtension.class);
 		extension.setDevWar(project.file(DEV_WAR));
@@ -177,8 +176,16 @@ public class GwtBasePlugin implements Plugin<Project> {
 		extension.setCacheDir(new File(buildDir, CACHE_DIR));
 		extension.getDev().setLogDir(new File(buildDir, LOG_DIR));
 		extension.getCompiler().setLocalWorkers(Runtime.getRuntime().availableProcessors());
-		extension.setSrc(project.files(mainSourceSet.getAllJava().getSrcDirs()).plus(project.files(mainSourceSet.getOutput().getResourcesDir())));
 		extension.setLogLevel(getLogLevel());
+		
+		ConventionMapping conventionMapping = ((IConventionAware)extension).getConventionMapping();
+		conventionMapping.map("src", new Callable<FileCollection>(){
+			@Override
+			public FileCollection call() throws Exception {
+				final SourceSet mainSourceSet = getMainSourceSet();
+				return project.files(mainSourceSet.getAllJava().getSrcDirs()).plus(project.files(mainSourceSet.getOutput().getResourcesDir()));
+			}});
+		
 		return extension;
 	}
 
