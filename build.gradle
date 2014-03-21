@@ -70,7 +70,7 @@ subprojects {
 	}
 
 	group='de.richsource.gradle.plugins'
-	version='0.4'
+	version='0.5-SNAPSHOT'
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
