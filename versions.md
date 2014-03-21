@@ -1,9 +1,25 @@
 ---
 layout : default
-title :  "Documentation overview"
+title :  "Version history"
 ---
 
-## Version history
+## Versions
+
+### 0.4 (2014-03-21)
+
+* Compatibility
+    * Gradle 1.6+ (tested 1.6-1.11)
+    * GWT 2.x (tested 2.6.0)
+* Resources
+    * [Documentation](doc/0.4/)
+    * [JavaDocs](doc/0.4/javadoc/)
+* Changes/fixes
+    * Internal changes to improve compatibility with several Gradle versions
+    * Fixed an issue that caused incompatibilities with Gradle 1.12
+    * Added more example projects
+    * Improved and extended the documentation
+* Breaking changes
+    * The inheritance of several tasks is changed. Do a clean build if anything behaves strange.
 
 ### 0.3 (2014-01-09)
 
