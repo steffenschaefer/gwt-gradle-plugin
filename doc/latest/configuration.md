@@ -24,7 +24,7 @@ gwt {
     }
     
     dev {
-        noServer = true
+        noserver = true
         port = 1337
     }
 }
