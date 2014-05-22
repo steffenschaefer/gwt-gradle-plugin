@@ -10,6 +10,15 @@ Among other things, the plugin provides these features:
 * Configuration of different GWT modules for development and production
 * GWT specific configuration of Eclipse projects
 
+# Note about contributions/pull requests
+
+I really like how open source development works including contributions, but currently I will not accept any pull request. It's not that your contributions aren't good, but it makes things a little bit more complicated for me...
+
+Let me explain: I personnally would like to see some kind of official support for Gradle very close to the GWT project. I think most developers will agree with this. I would like to contribute the whole code to the GWT project as base for an official plugin. I don't know if the steering comitee or somebody else who is responsible for such things will accept this, but things will be very complicated if people contributed code who potentially haven't signed the CLA (or even worse people who can't sign it due to legal issues).
+
+But how can you help?
+You can help by filing bugs for things that don't work or things you would like to see better support or easier solutions for.
+
 # Resources
 
 * [Version history](http://steffenschaefer.github.io/gwt-gradle-plugin/versions.html)
