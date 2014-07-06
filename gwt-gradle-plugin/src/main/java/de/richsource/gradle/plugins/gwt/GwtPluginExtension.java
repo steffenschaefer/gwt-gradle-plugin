@@ -94,7 +94,7 @@ public class GwtPluginExtension {
 
 	public void setDevModules(List<String> devModules) {
 		this.devModules.clear();
-		this.devModules.addAll(modules);
+		this.devModules.addAll(devModules);
 	}
 	
 	public void devModules(String... modules) {
