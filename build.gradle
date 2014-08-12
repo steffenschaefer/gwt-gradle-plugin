@@ -79,12 +79,18 @@ subprojects {
 				artifact sourceJar { classifier = 'sources' }
 				pom.withXml {
 					def root = asNode()
+	                root.appendNode('packaging', 'jar')
 	                root.appendNode('name', 'Gradle GWT plugin')
 	                root.appendNode('description', 'Gradle plugin to support GWT related tasks.')
 	                root.appendNode('inceptionYear', '2013')
+	                root.appendNode('url', 'https://github.com/steffenschaefer/gwt-gradle-plugin')
 					def license = root.appendNode('licenses').appendNode('license')
 					license.appendNode('name', 'Apache License, Version 2.0')
 					license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+					license.appendNode('distribution', 'repo')
+					def scm = root.appendNode('scm')
+					scm.appendNode('url', 'https://github.com/steffenschaefer/gwt-gradle-plugin')
+					scm.appendNode('connection', 'scm:git:https://github.com/steffenschaefer/gwt-gradle-plugin.git')
 				}
 			}
 		}
