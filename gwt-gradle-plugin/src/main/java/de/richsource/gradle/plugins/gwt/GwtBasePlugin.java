@@ -34,6 +34,7 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.testing.Test;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
+import org.gradle.plugins.ide.idea.IdeaPlugin;
 
 public class GwtBasePlugin implements Plugin<Project> {
 	public static final String GWT_TASK_GROUP = "GWT";
@@ -157,6 +158,14 @@ public class GwtBasePlugin implements Plugin<Project> {
 					@Override
 					public void execute(EclipsePlugin eclipsePlugin) {
 						new GwtEclipsePlugin().apply(project, GwtBasePlugin.this);
+					}
+				});
+
+		project.getPlugins().withType(IdeaPlugin.class,
+				new Action<IdeaPlugin>() {
+					@Override
+					public void execute(IdeaPlugin ideaPlugin) {
+						new GwtIdeaPlugin().apply(project, GwtBasePlugin.this);
 					}
 				});
 	}
