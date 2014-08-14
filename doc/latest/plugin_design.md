@@ -6,6 +6,7 @@ title :  "Plugin design"
 ## Plugin Design
 
 The plugin is designed to work with the following principles in mind (but can be configured to work different):
+
 * The webapp source (typically /src/main/webapp) is holy and won't be polluted with generated stuff. Instead a special working dir is set up with an exploded template of the webapp (typically /war)
 * Compilation is done with a dedicated output folder to make incremental builds work
 * All output is configured to be written to “${buildDir}/gwt” with several sub directories for different purposes (look at the chapter “Default directory structure” for details)
