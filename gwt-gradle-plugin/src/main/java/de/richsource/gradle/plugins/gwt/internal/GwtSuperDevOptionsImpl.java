@@ -28,6 +28,7 @@ public class GwtSuperDevOptionsImpl implements GwtSuperDevOptions {
 	private String bindAddress;
 	private Integer port;
 	private Boolean noPrecompile;
+	private Boolean useClasspathForSrc;
 
 	/** {@inheritDoc} */
 	@Override
@@ -75,5 +76,17 @@ public class GwtSuperDevOptionsImpl implements GwtSuperDevOptions {
 	@Override
 	public void setNoPrecompile(Boolean noPrecompile) {
 		this.noPrecompile = noPrecompile;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void setUseClasspathForSrc(Boolean useClasspathForSrc) {
+		this.useClasspathForSrc = useClasspathForSrc;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getUseClasspathForSrc() {
+		return useClasspathForSrc;
 	}
 }

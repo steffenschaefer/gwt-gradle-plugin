@@ -44,10 +44,12 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 
 	@Override
 	protected void addArgs() {
-		for (File srcDir : getSrc()) {
-			// TODO warning if file?
-			if(srcDir.exists() && srcDir.isDirectory()) {
-				argIfSet("-src", srcDir);
+		if(!Boolean.TRUE.equals(getUseClasspathForSrc())) {
+			for (File srcDir : getSrc()) {
+				// TODO warning if file?
+				if(srcDir.exists() && srcDir.isDirectory()) {
+					argIfSet("-src", srcDir);
+				}
 			}
 		}
 		dirArgIfSet("-workDir", getWorkDir());
@@ -76,11 +78,17 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 				return options.getNoPrecompile();
 			}
 		});
+		conventionMapping.map("useClasspathForSrc", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getUseClasspathForSrc();
+			}
+		});
 	}
 	
 	@Override
 	protected boolean prependSrcToClasspath() {
-		return false;
+		return Boolean.TRUE.equals(getUseClasspathForSrc());
 	}
 
 	/** {@inheritDoc} */
@@ -129,5 +137,17 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 	@Override
 	public void setNoPrecompile(Boolean noPrecompile) {
 		options.setNoPrecompile(noPrecompile);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setUseClasspathForSrc(Boolean useClasspathForSrc) {
+		options.setUseClasspathForSrc(useClasspathForSrc);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getUseClasspathForSrc() {
+		return options.getUseClasspathForSrc();
 	}
 }

@@ -177,6 +177,7 @@ public class GwtBasePlugin implements Plugin<Project> {
 		extension.getDev().setLogDir(new File(buildDir, LOG_DIR));
 		extension.getCompiler().setLocalWorkers(Runtime.getRuntime().availableProcessors());
 		extension.setLogLevel(getLogLevel());
+		extension.getSuperDev().setUseClasspathForSrc(true);
 		
 		ConventionMapping conventionMapping = ((IConventionAware)extension).getConventionMapping();
 		conventionMapping.map("src", new Callable<FileCollection>(){

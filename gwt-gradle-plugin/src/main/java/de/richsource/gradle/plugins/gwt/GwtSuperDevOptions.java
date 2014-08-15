@@ -70,4 +70,16 @@ public interface GwtSuperDevOptions {
 	 */
 	void setNoPrecompile(Boolean noPrecompile);
 
+	/**
+	 * If set to true, this causes the src to be prepended to the classpath instead of using -src parameters.
+	 * This is necessary due to a bug in GWT 2.5/2.6.
+	 * 
+	 * @see <a href="https://code.google.com/p/google-web-toolkit/issues/detail?id=7750">https://code.google.com/p/google-web-toolkit/issues/detail?id=7750</a>
+	 * 
+	 * @param useClasspathForSrc true to add the src to the classpath, false to use -src parameters
+	 */
+	void setUseClasspathForSrc(Boolean useClasspathForSrc);
+
+	Boolean getUseClasspathForSrc();
+
 }
