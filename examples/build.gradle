@@ -2,11 +2,11 @@ task licenseFormat
 
 buildscript {
 	repositories {
-		mavenCentral()
+		jcenter()
 	}
 	
 	dependencies {
-		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.6.0'
+		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
 	}
 }
 
