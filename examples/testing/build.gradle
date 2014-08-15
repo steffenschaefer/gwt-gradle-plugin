@@ -12,5 +12,5 @@ dependencies {
 }
 
 gwt {
-	gwtVersion='2.6.0'
+	gwtVersion='2.6.1'
 }
