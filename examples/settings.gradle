@@ -6,6 +6,7 @@ include 'testing'
 include 'compile-only'
 include 'war-using-compile-only'
 include 'compile-to-maven-repo'
+include 'custom-layout'
 
 rootProject.children.each {project ->
 	project.name = "example-${project.name}"

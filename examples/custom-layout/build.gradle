@@ -1,0 +1,25 @@
+apply plugin: 'war'
+apply plugin: 'gwt'
+apply plugin: 'eclipse'
+
+repositories { mavenCentral() }
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+	}
+}
+
+war{ 
+	webAppDirName = file('webapp') 
+}
+
+gwt {
+	gwtVersion='2.6.1'
+
+	modules 'de.richsource.gradle.plugins.gwt.example.Example'
+	
+	devWar = file('devWar')
+}
