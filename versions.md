@@ -8,6 +8,22 @@ title :  "Version history"
 ### 0.4 (2014-03-21)
 
 * Compatibility
+    * Gradle 1.6+ (tested 1.12 - 2.1)
+    * GWT 2.x (tested 2.6.1)
+* Resources
+    * [Documentation](doc/0.5/)
+    * [JavaDocs](doc/0.5/javadoc/)
+* Changes/fixes
+    * Fixed devModules property in GwtPluginExtension ([GitHub issue #40](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/40))
+    * Added new Flag 'useClasspathForSrc' to GwtSuperDevOptions/GwtSuperDev to work around a bug in GWT (GitHub issues [#34](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/34) and [#37](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/37))
+    * Added example with non-Maven layout
+    * Several cosmetic changes
+* Breaking changes
+    * 
+
+### 0.4 (2014-03-21)
+
+* Compatibility
     * Gradle 1.6+ (tested 1.6-1.11)
     * GWT 2.x (tested 2.6.0)
 * Resources
