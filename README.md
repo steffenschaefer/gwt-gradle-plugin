@@ -49,7 +49,7 @@ The following example shows the code to set up gwt-gradle-plugin for a GWT web a
     apply plugin: 'gwt'
 
     gwt {
-        gwtVersion='2.6.0'
+        gwtVersion='2.6.1'
         modules '<YOUR-GWT-MODULE>'
     }
     
