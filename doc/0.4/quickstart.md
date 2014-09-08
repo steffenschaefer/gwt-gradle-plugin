@@ -15,7 +15,7 @@ As it is not a core Gradle plugin, you have to ensure, that Gradle knows how to 
 buildscript {
     repositories {
         maven {
-            url 'https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/'
+            url 'http://dl.bintray.com/steffenschaefer/maven'
         }
         mavenCentral()
     }

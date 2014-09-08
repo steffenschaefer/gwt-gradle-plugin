@@ -17,7 +17,7 @@ The plugin is designed to work with the following principles in mind (but can be
 
 ## Where to get the plugin?
 
-Plugin binaries can be found in a Maven repository hosted at GitHub (URL: https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/). You can browse this repository [here](https://github.com/steffenschaefer/gwt-gradle-plugin/tree/maven-repo).
+Plugin binaries can be found in a Maven repository hosted at GitHub (URL: http://dl.bintray.com/steffenschaefer/maven). You can browse this repository [here](https://github.com/steffenschaefer/gwt-gradle-plugin/tree/maven-repo).
 
 To build a version on your own, simply run "gradle publish" in the root directory of the code repository. After the build finished, a directory named "repo" will appear. This directory is a maven repository containing the plugin binaries. You can copy this directory to your project and use it as local repository.
 
@@ -31,7 +31,7 @@ To configure your project to apply the plugin using the maven repository hosted 
 buildscript {
     repositories {
         maven {
-            url 'https://github.com/steffenschaefer/gwt-gradle-plugin/raw/maven-repo/'
+            url 'http://dl.bintray.com/steffenschaefer/maven'
         }
         mavenCentral()
     }
