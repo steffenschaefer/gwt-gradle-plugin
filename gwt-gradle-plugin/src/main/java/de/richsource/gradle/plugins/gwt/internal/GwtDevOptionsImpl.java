@@ -18,6 +18,7 @@ package de.richsource.gradle.plugins.gwt.internal;
 import java.io.File;
 
 import de.richsource.gradle.plugins.gwt.GwtDevOptions;
+import de.richsource.gradle.plugins.gwt.JsInteropMode;
 
 /**
  * Default implementation of {@link GwtDevOptions}.
@@ -34,6 +35,10 @@ public class GwtDevOptionsImpl implements GwtDevOptions {
 	private Boolean autoCodeServerPort;
 	private String server;
 	private String startupUrl;
+	private Boolean superDevMode;
+	private Boolean incremental;
+	private Boolean startServer;
+	private JsInteropMode jsInteropMode;
 
 	/** {@inheritDoc} */
 	@Override
@@ -165,5 +170,51 @@ public class GwtDevOptionsImpl implements GwtDevOptions {
 	@Override
 	public void setAutoCodeServerPort(Boolean autoCodeServerPort) {
 		this.autoCodeServerPort = autoCodeServerPort;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getSuperDevMode() {
+		return superDevMode;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void setSuperDevMode(Boolean superDevMode) {
+		this.superDevMode = superDevMode;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getIncremental() {
+		return incremental;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void setIncremental(Boolean incremental) {
+		this.incremental = incremental;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getStartServer() {
+		return startServer;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void setStartServer(Boolean startServer) {
+		this.startServer = startServer;
+	}
+	
+	@Override
+	public JsInteropMode getJsInteropMode() {
+		return jsInteropMode;
+	}
+	
+	@Override
+	public void setJsInteropMode(JsInteropMode jsInteropMode) {
+		this.jsInteropMode = jsInteropMode;
 	}
 }

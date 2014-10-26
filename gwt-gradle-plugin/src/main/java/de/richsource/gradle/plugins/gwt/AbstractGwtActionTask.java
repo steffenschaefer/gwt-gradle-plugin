@@ -134,6 +134,14 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 			args(arg);
 		}
 	}
+	
+	protected void argOnOff(Boolean condition, String onArg, String offArg) {
+		if (Boolean.TRUE.equals(condition)) {
+			args(onArg);
+		} else if (Boolean.FALSE.equals(condition)) {
+			args(offArg);
+		}
+	}
 
 	protected void dirArgIfSet(String arg, File dir) {
 		if (dir != null) {
