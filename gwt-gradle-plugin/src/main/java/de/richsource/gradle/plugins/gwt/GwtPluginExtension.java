@@ -42,6 +42,10 @@ public class GwtPluginExtension {
 	private List<String> modules = new ArrayList<String>();
 	private List<String> devModules = new ArrayList<String>();
 	private FileCollection src;
+	private String sourceLevel;
+
+	private Boolean incremental;
+	private JsInteropMode jsInteropMode;
 	
 	private String minHeapSize = "256M";
 	private String maxHeapSize = "256M";
@@ -207,5 +211,29 @@ public class GwtPluginExtension {
 
 	public void setSrc(FileCollection src) {
 		this.src = src;
+	}
+	
+	public String getSourceLevel() {
+		return sourceLevel;
+	}
+	
+	public void setSourceLevel(String sourceLevel) {
+		this.sourceLevel = sourceLevel;
+	}
+	
+	public Boolean getIncremental() {
+		return incremental;
+	}
+	
+	public void setIncremental(Boolean incremental) {
+		this.incremental = incremental;
+	}
+	
+	public JsInteropMode getJsInteropMode() {
+		return jsInteropMode;
+	}
+	
+	public void setJsInteropMode(JsInteropMode jsInteropMode) {
+		this.jsInteropMode = jsInteropMode;
 	}
 }

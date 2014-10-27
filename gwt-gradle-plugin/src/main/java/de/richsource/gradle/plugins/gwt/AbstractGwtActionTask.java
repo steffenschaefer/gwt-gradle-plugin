@@ -55,6 +55,12 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	
 	private boolean debug;
 	
+	private String sourceLevel;
+
+	private Boolean incremental;
+	
+	private JsInteropMode jsInteropMode;
+	
 	public AbstractGwtActionTask(String main) {
 		this.main = main;
 	}
@@ -86,6 +92,10 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 					classpath = getSrc().plus(classpath);
 				}
 				javaExecSpec.setClasspath(classpath);
+
+				argIfSet("-XjsInteropMode", getJsInteropMode());
+				argOnOff(getIncremental(), "-incremental", "-noincremental");
+				argIfSet("-sourceLevel", getSourceLevel());
 				
 				addArgs();
 				javaExecSpec.jvmArgs(jvmArgs);
@@ -238,5 +248,29 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+	}
+	
+	public String getSourceLevel() {
+		return sourceLevel;
+	}
+	
+	public void setSourceLevel(String sourceLevel) {
+		this.sourceLevel = sourceLevel;
+	}
+	
+	public Boolean getIncremental() {
+		return incremental;
+	}
+	
+	public void setIncremental(Boolean incremental) {
+		this.incremental = incremental;
+	}
+	
+	public JsInteropMode getJsInteropMode() {
+		return jsInteropMode;
+	}
+	
+	public void setJsInteropMode(JsInteropMode jsInteropMode) {
+		this.jsInteropMode = jsInteropMode;
 	}
 }

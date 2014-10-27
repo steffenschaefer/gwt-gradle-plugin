@@ -134,15 +134,6 @@ public interface GwtDevOptions {
 	 */
 	void setSuperDevMode(Boolean superDevMode);
 	
-	Boolean getIncremental();
-	
-	/**
-	 * Is set to true, this causes the "-incremental" (added in GWT 2.7) flag to be added.
-	 * 
-	 * @param incremental
-	 */
-	void setIncremental(Boolean incremental);
-	
 	Boolean getStartServer();
 	
 	/**
@@ -151,14 +142,4 @@ public interface GwtDevOptions {
 	 * @param startServer
 	 */
 	void setStartServer(Boolean startServer);
-	
-	JsInteropMode getJsInteropMode();
-	
-	/**
-	 * Is set, this causes the "-XjsInteropMode" (added in GWT 2.7) flag to be added.
-	 * 
-	 * @param jsInteropMode
-	 */
-	void setJsInteropMode(JsInteropMode jsInteropMode);
-
 }

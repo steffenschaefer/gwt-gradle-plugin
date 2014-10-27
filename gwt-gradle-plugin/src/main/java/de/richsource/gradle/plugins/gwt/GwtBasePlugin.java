@@ -273,6 +273,24 @@ public class GwtBasePlugin implements Plugin<Project> {
 						return extension.getMaxHeapSize();
 					}
 				});
+				conventionMapping.map("sourceLevel", new Callable<String>() {
+					@Override
+					public String call() throws Exception {
+						return extension.getSourceLevel();
+					}
+				});
+				conventionMapping.map("incremental", new Callable<Boolean>() {
+					@Override
+					public Boolean call() throws Exception {
+						return extension.getIncremental();
+					}
+				});
+				conventionMapping.map("jsInteropMode", new Callable<JsInteropMode>() {
+					@Override
+					public JsInteropMode call() throws Exception {
+						return extension.getJsInteropMode();
+					}
+				});
 			}});
 	}
 	
