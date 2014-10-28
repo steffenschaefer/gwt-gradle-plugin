@@ -20,6 +20,9 @@ dependencies {
 	def cargoVersion = '1.4.4'
 	cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
 		  "org.codehaus.cargo:cargo-ant:$cargoVersion"
+	
+	// Needed for Legacy SuperDevMode
+//	gwt files('etc/superdevmode-launcher-legacy.jar')
 }
 
 gwt {
@@ -28,10 +31,17 @@ gwt {
 	modules 'de.richsource.gradle.plugins.gwt.example.Example'
 	devModules 'de.richsource.gradle.plugins.gwt.example.ExampleDev'
 	
+	maxHeapSize = "1024M"
+	
 	superDev {
 		noPrecompile=true
 	}
 }
+
+// Needed for Legacy SuperDevMode
+//gwtDev {
+//	args '-superDevMode'
+//}
 
 cargo {
 	containerId = 'jetty9x'
