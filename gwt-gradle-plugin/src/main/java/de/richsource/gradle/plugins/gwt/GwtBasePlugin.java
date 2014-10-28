@@ -222,6 +222,9 @@ public class GwtBasePlugin implements Plugin<Project> {
 					public File call() throws Exception {
 						return extension.getCacheDir();
 					}});
+				// TODO logLevel was introduced to CodeServer in GWT 2.7
+				// To not break compatibility with previous versions the conventionMapping is not applied for gwtSuperDev task
+				// There should be GWT version depending configuration
 				conventionMapping.map("logLevel", new Callable<LogLevel>(){
 					@Override
 					public LogLevel call() throws Exception {

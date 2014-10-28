@@ -56,6 +56,11 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 		argIfSet("-bindAddress", getBindAddress());
 		argIfSet("-port", getPort());
 		argIfEnabled(getNoPrecompile(), "-noprecompile");
+		argOnOff(getAllowMissingSrc(), "-allowMissingSrc", "-noallowMissingSrc");
+		argOnOff(getFailOnError(), "-failOnError", "-nofailOnError");
+		argOnOff(getCompileTest(), "-compileTest", "-nocompileTest");
+		argIfSet("-compileTestRecompiles", getCompileTestRecompiles());
+		argIfSet("-launcherDir", getLauncherDir());
 	}
 	
 	protected void configure(final GwtSuperDevOptions options) {
@@ -82,6 +87,36 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 			@Override
 			public Boolean call() throws Exception {
 				return options.getUseClasspathForSrc();
+			}
+		});
+		conventionMapping.map("allowMissingSrc", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getAllowMissingSrc();
+			}
+		});
+		conventionMapping.map("failOnError", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getFailOnError();
+			}
+		});
+		conventionMapping.map("compileTest", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getCompileTest();
+			}
+		});
+		conventionMapping.map("compileTestRecompiles", new Callable<Integer>() {
+			@Override
+			public Integer call() throws Exception {
+				return options.getCompileTestRecompiles();
+			}
+		});
+		conventionMapping.map("launcherDir", new Callable<File>() {
+			@Override
+			public File call() throws Exception {
+				return options.getLauncherDir();
 			}
 		});
 	}
@@ -149,5 +184,65 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 	@Override
 	public Boolean getUseClasspathForSrc() {
 		return options.getUseClasspathForSrc();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setLauncherDir(File launcherDir) {
+		options.setLauncherDir(launcherDir);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getLauncherDir() {
+		return options.getLauncherDir();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCompileTestRecompiles(Integer compileTestRecompiles) {
+		options.setCompileTestRecompiles(compileTestRecompiles);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Integer getCompileTestRecompiles() {
+		return options.getCompileTestRecompiles();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCompileTest(Boolean compileTest) {
+		options.setCompileTest(compileTest);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getCompileTest() {
+		return options.getCompileTest();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFailOnError(Boolean failOnError) {
+		options.setFailOnError(failOnError);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getFailOnError() {
+		return options.getFailOnError();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAllowMissingSrc(Boolean allowMissingSrc) {
+		options.setAllowMissingSrc(allowMissingSrc);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getAllowMissingSrc() {
+		return options.getAllowMissingSrc();
 	}
 }

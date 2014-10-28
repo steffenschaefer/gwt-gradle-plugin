@@ -29,6 +29,11 @@ public class GwtSuperDevOptionsImpl implements GwtSuperDevOptions {
 	private Integer port;
 	private Boolean noPrecompile;
 	private Boolean useClasspathForSrc;
+	private Boolean allowMissingSrc;
+	private Boolean failOnError;
+	private Boolean compileTest;
+	private Integer compileTestRecompiles;
+	private File launcherDir;
 
 	/** {@inheritDoc} */
 	@Override
@@ -88,5 +93,65 @@ public class GwtSuperDevOptionsImpl implements GwtSuperDevOptions {
 	@Override
 	public Boolean getUseClasspathForSrc() {
 		return useClasspathForSrc;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getAllowMissingSrc() {
+		return allowMissingSrc;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAllowMissingSrc(Boolean allowMissingSrc) {
+		this.allowMissingSrc = allowMissingSrc;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getFailOnError() {
+		return failOnError;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFailOnError(Boolean failOnError) {
+		this.failOnError = failOnError;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getCompileTest() {
+		return compileTest;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCompileTest(Boolean compileTest) {
+		this.compileTest = compileTest;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Integer getCompileTestRecompiles() {
+		return compileTestRecompiles;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCompileTestRecompiles(Integer compileTestRecompiles) {
+		this.compileTestRecompiles = compileTestRecompiles;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getLauncherDir() {
+		return launcherDir;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setLauncherDir(File launcherDir) {
+		this.launcherDir = launcherDir;
 	}
 }

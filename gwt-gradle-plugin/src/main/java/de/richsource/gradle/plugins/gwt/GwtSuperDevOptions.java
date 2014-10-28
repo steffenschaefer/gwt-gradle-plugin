@@ -82,4 +82,24 @@ public interface GwtSuperDevOptions {
 
 	Boolean getUseClasspathForSrc();
 
+	public abstract void setLauncherDir(File launcherDir);
+
+	public abstract File getLauncherDir();
+
+	public abstract void setCompileTestRecompiles(Integer compileTestRecompiles);
+
+	public abstract Integer getCompileTestRecompiles();
+
+	public abstract void setCompileTest(Boolean compileTest);
+
+	public abstract Boolean getCompileTest();
+
+	public abstract void setFailOnError(Boolean failOnError);
+
+	public abstract Boolean getFailOnError();
+
+	public abstract void setAllowMissingSrc(Boolean allowMissingSrc);
+
+	public abstract Boolean getAllowMissingSrc();
+
 }

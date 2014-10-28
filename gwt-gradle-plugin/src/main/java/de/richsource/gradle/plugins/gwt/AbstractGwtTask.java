@@ -31,7 +31,6 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 	private File workDir;
 	private File gen;
 	private File cacheDir;
-	private LogLevel logLevel;
 	
 	@Override
 	protected void addArgs() {
@@ -40,8 +39,6 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 		dirArgIfSet("-extra", getExtra());
 		dirArgIfSet("-workDir", getWorkDir());
 		dirArgIfSet("-gen", getGen());
-		
-		argIfSet("-logLevel", getLogLevel());
 		
 		final File cacheDir = getCacheDir();
 		if(cacheDir != null) {
@@ -127,18 +124,5 @@ public abstract class AbstractGwtTask extends AbstractGwtActionTask {
 	 */
 	public void setCacheDir(File cacheDir) {
 		this.cacheDir = cacheDir;
-	}
-
-	public LogLevel getLogLevel() {
-		return logLevel;
-	}
-
-	/**
-	 * Sets the {@link LogLevel} for this task.
-	 * 
-	 * @param logLevel the log level to set
-	 */
-	public void setLogLevel(LogLevel logLevel) {
-		this.logLevel = logLevel;
 	}
 }

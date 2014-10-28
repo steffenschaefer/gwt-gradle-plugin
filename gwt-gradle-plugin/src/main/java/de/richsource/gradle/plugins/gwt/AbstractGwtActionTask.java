@@ -55,6 +55,8 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	
 	private boolean debug;
 	
+	private LogLevel logLevel;
+	
 	private String sourceLevel;
 
 	private Boolean incremental;
@@ -96,6 +98,7 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 				argIfSet("-XjsInteropMode", getJsInteropMode());
 				argOnOff(getIncremental(), "-incremental", "-noincremental");
 				argIfSet("-sourceLevel", getSourceLevel());
+				argIfSet("-logLevel", getLogLevel());
 				
 				addArgs();
 				javaExecSpec.jvmArgs(jvmArgs);
@@ -248,6 +251,19 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	 */
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+	}
+
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+
+	/**
+	 * Sets the {@link LogLevel} for this task.
+	 * 
+	 * @param logLevel the log level to set
+	 */
+	public void setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
 	}
 	
 	public String getSourceLevel() {
