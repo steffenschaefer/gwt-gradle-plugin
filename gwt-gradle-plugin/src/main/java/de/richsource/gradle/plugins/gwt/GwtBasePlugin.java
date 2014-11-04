@@ -22,7 +22,6 @@ import java.util.concurrent.Callable;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
@@ -342,9 +341,9 @@ public class GwtBasePlugin implements Plugin<Project> {
 				final GwtTestExtension testExtension = testTask.getExtensions().create("gwt", GwtTestExtension.class);
 				testExtension.configure(gwtPluginExtension, (IConventionAware) testExtension);
 				
-				testTask.doFirst(new Action<Task>() {
+				project.afterEvaluate(new Action<Project>() {
 					@Override
-					public void execute(Task arg0) {
+					public void execute(Project t) {
 						String gwtArgs = testExtension.getParameterString();
 						testTask.systemProperty("gwt.args", gwtArgs);
 						logger.info("Using gwt.args for test: "+ gwtArgs);
