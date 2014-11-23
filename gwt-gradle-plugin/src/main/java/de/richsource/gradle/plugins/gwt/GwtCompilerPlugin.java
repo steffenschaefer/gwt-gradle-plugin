@@ -19,6 +19,7 @@ import java.io.File;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPlugin;
 
 public class GwtCompilerPlugin implements Plugin<Project> {
@@ -27,6 +28,7 @@ public class GwtCompilerPlugin implements Plugin<Project> {
 	
 	public static final String TASK_COMPILE_GWT = "compileGwt";
 	public static final String TASK_DRAFT_COMPILE_GWT = "draftCompileGwt";
+	public static final String TASK_CHECK = "checkGwt";
 
 	@Override
 	public void apply(final Project project) {
@@ -43,5 +45,10 @@ public class GwtCompilerPlugin implements Plugin<Project> {
 		draftCompileTask.setWar(new File(gwtBuildDir, DRAFT_OUT_DIR));
 		draftCompileTask.setDescription("Runs the GWT compiler to produce draft quality output used for development");
 		draftCompileTask.dependsOn(JavaPlugin.COMPILE_JAVA_TASK_NAME, JavaPlugin.PROCESS_RESOURCES_TASK_NAME);
+		
+		final GwtCheck gwtCheck = project.getTasks().create(TASK_CHECK, GwtCheck.class);
+		gwtCheck.setDescription("Runs the GWT compiler to validate the relevant sources");
+		gwtCheck.dependsOn(JavaPlugin.COMPILE_JAVA_TASK_NAME, JavaPlugin.PROCESS_RESOURCES_TASK_NAME);
+		gwtCheck.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
 	}
 }

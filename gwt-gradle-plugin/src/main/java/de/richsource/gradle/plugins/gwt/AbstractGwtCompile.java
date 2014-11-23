@@ -21,7 +21,6 @@ import java.util.concurrent.Callable;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
-import org.gradle.api.tasks.OutputDirectory;
 
 import de.richsource.gradle.plugins.gwt.internal.GwtCompileOptionsImpl;
 
@@ -76,13 +75,6 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 				return options.getLocalWorkers();
 			}
 		});
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	@OutputDirectory
-	public File getWar() {
-		return super.getWar();
 	}
 
 	/** {@inheritDoc} */

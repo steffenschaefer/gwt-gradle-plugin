@@ -15,22 +15,26 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
-import java.io.File;
-
-import org.gradle.api.tasks.OutputDirectory;
+import org.gradle.api.Task;
+import org.gradle.api.specs.Spec;
 
 /**
- * Task to run the GWT compiler for development quality output.
+ * Task to run the GWT compiler for validation only so that no JavaScript output is produced.
  */
-public class GwtDraftCompile extends AbstractGwtCompile {
-	public GwtDraftCompile() {
-		setDraftCompile(true);
+public class GwtCheck extends AbstractGwtCompile {
+	public GwtCheck() {
+		setValidateOnly(true);
+		
+		getOutputs().upToDateWhen(new Spec<Task>(){
+			@Override
+			public boolean isSatisfiedBy(Task task) {
+				return false;
+			}});
 	}
-
+	
 	/** {@inheritDoc} */
 	@Override
-	@OutputDirectory
-	public File getWar() {
-		return super.getWar();
+	protected boolean isDevTask() {
+		return false;
 	}
 }
