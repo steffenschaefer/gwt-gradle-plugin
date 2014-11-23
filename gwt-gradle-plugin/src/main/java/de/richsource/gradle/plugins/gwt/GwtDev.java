@@ -29,6 +29,8 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	
 	private final GwtDevOptions options = new GwtDevOptionsImpl();
 	
+	private String modulePathPrefix;
+	
 	public GwtDev() {
 		super("com.google.gwt.dev.DevMode");
 		
@@ -54,9 +56,11 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 		argIfSet("-startupUrl", getStartupUrl());
 		argOnOff(getSuperDevMode(), "-superDevMode", "-nosuperDevMode");
 		argOnOff(getStartServer(), "-startServer", "-nostartServer");
+		argIfSet("-modulePathPrefix", getModulePathPrefix());
 	}
 	
-	protected void configure(final GwtDevOptions options) {
+	protected void configure(final GwtPluginExtension gwtPluginExtension) {
+		final GwtDevOptions options = gwtPluginExtension.getDev();
 		ConventionMapping conventionMapping =((IConventionAware)this).getConventionMapping();
 		conventionMapping.map("noserver", new Callable<Boolean>() {
 			@Override
@@ -134,6 +138,12 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 			@Override
 			public Boolean call() throws Exception {
 				return options.getStartServer();
+			}
+		});
+		conventionMapping.map("modulePathPrefix", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return gwtPluginExtension.getModulePathPrefix();
 			}
 		});
 	}
@@ -292,5 +302,18 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	@Override
 	public void setStartServer(Boolean startServer) {
 		options.setStartServer(startServer);
+	}
+
+	public String getModulePathPrefix() {
+		return modulePathPrefix;
+	}
+
+	/**
+	 * Sets the "-modulePathPrefix" parameter introduced in GWT 2.7.
+	 * 
+	 * @param modulePathPrefix the path prefix where the GWT modules are located relative to the war root.
+	 */
+	public void setModulePathPrefix(String modulePathPrefix) {
+		this.modulePathPrefix = modulePathPrefix;
 	}
 }

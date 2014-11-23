@@ -18,8 +18,10 @@ package de.richsource.gradle.plugins.gwt;
 import java.io.File;
 import java.util.concurrent.Callable;
 
+import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.IConventionAware;
 import org.gradle.api.logging.Logger;
@@ -30,6 +32,8 @@ import org.gradle.api.plugins.WarPlugin;
 import org.gradle.api.plugins.WarPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.bundling.War;
+
+import de.richsource.gradle.plugins.gwt.internal.ActionClosure;
 
 public class GwtWarPlugin implements Plugin<Project> {
 
@@ -59,7 +63,28 @@ public class GwtWarPlugin implements Plugin<Project> {
 		
 		logger.debug("Configuring war plugin with GWT settings");
 
-		warTask.from(compileTask.getOutputs());
+		project.afterEvaluate(new Action<Project>() {
+			@Override
+			public void execute(Project t) {
+				String modulePathPrefix = extension.getModulePathPrefix();
+				if(modulePathPrefix == null || modulePathPrefix.isEmpty()) {
+					warTask.from(compileTask.getOutputs());
+					return;
+				}
+				
+				warTask.into(modulePathPrefix == null ? "" : modulePathPrefix, (new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
+					@Override
+					public void execute(CopySpec spec) {
+						spec.from(compileTask.getOutputs());
+						spec.exclude("WEB-INF");
+					}})));
+				warTask.into("", (new ActionClosure<CopySpec>(this, new Action<CopySpec>(){
+					@Override
+					public void execute(CopySpec spec) {
+						spec.from(compileTask.getOutputs());
+						spec.include("WEB-INF");
+					}})));
+			}});
 		
 		final WarPluginConvention warPluginConvention = (WarPluginConvention) project.getConvention().getPlugins().get("war");
 

@@ -43,6 +43,7 @@ public class GwtPluginExtension {
 	private List<String> devModules = new ArrayList<String>();
 	private FileCollection src;
 	private String sourceLevel;
+	private String modulePathPrefix;
 
 	private Boolean incremental;
 	private JsInteropMode jsInteropMode;
@@ -235,5 +236,13 @@ public class GwtPluginExtension {
 	
 	public void setJsInteropMode(JsInteropMode jsInteropMode) {
 		this.jsInteropMode = jsInteropMode;
+	}
+
+	public String getModulePathPrefix() {
+		return modulePathPrefix;
+	}
+
+	public void setModulePathPrefix(String modulePathPrefix) {
+		this.modulePathPrefix = modulePathPrefix;
 	}
 }

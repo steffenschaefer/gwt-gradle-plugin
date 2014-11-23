@@ -310,7 +310,7 @@ public class GwtBasePlugin implements Plugin<Project> {
 		project.getTasks().withType(GwtDev.class, new Action<GwtDev>() {
 			@Override
 			public void execute(final GwtDev task) {
-				task.configure(extension.getDev());
+				task.configure(extension);
 				task.setDebug(debug);
 			}
 		});
