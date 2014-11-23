@@ -26,7 +26,7 @@ dependencies {
 }
 
 gwt {
-	gwtVersion='2.6.1'
+	gwtVersion='2.7.0'
 
 	modules 'de.richsource.gradle.plugins.gwt.example.Example'
 	devModules 'de.richsource.gradle.plugins.gwt.example.ExampleDev'
