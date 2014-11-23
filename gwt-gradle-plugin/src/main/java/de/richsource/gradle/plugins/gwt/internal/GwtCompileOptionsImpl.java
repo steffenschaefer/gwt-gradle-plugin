@@ -15,7 +15,10 @@
  */
 package de.richsource.gradle.plugins.gwt.internal;
 
+import java.io.File;
+
 import de.richsource.gradle.plugins.gwt.GwtCompileOptions;
+import de.richsource.gradle.plugins.gwt.Namespace;
 import de.richsource.gradle.plugins.gwt.Style;
 
 
@@ -50,6 +53,13 @@ public class GwtCompileOptionsImpl implements GwtCompileOptions {
 	private Boolean enableClosureCompiler;
 	// -XfragmentCount
 	private Integer fragmentCount;
+	private File missingDepsFile;
+	private Namespace namespace;
+	private Boolean enforceStrictResources;
+	private Boolean incrementalCompileWarnings;
+	private Boolean overlappingSourceWarnings;
+	private Boolean saveSource;
+	private File saveSourceOutput;
 
 	/** {@inheritDoc} */
 	@Override
@@ -266,5 +276,89 @@ public class GwtCompileOptionsImpl implements GwtCompileOptions {
 	@Override
 	public void setFragmentCount(Integer fragmentCount) {
 		this.fragmentCount = fragmentCount;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getMissingDepsFile() {
+		return missingDepsFile;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setMissingDepsFile(File missingDepsFile) {
+		this.missingDepsFile = missingDepsFile;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Namespace getNamespace() {
+		return namespace;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setNamespace(Namespace namespace) {
+		this.namespace = namespace;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getEnforceStrictResources() {
+		return enforceStrictResources;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setEnforceStrictResources(Boolean enforceStrictResources) {
+		this.enforceStrictResources = enforceStrictResources;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getIncrementalCompileWarnings() {
+		return incrementalCompileWarnings;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setIncrementalCompileWarnings(Boolean incrementalCompileWarnings) {
+		this.incrementalCompileWarnings = incrementalCompileWarnings;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getOverlappingSourceWarnings() {
+		return overlappingSourceWarnings;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setOverlappingSourceWarnings(Boolean overlappingSourceWarnings) {
+		this.overlappingSourceWarnings = overlappingSourceWarnings;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getSaveSource() {
+		return saveSource;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSaveSource(Boolean saveSource) {
+		this.saveSource = saveSource;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getSaveSourceOutput() {
+		return saveSourceOutput;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSaveSourceOutput(File saveSourceOutput) {
+		this.saveSourceOutput = saveSourceOutput;
 	}
 }

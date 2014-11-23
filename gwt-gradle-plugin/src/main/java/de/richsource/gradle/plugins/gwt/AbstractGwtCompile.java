@@ -60,6 +60,13 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 		argIfEnabled(getDisableSoycHtml(), "-XdisableSoycHtml");
 		argIfEnabled(getEnableClosureCompiler(), "-XenableClosureCompiler");
 		argIfSet("-XfragmentCount", getFragmentCount());
+		argIfSet("-missingDepsFile ", getMissingDepsFile());
+		argIfSet("-Xnamespace  ", getNamespace());
+		argOnOff(getEnforceStrictResources(), "-XenforceStrictResources", "-XnoenforceStrictResources");
+		argOnOff(getIncrementalCompileWarnings(), "-incrementalCompileWarnings", "-noincrementalCompileWarnings");
+		argOnOff(getOverlappingSourceWarnings(), "-overlappingSourceWarnings", "-nooverlappingSourceWarnings");
+		argOnOff(getSaveSource(), "-saveSource", "-nosaveSource");
+		argIfSet("-saveSourceOutput", getSaveSourceOutput());
 	}
 	
 	protected void configure(final GwtCompileOptions options) {
@@ -327,5 +334,89 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 	@Override
 	public void setFragmentCount(Integer fragmentCount) {
 		options.setFragmentCount(fragmentCount);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getMissingDepsFile() {
+		return options.getMissingDepsFile();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setMissingDepsFile(File missingDepsFile) {
+		options.setMissingDepsFile(missingDepsFile);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Namespace getNamespace() {
+		return options.getNamespace();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setNamespace(Namespace namespace) {
+		options.setNamespace(namespace);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getEnforceStrictResources() {
+		return options.getEnforceStrictResources();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setEnforceStrictResources(Boolean enforceStrictResources) {
+		options.setEnforceStrictResources(enforceStrictResources);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getIncrementalCompileWarnings() {
+		return options.getIncrementalCompileWarnings();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setIncrementalCompileWarnings(Boolean incrementalCompileWarnings) {
+		options.setIncrementalCompileWarnings(incrementalCompileWarnings);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getOverlappingSourceWarnings() {
+		return options.getOverlappingSourceWarnings();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setOverlappingSourceWarnings(Boolean overlappingSourceWarnings) {
+		options.setOverlappingSourceWarnings(overlappingSourceWarnings);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getSaveSource() {
+		return options.getSaveSource();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSaveSource(Boolean saveSource) {
+		options.setSaveSource(saveSource);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public File getSaveSourceOutput() {
+		return options.getSaveSourceOutput();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSaveSourceOutput(File saveSourceOutput) {
+		options.setSaveSourceOutput(saveSourceOutput);
 	}
 }

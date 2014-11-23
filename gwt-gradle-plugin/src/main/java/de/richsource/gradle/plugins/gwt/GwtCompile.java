@@ -15,6 +15,7 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
+import java.io.File;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.internal.ConventionMapping;
@@ -135,6 +136,48 @@ public class GwtCompile extends AbstractGwtCompile {
 			@Override
 			public Integer call() throws Exception {
 				return options.getFragmentCount();
+			}
+		});
+		conventionMapping.map("missingDepsFile", new Callable<File>() {
+			@Override
+			public File call() throws Exception {
+				return options.getMissingDepsFile();
+			}
+		});
+		conventionMapping.map("namespace", new Callable<Namespace>() {
+			@Override
+			public Namespace call() throws Exception {
+				return options.getNamespace();
+			}
+		});
+		conventionMapping.map("enforceStrictResources", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getEnforceStrictResources();
+			}
+		});
+		conventionMapping.map("incrementalCompileWarnings", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getIncrementalCompileWarnings();
+			}
+		});
+		conventionMapping.map("overlappingSourceWarnings", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getOverlappingSourceWarnings();
+			}
+		});
+		conventionMapping.map("saveSource", new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				return options.getSaveSource();
+			}
+		});
+		conventionMapping.map("saveSourceOutput", new Callable<File>() {
+			@Override
+			public File call() throws Exception {
+				return options.getSaveSourceOutput();
 			}
 		});
 	}

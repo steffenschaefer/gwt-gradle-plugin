@@ -15,6 +15,8 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
+import java.io.File;
+
 
 /**
  * Defines the options known by the {@link GwtCompile} and {@link GwtDraftCompile} tasks.
@@ -183,4 +185,52 @@ public interface GwtCompileOptions {
 	 */
 	void setFragmentCount(Integer fragmentCount);
 
+	File getMissingDepsFile();
+
+	/**
+	 * @param missingDepsFile the missingDepsFile to set
+	 */
+	void setMissingDepsFile(File missingDepsFile);
+
+	Namespace getNamespace();
+
+	/**
+	 * @param namespace the namespace to set
+	 */
+	void setNamespace(Namespace namespace);
+
+	Boolean getEnforceStrictResources();
+
+	/**
+	 * @param enforceStrictResources the enforceStrictResources to set
+	 */
+	void setEnforceStrictResources(Boolean enforceStrictResources);
+
+	Boolean getIncrementalCompileWarnings();
+
+	/**
+	 * @param incrementalCompileWarnings the incrementalCompileWarnings to set
+	 */
+	void setIncrementalCompileWarnings(Boolean incrementalCompileWarnings);
+
+	Boolean getOverlappingSourceWarnings();
+
+	/**
+	 * @param overlappingSourceWarnings the overlappingSourceWarnings to set
+	 */
+	void setOverlappingSourceWarnings(Boolean overlappingSourceWarnings);
+
+	Boolean getSaveSource();
+
+	/**
+	 * @param saveSource the saveSource to set
+	 */
+	void setSaveSource(Boolean saveSource);
+
+	File getSaveSourceOutput();
+
+	/**
+	 * @param saveSourceOutput the saveSourceOutput to set
+	 */
+	void setSaveSourceOutput(File saveSourceOutput);
 }
