@@ -142,4 +142,13 @@ public interface GwtDevOptions {
 	 * @param startServer
 	 */
 	void setStartServer(Boolean startServer);
+	
+	MethodNameDisplayMode getMethodNameDisplayMode();
+	
+	/**
+	 * If set to true, this causes the "-XmethodNameDisplayMode" (added in GWT 2.7) parameter to be added.
+	 * 
+	 * @param methodNameDisplayMode
+	 */
+	void setMethodNameDisplayMode(MethodNameDisplayMode methodNameDisplayMode);
 }
