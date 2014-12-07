@@ -5,6 +5,19 @@ title :  "Version history"
 
 ## Versions
 
+### 0.5 (2014-12-07)
+
+* Compatibility
+    * Gradle 1.6+ (tested 2.0 - 2.1)
+    * GWT 2.x (tested 2.7.0)
+* Resources
+    * [Documentation](doc/0.6/)
+    * [JavaDocs](doc/0.6/javadoc/)
+* Changes/fixes
+    * Added new flags introduced in GWT 2.7 and 2.6 ([GitHub issue #55](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/55))
+    * Added new task 'checkGwt' for validation of GWT sources (GitHub issues [#58](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/58)
+    * Fixed configuration of test task for GWT (GitHub issues [#57](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/57)
+
 ### 0.5 (2014-09-08)
 
 * Compatibility
@@ -18,8 +31,6 @@ title :  "Version history"
     * Added new Flag 'useClasspathForSrc' to GwtSuperDevOptions/GwtSuperDev to work around a bug in GWT (GitHub issues [#34](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/34) and [#37](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/37))
     * Added example with non-Maven layout
     * Several cosmetic changes
-* Breaking changes
-    * 
 
 ### 0.4 (2014-03-21)
 

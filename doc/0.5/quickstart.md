@@ -20,7 +20,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.4'
+        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.5'
     }
 }
 {% endhighlight %}
