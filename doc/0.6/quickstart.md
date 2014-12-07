@@ -14,13 +14,22 @@ As it is not a core Gradle plugin, you have to ensure, that Gradle knows how to 
 {% highlight groovy linenos=table %}
 buildscript {
     repositories {
-        maven {
-            url 'http://dl.bintray.com/steffenschaefer/maven'
-        }
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+    }
+}
+{% endhighlight %}
+
+If you do not want to use [Bintray's JCenter](http://jcenter.bintray.com) repository, you can also use the following repository that only contains the plugin itself:
+
+{% highlight groovy linenos=table %}
+buildscript {
+    repositories {
+        maven {
+            url 'http://dl.bintray.com/steffenschaefer/maven'
+        }
     }
 }
 {% endhighlight %}
