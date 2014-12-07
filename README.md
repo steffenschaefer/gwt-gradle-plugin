@@ -41,7 +41,7 @@ The following example shows the code to set up gwt-gradle-plugin for a GWT web a
             mavenCentral()
         }
         dependencies {
-            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.5'
+            classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
         }
     }
 
