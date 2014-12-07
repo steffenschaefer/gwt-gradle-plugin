@@ -35,10 +35,11 @@ The following example shows the code to set up gwt-gradle-plugin for a GWT web a
 
     buildscript {
         repositories {
-            maven {
-                url 'http://dl.bintray.com/steffenschaefer/maven'
-            }
-            mavenCentral()
+            jcenter()
+            // Alternatively use:
+    //        maven {
+	//            url 'http://dl.bintray.com/steffenschaefer/maven'
+	//        }
         }
         dependencies {
             classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
