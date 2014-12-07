@@ -15,8 +15,8 @@ title :  "Version history"
     * [JavaDocs](doc/0.6/javadoc/)
 * Changes/fixes
     * Added new flags introduced in GWT 2.7 and 2.6 ([GitHub issue #55](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/55))
-    * Added new task 'checkGwt' for validation of GWT sources (GitHub issues [#58](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/58)
-    * Fixed configuration of test task for GWT (GitHub issues [#57](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/57)
+    * Added new task 'checkGwt' for validation of GWT sources ([GitHub issue #58](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/58))
+    * Fixed configuration of test task for GWT ([GitHub issue #57](https://github.com/steffenschaefer/gwt-gradle-plugin/issues/57))
 
 ### 0.5 (2014-09-08)
 
