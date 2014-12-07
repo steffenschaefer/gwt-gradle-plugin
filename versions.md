@@ -5,7 +5,7 @@ title :  "Version history"
 
 ## Versions
 
-### 0.5 (2014-12-07)
+### 0.6 (2014-12-07)
 
 * Compatibility
     * Gradle 1.6+ (tested 2.0 - 2.1)
