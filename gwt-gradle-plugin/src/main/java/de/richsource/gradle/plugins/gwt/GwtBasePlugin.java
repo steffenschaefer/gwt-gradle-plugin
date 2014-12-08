@@ -263,6 +263,12 @@ public class GwtBasePlugin implements Plugin<Project> {
 						return mainSourceSet.getCompileClasspath().plus(project.files(mainSourceSet.getOutput().getClassesDir()));
 					}
 				});
+				conventionMapping.map("extraJvmArgs", new Callable<String>() {
+					@Override
+					public String call() throws Exception {
+						return extension.getExtraJvmArgs();
+					}
+				});
 				conventionMapping.map("minHeapSize", new Callable<String>() {
 					@Override
 					public String call() throws Exception {

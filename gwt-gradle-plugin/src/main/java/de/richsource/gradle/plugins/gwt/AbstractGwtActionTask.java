@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
@@ -50,9 +52,11 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	private final String main;
 	
 	private List<Object> args = new ArrayList<Object>();
-	
+
+	private String extraJvmArgs;
+
 	private List<Object> jvmArgs = new ArrayList<Object>();
-	
+
 	private boolean debug;
 	
 	private LogLevel logLevel;
@@ -99,8 +103,10 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 				argOnOff(getIncremental(), "-incremental", "-noincremental");
 				argIfSet("-sourceLevel", getSourceLevel());
 				argIfSet("-logLevel", getLogLevel());
-				
+
+				addExtraJvmArgs();
 				addArgs();
+
 				javaExecSpec.jvmArgs(jvmArgs);
 				javaExecSpec.args(args);
 				// the module names are expected to be the last parameters
@@ -108,6 +114,12 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 			}
 		}));
 		execResult.assertNormalExitValue().rethrowFailure();
+	}
+
+	private void addExtraJvmArgs() {
+		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(getExtraJvmArgs());
+		while (m.find())
+			this.jvmArgs.add(m.group(1));
 	}
 
 	/**
@@ -238,6 +250,14 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	 */
 	public void setMaxHeapSize(String maxHeapSize) {
 		this.maxHeapSize = maxHeapSize;
+	}
+
+	public String getExtraJvmArgs() {
+		return extraJvmArgs;
+	}
+
+	public void setExtraJvmArgs(String value) {
+		extraJvmArgs = value;
 	}
 
 	public boolean isDebug() {

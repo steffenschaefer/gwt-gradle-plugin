@@ -47,7 +47,8 @@ public class GwtPluginExtension {
 
 	private Boolean incremental;
 	private JsInteropMode jsInteropMode;
-	
+
+	private String extraJvmArgs = "";
 	private String minHeapSize = "256M";
 	private String maxHeapSize = "256M";
 	
@@ -152,6 +153,14 @@ public class GwtPluginExtension {
 
 	public void setLogLevel(LogLevel logLevel) {
 		this.logLevel = logLevel;
+	}
+
+	public String getExtraJvmArgs() {
+		return extraJvmArgs;
+	}
+
+	public void setExtraJvmArgs(String extraJvmArgs) {
+		this.extraJvmArgs = extraJvmArgs;
 	}
 
 	public String getMinHeapSize() {
