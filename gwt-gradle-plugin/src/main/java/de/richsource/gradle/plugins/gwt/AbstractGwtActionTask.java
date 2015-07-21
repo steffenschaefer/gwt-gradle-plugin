@@ -94,7 +94,12 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 				if (prependSrcToClasspath()) {
 					classpath = getSrc().plus(classpath);
 				}
-				javaExecSpec.setClasspath(classpath);
+
+				if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+					javaExecSpec.environment("CLASSPATH", classpath.getAsPath());
+				} else {
+					javaExecSpec.setClasspath(classpath);
+				}
 
 				argIfSet("-XjsInteropMode", getJsInteropMode());
 				argOnOff(getGenerateJsInteropExports(), "-generateJsInteropExports", "-nogenerateJsInteropExports");
