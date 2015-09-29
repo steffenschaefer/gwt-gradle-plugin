@@ -16,6 +16,9 @@
 package de.richsource.gradle.plugins.gwt.internal;
 
 import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.richsource.gradle.plugins.gwt.GwtCompileOptions;
 import de.richsource.gradle.plugins.gwt.Namespace;
@@ -60,6 +63,8 @@ public class GwtCompileOptionsImpl implements GwtCompileOptions {
 	private Boolean overlappingSourceWarnings;
 	private Boolean saveSource;
 	private File saveSourceOutput;
+
+	private List<Object> jvmArgs = new ArrayList<Object>();
 
 	/** {@inheritDoc} */
 	@Override
@@ -361,4 +366,15 @@ public class GwtCompileOptionsImpl implements GwtCompileOptions {
 	public void setSaveSourceOutput(File saveSourceOutput) {
 		this.saveSourceOutput = saveSourceOutput;
 	}
+
+	@Override
+	public List<Object> getJvmArgs() {
+	    return jvmArgs;
+	}
+
+	@Override
+	public void setJvmArgs(Object... args) {
+	     jvmArgs.addAll(Arrays.asList(args));
+	}
+
 }

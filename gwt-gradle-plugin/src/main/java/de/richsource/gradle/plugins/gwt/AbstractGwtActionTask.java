@@ -142,6 +142,15 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 		this.jvmArgs.addAll(Arrays.asList(args));
 	}
 
+	public void setJvmArgs(List<Object> args) {
+		this.jvmArgs.clear();
+		this.jvmArgs.addAll(args);
+	}
+
+	public List<Object> getJvmArgs() {
+		return this.jvmArgs;
+	}
+
 	protected void argIfEnabled(Boolean condition, String arg) {
 		if (Boolean.TRUE.equals(condition)) {
 			args(arg);
