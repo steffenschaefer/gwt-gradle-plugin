@@ -55,6 +55,7 @@ public class GwtPluginExtension {
 	private final GwtSuperDevOptions superDev = new GwtSuperDevOptionsImpl();
 	private final GwtCompileOptions compiler = new GwtCompileOptionsImpl();
 	private final GwtTestOptions test = new GwtTestOptions();
+	private List<Object> jvmArgs = new ArrayList<Object>();
 
 	public List<String> getModules() {
 		return modules;
@@ -244,5 +245,14 @@ public class GwtPluginExtension {
 
 	public void setModulePathPrefix(String modulePathPrefix) {
 		this.modulePathPrefix = modulePathPrefix;
+	}
+
+	public List<Object> getJvmArgs() {
+		return jvmArgs;
+	}
+
+	public void setJvmArgs(List<Object> jvmArgs) {
+		this.jvmArgs.clear();
+		this.jvmArgs.addAll(jvmArgs);
 	}
 }

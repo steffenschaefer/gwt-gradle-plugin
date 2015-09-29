@@ -16,6 +16,7 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.List;
 
 
 /**
@@ -233,4 +234,9 @@ public interface GwtCompileOptions {
 	 * @param saveSourceOutput the saveSourceOutput to set
 	 */
 	void setSaveSourceOutput(File saveSourceOutput);
+
+	List<Object> getJvmArgs();
+
+	void setJvmArgs(Object... args);
+
 }

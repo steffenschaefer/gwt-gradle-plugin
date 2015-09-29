@@ -302,6 +302,12 @@ public class GwtBasePlugin implements Plugin<Project> {
 						return extension.getJsInteropMode();
 					}
 				});
+				conventionMapping.map("jvmArgs", new Callable<List<Object>>() {
+					@Override
+					public List<Object> call() throws Exception {
+						return extension.getJvmArgs();
+					}
+				});
 			}});
 	}
 	

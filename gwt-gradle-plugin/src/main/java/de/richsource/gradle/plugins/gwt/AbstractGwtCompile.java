@@ -16,6 +16,7 @@
 package de.richsource.gradle.plugins.gwt;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.gradle.api.internal.IConventionAware;
@@ -66,6 +67,7 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 		argOnOff(getOverlappingSourceWarnings(), "-overlappingSourceWarnings", "-nooverlappingSourceWarnings");
 		argOnOff(getSaveSource(), "-saveSource", "-nosaveSource");
 		argIfSet("-saveSourceOutput", getSaveSourceOutput());
+		jvmArgs(getJvmArgs().toArray());
 	}
 	
 	protected void configure(final GwtCompileOptions options) {
@@ -410,5 +412,15 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 	@Override
 	public void setSaveSourceOutput(File saveSourceOutput) {
 		options.setSaveSourceOutput(saveSourceOutput);
+	}
+
+	@Override
+	public void setJvmArgs(Object... args) {
+	       options.setJvmArgs(args);
+	}
+
+	@Override
+	public List<Object> getJvmArgs() {
+	       return options.getJvmArgs();
 	}
 }
