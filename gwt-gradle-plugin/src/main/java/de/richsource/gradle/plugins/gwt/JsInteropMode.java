@@ -16,5 +16,5 @@
 package de.richsource.gradle.plugins.gwt;
 
 public enum JsInteropMode {
-	NONE, JS, CLOSURE
+	NONE, JS, CLOSURE, JS_RC
 }
