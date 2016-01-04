@@ -15,17 +15,13 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
+import java.util.Collection;
+
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.logging.Logger;
-import org.gradle.api.logging.Logging;
-import org.gradle.plugins.ide.eclipse.EclipsePlugin;
-import org.gradle.plugins.ide.eclipse.model.EclipseModel;
 import org.gradle.plugins.ide.idea.IdeaPlugin;
 import org.gradle.plugins.ide.idea.model.IdeaModel;
-
-import java.util.Collection;
 
 /**
  * This "plugin" improves the IntelliJ IDEA integration by adding
