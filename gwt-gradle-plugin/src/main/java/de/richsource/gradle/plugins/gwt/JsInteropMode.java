@@ -16,5 +16,11 @@
 package de.richsource.gradle.plugins.gwt;
 
 public enum JsInteropMode {
-	NONE, JS, CLOSURE
+	JS,
+	/** GWT 2.7 only */
+	NONE,
+	/** GWT 2.7 only */
+	CLOSURE,
+	/** GWT 2.8 */
+	JS_RC
 }

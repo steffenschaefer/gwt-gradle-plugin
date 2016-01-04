@@ -60,6 +60,8 @@ public class GwtCompileOptionsImpl implements GwtCompileOptions {
 	private Boolean overlappingSourceWarnings;
 	private Boolean saveSource;
 	private File saveSourceOutput;
+	// -X[no]closureFormattedOutput
+	private Boolean closureFormattedOutput;
 
 	/** {@inheritDoc} */
 	@Override
@@ -360,5 +362,17 @@ public class GwtCompileOptionsImpl implements GwtCompileOptions {
 	@Override
 	public void setSaveSourceOutput(File saveSourceOutput) {
 		this.saveSourceOutput = saveSourceOutput;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getClosureFormattedOutput() {
+		return closureFormattedOutput;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setClosureFormattedOutput(Boolean closureFormattedOutput) {
+		this.closureFormattedOutput = closureFormattedOutput;
 	}
 }

@@ -34,6 +34,8 @@ public class GwtSuperDevOptionsImpl implements GwtSuperDevOptions {
 	private Boolean compileTest;
 	private Integer compileTestRecompiles;
 	private File launcherDir;
+	// -X[no]closureFormattedOutput
+	private Boolean closureFormattedOutput;
 
 	/** {@inheritDoc} */
 	@Override
@@ -153,5 +155,17 @@ public class GwtSuperDevOptionsImpl implements GwtSuperDevOptions {
 	@Override
 	public void setLauncherDir(File launcherDir) {
 		this.launcherDir = launcherDir;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getClosureFormattedOutput() {
+		return closureFormattedOutput;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setClosureFormattedOutput(Boolean closureFormattedOutput) {
+		this.closureFormattedOutput = closureFormattedOutput;
 	}
 }

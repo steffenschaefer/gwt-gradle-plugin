@@ -233,4 +233,13 @@ public interface GwtCompileOptions {
 	 * @param saveSourceOutput the saveSourceOutput to set
 	 */
 	void setSaveSourceOutput(File saveSourceOutput);
+
+	Boolean getClosureFormattedOutput();
+
+	/**
+	 * If set to true, this adds the parameter -XclosureFormattedOutput.
+	 * If set to false, this adds the parameter -XnoclosureFormattedOutput.
+	 * Added in GWT 2.8.
+	 */
+	void setClosureFormattedOutput(Boolean closureFormattedOutput);
 }

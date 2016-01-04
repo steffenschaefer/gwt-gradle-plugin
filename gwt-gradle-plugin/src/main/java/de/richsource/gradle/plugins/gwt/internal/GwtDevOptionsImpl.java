@@ -18,7 +18,6 @@ package de.richsource.gradle.plugins.gwt.internal;
 import java.io.File;
 
 import de.richsource.gradle.plugins.gwt.GwtDevOptions;
-import de.richsource.gradle.plugins.gwt.MethodNameDisplayMode;
 
 /**
  * Default implementation of {@link GwtDevOptions}.
@@ -37,7 +36,6 @@ public class GwtDevOptionsImpl implements GwtDevOptions {
 	private String startupUrl;
 	private Boolean superDevMode;
 	private Boolean startServer;
-	private MethodNameDisplayMode methodNameDisplayMode;
 
 	/** {@inheritDoc} */
 	@Override
@@ -193,17 +191,5 @@ public class GwtDevOptionsImpl implements GwtDevOptions {
 	@Override
 	public void setStartServer(Boolean startServer) {
 		this.startServer = startServer;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public MethodNameDisplayMode getMethodNameDisplayMode() {
-		return methodNameDisplayMode;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setMethodNameDisplayMode(MethodNameDisplayMode methodNameDisplayMode) {
-		this.methodNameDisplayMode = methodNameDisplayMode;
 	}
 }

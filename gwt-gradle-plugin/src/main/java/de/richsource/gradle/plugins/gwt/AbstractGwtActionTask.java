@@ -62,6 +62,9 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	private Boolean incremental;
 	
 	private JsInteropMode jsInteropMode;
+	// -[no]generateJsInteropExports
+	private Boolean generateJsInteropExports;
+	private MethodNameDisplayMode methodNameDisplayMode;
 	
 	public AbstractGwtActionTask(String main) {
 		this.main = main;
@@ -96,6 +99,8 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 				javaExecSpec.setClasspath(classpath);
 
 				argIfSet("-XjsInteropMode", getJsInteropMode());
+				argOnOff(getGenerateJsInteropExports(), "-generateJsInteropExports", "-nogenerateJsInteropExports");
+				argIfSet("-XmethodNameDisplayMode", getMethodNameDisplayMode());
 				argOnOff(getIncremental(), "-incremental", "-noincremental");
 				argIfSet("-sourceLevel", getSourceLevel());
 				argIfSet("-logLevel", getLogLevel());
@@ -288,5 +293,31 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	
 	public void setJsInteropMode(JsInteropMode jsInteropMode) {
 		this.jsInteropMode = jsInteropMode;
+	}
+
+	public Boolean getGenerateJsInteropExports() {
+		return generateJsInteropExports;
+	}
+
+	/**
+	 * If set to true, this adds the parameter -generateJsInteropExports.
+	 * If set to false, this adds the parameter -nogenerateJsInteropExports.
+	 * Added in GWT 2.8.
+	 */
+	public void setGenerateJsInteropExports(Boolean generateJsInteropExports) {
+		this.generateJsInteropExports = generateJsInteropExports;
+	}
+	
+	public MethodNameDisplayMode getMethodNameDisplayMode() {
+		return methodNameDisplayMode;
+	}
+	
+	/**
+	 * If set, this causes the "-XmethodNameDisplayMode" (added in GWT 2.7/2.8) parameter to be added.
+	 * 
+	 * @param methodNameDisplayMode
+	 */
+	public void setMethodNameDisplayMode(MethodNameDisplayMode methodNameDisplayMode) {
+		this.methodNameDisplayMode = methodNameDisplayMode;
 	}
 }

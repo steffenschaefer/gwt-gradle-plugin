@@ -141,12 +141,6 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 				return options.getStartServer();
 			}
 		});
-		conventionMapping.map("methodNameDisplayMode", new Callable<MethodNameDisplayMode>() {
-			@Override
-			public MethodNameDisplayMode call() throws Exception {
-				return options.getMethodNameDisplayMode();
-			}
-		});
 		conventionMapping.map("modulePathPrefix", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
@@ -309,18 +303,6 @@ public class GwtDev extends AbstractGwtTask implements GwtDevOptions {
 	@Override
 	public void setStartServer(Boolean startServer) {
 		options.setStartServer(startServer);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public MethodNameDisplayMode getMethodNameDisplayMode() {
-		return options.getMethodNameDisplayMode();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void setMethodNameDisplayMode(MethodNameDisplayMode methodNameDisplayMode) {
-		options.setMethodNameDisplayMode(methodNameDisplayMode);
 	}
 
 	public String getModulePathPrefix() {

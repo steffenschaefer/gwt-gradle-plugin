@@ -188,5 +188,6 @@ public class GwtCompile extends AbstractGwtCompile {
 				return options.getSaveSourceOutput();
 			}
 		});
+		conventionMapping.map("closureFormattedOutput", options::getClosureFormattedOutput);
 	}
 }

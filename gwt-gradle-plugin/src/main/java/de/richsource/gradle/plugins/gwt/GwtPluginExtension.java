@@ -47,6 +47,8 @@ public class GwtPluginExtension {
 
 	private Boolean incremental;
 	private JsInteropMode jsInteropMode;
+	private Boolean generateJsInteropExports;
+	private MethodNameDisplayMode methodNameDisplayMode;
 	
 	private String minHeapSize = "256M";
 	private String maxHeapSize = "256M";
@@ -244,5 +246,31 @@ public class GwtPluginExtension {
 
 	public void setModulePathPrefix(String modulePathPrefix) {
 		this.modulePathPrefix = modulePathPrefix;
+	}
+
+	public Boolean getGenerateJsInteropExports() {
+		return generateJsInteropExports;
+	}
+
+	/**
+	 * If set to true, this adds the parameter -generateJsInteropExports.
+	 * If set to false, this adds the parameter -nogenerateJsInteropExports.
+	 * Added in GWT 2.8.
+	 */
+	public void setGenerateJsInteropExports(Boolean generateJsInteropExports) {
+		this.generateJsInteropExports = generateJsInteropExports;
+	}
+	
+	public MethodNameDisplayMode getMethodNameDisplayMode() {
+		return methodNameDisplayMode;
+	}
+	
+	/**
+	 * If set, this causes the "-XmethodNameDisplayMode" (added in GWT 2.7/2.8) parameter to be added.
+	 * 
+	 * @param methodNameDisplayMode
+	 */
+	public void setMethodNameDisplayMode(MethodNameDisplayMode methodNameDisplayMode) {
+		this.methodNameDisplayMode = methodNameDisplayMode;
 	}
 }

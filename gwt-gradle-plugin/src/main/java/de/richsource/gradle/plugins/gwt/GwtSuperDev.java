@@ -61,6 +61,7 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 		argOnOff(getCompileTest(), "-compileTest", "-nocompileTest");
 		argIfSet("-compileTestRecompiles", getCompileTestRecompiles());
 		argIfSet("-launcherDir", getLauncherDir());
+		argOnOff(getClosureFormattedOutput(), "-XclosureFormattedOutput", "-XnoclosureFormattedOutput");
 	}
 	
 	protected void configure(final GwtSuperDevOptions options) {
@@ -119,6 +120,7 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 				return options.getLauncherDir();
 			}
 		});
+		conventionMapping.map("closureFormattedOutput", options::getClosureFormattedOutput);
 	}
 	
 	@Override
@@ -244,5 +246,17 @@ public class GwtSuperDev extends AbstractGwtActionTask implements GwtSuperDevOpt
 	@Override
 	public Boolean getAllowMissingSrc() {
 		return options.getAllowMissingSrc();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getClosureFormattedOutput() {
+		return options.getClosureFormattedOutput();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setClosureFormattedOutput(Boolean closureFormattedOutput) {
+		options.setClosureFormattedOutput(closureFormattedOutput);
 	}
 }

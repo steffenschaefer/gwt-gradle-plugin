@@ -302,6 +302,8 @@ public class GwtBasePlugin implements Plugin<Project> {
 						return extension.getJsInteropMode();
 					}
 				});
+				conventionMapping.map("generateJsInteropExports", extension::getGenerateJsInteropExports);
+				conventionMapping.map("methodNameDisplayMode", extension::getMethodNameDisplayMode);
 			}});
 	}
 	

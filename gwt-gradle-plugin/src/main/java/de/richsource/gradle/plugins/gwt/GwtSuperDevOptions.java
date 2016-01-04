@@ -102,4 +102,13 @@ public interface GwtSuperDevOptions {
 
 	public abstract Boolean getAllowMissingSrc();
 
+	Boolean getClosureFormattedOutput();
+
+	/**
+	 * If set to true, this adds the parameter -XclosureFormattedOutput.
+	 * If set to false, this adds the parameter -XnoclosureFormattedOutput.
+	 * Added in GWT 2.8.
+	 */
+	void setClosureFormattedOutput(Boolean closureFormattedOutput);
+
 }

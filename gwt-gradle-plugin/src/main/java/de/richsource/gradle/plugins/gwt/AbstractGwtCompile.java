@@ -66,6 +66,7 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 		argOnOff(getOverlappingSourceWarnings(), "-overlappingSourceWarnings", "-nooverlappingSourceWarnings");
 		argOnOff(getSaveSource(), "-saveSource", "-nosaveSource");
 		argIfSet("-saveSourceOutput", getSaveSourceOutput());
+		argOnOff(getClosureFormattedOutput(), "-XclosureFormattedOutput", "-XnoclosureFormattedOutput");
 	}
 	
 	protected void configure(final GwtCompileOptions options) {
@@ -410,5 +411,17 @@ public class AbstractGwtCompile extends AbstractGwtTask implements GwtCompileOpt
 	@Override
 	public void setSaveSourceOutput(File saveSourceOutput) {
 		options.setSaveSourceOutput(saveSourceOutput);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean getClosureFormattedOutput() {
+		return options.getClosureFormattedOutput();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setClosureFormattedOutput(Boolean closureFormattedOutput) {
+		options.setClosureFormattedOutput(closureFormattedOutput);
 	}
 }
