@@ -15,7 +15,6 @@
  */
 package de.richsource.gradle.plugins.gwt;
 
-import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.WarPlugin;
@@ -26,12 +25,7 @@ public class GwtPlugin implements Plugin<Project> {
 	public void apply(final Project project) {
 		project.getPlugins().apply(GwtCompilerPlugin.class);
 
-		project.getPlugins().withType(WarPlugin.class, new Action<WarPlugin>(){
-
-			@Override
-			public void execute(WarPlugin warPlugin) {
-				project.getPlugins().apply(GwtWarPlugin.class);
-			}
-		});
+		project.getPlugins().withType(WarPlugin.class,
+				(warPlugin) -> project.getPlugins().apply(GwtWarPlugin.class));
 	}
 }
