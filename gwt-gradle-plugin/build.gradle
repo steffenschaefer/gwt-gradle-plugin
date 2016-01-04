@@ -33,6 +33,18 @@ dependencies {
 	retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.1.0'
 }
 
+retrolambda {
+	javaVersion JavaVersion.VERSION_1_6
+	if(System.getProperty("os.name").toLowerCase().contains('mac')) {
+		if(jdk == null) {
+			jdk = '/usr/libexec/java_home -v 1.8'.execute().text
+		}
+		if(oldJdk == null) {
+			oldJdk = '/usr/libexec/java_home -v 1.6'.execute().text
+		}
+	}
+}
+
 tasks.withType(JavaCompile) {
 	options.encoding = rootProject.encoding
 }
