@@ -7,15 +7,17 @@ buildscript {
 	
 	dependencies {
 		classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+		classpath 'me.tatarka:gradle-retrolambda:3.2.4'
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'license'
+apply plugin: 'me.tatarka.retrolambda'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 license {
 	ext.year = Calendar.getInstance().get(Calendar.YEAR)
@@ -28,6 +30,7 @@ repositories { mavenCentral() }
 dependencies {
 	compile gradleApi()
 	testCompile group: 'junit', name: 'junit', version: '4.11'
+	retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.1.0'
 }
 
 tasks.withType(JavaCompile) {
