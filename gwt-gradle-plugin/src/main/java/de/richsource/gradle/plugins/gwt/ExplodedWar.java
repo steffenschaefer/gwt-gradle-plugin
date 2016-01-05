@@ -106,6 +106,7 @@ public class ExplodedWar extends DefaultTask {
 	
 	@TaskAction
 	protected void buildWarTemplate() {
+		// TODO usage of ActionClosure can be removed when updating to Gradle 2.5+
 		getProject().copy(new ActionClosure<CopySpec>(this, new Action<CopySpec>() {
 
 			@Override
