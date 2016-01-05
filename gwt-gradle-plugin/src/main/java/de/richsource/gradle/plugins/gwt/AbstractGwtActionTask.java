@@ -30,8 +30,6 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecResult;
 import org.gradle.process.JavaExecSpec;
 
-import de.richsource.gradle.plugins.gwt.internal.ActionClosure;
-
 /**
  * Base class for all GWT related tasks.
  */
@@ -72,7 +70,7 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 	
 	@TaskAction
 	public void exec() {
-		 final ExecResult execResult = getProject().javaexec(new ActionClosure<JavaExecSpec>(this, new Action<JavaExecSpec>() {
+		 final ExecResult execResult = getProject().javaexec(new Action<JavaExecSpec>() {
 			@Override
 			public void execute(JavaExecSpec javaExecSpec) {
 				if (getSrc() == null) {
@@ -111,7 +109,7 @@ public abstract class AbstractGwtActionTask extends DefaultTask {
 				// the module names are expected to be the last parameters
 				javaExecSpec.args(getModules());
 			}
-		}));
+		});
 		execResult.assertNormalExitValue().rethrowFailure();
 	}
 
