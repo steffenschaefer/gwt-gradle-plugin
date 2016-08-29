@@ -24,7 +24,6 @@ import org.gradle.api.Project;
 import org.gradle.api.internal.project.AbstractProject;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.WarPlugin;
-import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.bundling.War;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
@@ -85,7 +84,7 @@ public class GwtPluginTest {
 	public void testWarTasksAvailable() {
 		project.getPlugins().apply(WarPlugin.class);
 		
-		assertThat(tasks.getByName(GwtWarPlugin.TASK_WAR_TEMPLATE), instanceOf(Copy.class));
+		assertThat(tasks.getByName(GwtWarPlugin.TASK_WAR_TEMPLATE), instanceOf(ExplodedWar.class));
 		assertThat(tasks.getByName(GwtWarPlugin.TASK_GWT_DEV), instanceOf(GwtDev.class));
 		assertThat(tasks.getByName(GwtWarPlugin.TASK_DRAFT_WAR), instanceOf(War.class));
 	}
