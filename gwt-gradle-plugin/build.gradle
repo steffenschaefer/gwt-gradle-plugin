@@ -20,7 +20,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 license {
-	ext.year = Calendar.getInstance().get(Calendar.YEAR)
+	ext.year = 2016
 	ext.name = 'Steffen Schaefer'
 	header rootProject.file('LICENSE')
 }
