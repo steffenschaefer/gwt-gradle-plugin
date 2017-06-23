@@ -64,8 +64,8 @@ public class GwtEclipsePlugin {
 
 				eclipseModel.getProject().buildCommand(ECLIPSE_BUILDER_WEBAPP_VALIDATOR);
 				
-				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(GwtWarPlugin.TASK_WAR_TEMPLATE);
-				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.getECLIPSE_TASK_NAME())).dependsOn(getAssociatedCleanTask(GwtWarPlugin.TASK_WAR_TEMPLATE));
+				project.getTasks().getByName(EclipsePlugin.ECLIPSE_TASK_NAME).dependsOn(GwtWarPlugin.TASK_WAR_TEMPLATE);
+				project.getTasks().getByName(getAssociatedCleanTask(EclipsePlugin.ECLIPSE_TASK_NAME)).dependsOn(getAssociatedCleanTask(GwtWarPlugin.TASK_WAR_TEMPLATE));
 				
 				final GdtOptions gdtExtension = ((ExtensionAware)eclipseExtension).getExtensions().create("gdt", GdtOptionsImpl.class);
 				configureGdtExtension(extension, gdtExtension);
@@ -74,7 +74,7 @@ public class GwtEclipsePlugin {
 				
 				GenerateGdt generateGdt = project.getTasks().create(GENERATE_GDT_TASK, GenerateGdt.class);
 				generateGdt.setSettingsFile(project.file(".settings/com.google.gdt.eclipse.core.prefs"));
-				project.getTasks().getByName(EclipsePlugin.getECLIPSE_TASK_NAME()).dependsOn(generateGdt);
+				project.getTasks().getByName(EclipsePlugin.ECLIPSE_TASK_NAME).dependsOn(generateGdt);
 				
 				project.afterEvaluate(new Action<Project>() {
 					@Override
