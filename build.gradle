@@ -1,8 +1,8 @@
 task publish
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.0'
-	distributionUrl = 'https://services.gradle.org/distributions/gradle-2.0-all.zip'
+	gradleVersion = '4.0'
+	distributionUrl = 'https://services.gradle.org/distributions/gradle-4.0-all.zip'
 }
 
 ext {
@@ -11,7 +11,7 @@ ext {
 
 allprojects {
 	apply plugin: 'eclipse'
-	tasks.eclipse << {
+	tasks.eclipse.doLast {
 		File prefs = project.file('.settings/org.eclipse.core.resources.prefs');
 		if(!prefs.exists()) {
 			prefs.parentFile.mkdirs()
