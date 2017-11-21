@@ -84,5 +84,5 @@ If you want to start the GWT development mode simply call "gradle gwtDev".
 
 ## How to debug Development Mode?
 
-When running the task “gwtDev” you can specify a system property “-DgwtDev.debug=true” to enable debugging. This causes the build to stop when starting development mode and waiting for a debuger to attach to port 5005.
+When running the task “gwtDev” you can specify a system property “-DgwtDev.debug=true” to enable debugging. This causes the build to stop when starting development mode and waiting for a debugger to attach to port 5005.
 Now you can configure your IDE to connect to that debug port.

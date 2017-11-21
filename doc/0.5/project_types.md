@@ -47,7 +47,7 @@ gwt {
 }
 {% endhighlight %}
 
-As nobody but you knows what you want to do with the GWT compiler output, the plugin does nothing else than configuring the task "compileGwt". You are responsible the this task is called by setting appropriate task dependencies.
+As nobody but you knows what you want to do with the GWT compiler output, the plugin does nothing else than configuring the task "compileGwt". You are responsible that this task is called by setting appropriate task dependencies.
 
 Typical use-cases for this are:
 * Uploading the GWT compiler output to a maven repository to be consumed by other projects.
