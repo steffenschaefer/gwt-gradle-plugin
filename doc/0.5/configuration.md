@@ -6,7 +6,7 @@ title :  "Configuration"
 ### Plugin configuration
 
 The plugin registers an extension named "gwt" of type [GwtPluginExtension](javadoc/de/richsource/gradle/plugins/gwt/GwtPluginExtension.html) with the Gradle model. This extension defines the conventions/defaults for all GWT related tasks. If you use the extension to do the configuration, the plugin ensures that the configuration properties are consistently set as default values to all related tasks.
-All properties that are common to multiple/all GWT related tasks are defined in the extension itself (e.g. used GWT modules). Properties that a re specific to one kind of task are defined in specific sub-objects.
+All properties that are common to multiple/all GWT related tasks are defined in the extension itself (e.g. used GWT modules). Properties that are specific to one kind of task are defined in specific sub-objects.
 
 An example of both kinds of properties looks this way:
 
@@ -55,10 +55,10 @@ In the following list you can find the interfaces/classes that define specific t
 
 The plugin's support of testing is not based on a custom task but instead extends the existing Test task of Gradle.
 
-To do this, every instance of Gradle's Test task is dynamically extended to have a prperty "gwt" of type [GwtTestExtension](javadoc/de/richsource/gradle/plugins/gwt/GwtTestExtension.html).
+To do this, every instance of Gradle's Test task is dynamically extended to have a property "gwt" of type [GwtTestExtension](javadoc/de/richsource/gradle/plugins/gwt/GwtTestExtension.html).
 In addition, an instance of [GwtTestOptions](javadoc/de/richsource/gradle/plugins/gwt/GwtTestOptions.html) is added as property "test" to the plugin's extension object. Using this, you can again specify defaults for all instances of the Test task.
 
-To activate the manipulation of Test tasks to support GWT tests, you have to add the foollowing to your build.gradle:
+To activate the manipulation of Test tasks to support GWT tests, you have to add the following to your build.gradle:
 
 {% highlight groovy linenos=table %}
 gwt {
@@ -106,4 +106,4 @@ gwt {
 }
 {% endhighlight %}
 
-The availeble log levels are defined in the enum [LogLevel](javadoc/de/richsource/gradle/plugins/gwt/LogLevel.html).
+The available log levels are defined in the enum [LogLevel](javadoc/de/richsource/gradle/plugins/gwt/LogLevel.html).

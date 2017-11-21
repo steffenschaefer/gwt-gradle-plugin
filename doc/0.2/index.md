@@ -129,7 +129,7 @@ If your project uses the “gwt” plugin together with the “eclipse” and �
 
 ## How to debug Development Mode?
 
-When running the task “gwtDev” you can specify a system property “-DgwtDev.debug=true” to enable debugging. This causes the build to stop when starting development mode and waiting for a debuger to attach to port 5005.
+When running the task “gwtDev” you can specify a system property “-DgwtDev.debug=true” to enable debugging. This causes the build to stop when starting development mode and waiting for a debugger to attach to port 5005.
 Now you can configure your IDE to connect to that debug port.
 
 ## How to run Super Dev Mode?
